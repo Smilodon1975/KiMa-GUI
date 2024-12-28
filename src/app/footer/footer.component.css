@@ -1,0 +1,7 @@
+.card {
+    border: 2px solid #ccc; /* Füge eine graue Randlinie hinzu */
+}
+.modal-content {
+    background-color: #f4f4f4; /* Hintergrundfarbe des Modals */
+    color: #000; /* Textfarbe des Modals */
+}
