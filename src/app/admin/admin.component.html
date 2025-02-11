@@ -1,0 +1,29 @@
+<div class="container">
+    <h2>Admin Bereich</h2>
+    <button (click)="getUsers()">Alle Benutzer anzeigen</button>
+  
+    <div *ngIf="users.length > 0">
+      <h3>Benutzerliste</h3>
+      <table class="table">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Email</th>
+            <th>Rolle</th>
+            <th>Aktionen</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let user of users">
+            <td>{{ user.id }}</td>
+            <td>{{ user.email }}</td>
+            <td>{{ user.roles }}</td>
+            <td>
+              <button (click)="deleteUser(user.id)">Löschen</button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+  

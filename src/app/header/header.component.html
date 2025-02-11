@@ -2,7 +2,7 @@
 <header class="container-fluid bg-light shadow-sm py-3">
     <div class="d-flex align-items-center justify-content-between">
         <!-- Logo links -->
-        <img src="assets/images/kima_logo_gruen_rot_rgb.png" alt="Kirschbaum" class="img-fluid ms-3" style="width: 100px; height: 100px;">
+        <img src="assets/Images/kima_logo_gruen_rot_rgb.png" alt="Kirschbaum" class="img-fluid ms-3" style="width: 100px; height: 100px;">
 
         <!-- Navigationsleiste -->
         <nav>
@@ -16,6 +16,16 @@
                 <li class="nav-item">
                     <a class="nav-link text-dark" routerLink="/kunden">Kunden</a>
                 </li>
+                <li class="nav-item">
+                    <a class="nav-link text-dark" routerLink="/login">Login</a>
+                </li>
+                <li class="nav-item" *ngIf="isLoggedIn()">
+                    <a class="nav-link text-dark" (click)="logout()" style="cursor: pointer;">Logout</a>
+                </li>
+                <li class="nav-item" *ngIf="authService.getUserRole() === 'Admin'">
+                    <a class="nav-link" routerLink="/admin">Admin-Bereich</a>
+                </li>
+                  
                 <li class="nav-item">
                     <a class="nav-link text-dark" href="https://tcd3b40f5.emailsys1a.net/166/3797/894a492721/subscribe/form.html?_g=1600358208">
                         Newsletter
