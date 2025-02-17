@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
-import { of } from 'rxjs';
+import { Observable,of,catchError, map, tap } from 'rxjs';
 import {jwtDecode} from 'jwt-decode';
 
 
@@ -11,20 +10,25 @@ import {jwtDecode} from 'jwt-decode';
 })
 export class AuthService {
   private authUrl = 'https://localhost:7090/api/auth'; 
+  private userUrl = 'https://localhost:7090/api/user';
   
 
   constructor(private http: HttpClient) {}
-  login(email: string, password: string): Observable<any> {
-    return this.http.post<{ token: string }>(`${this.authUrl}/login`, { email, password })
-      .pipe(
-        tap(response => {
-          if (response.token) {
-            localStorage.setItem('jwt', response.token); // Token speichern
-          }
-        })
-      );
-  }
-  
+
+ private token: string | null = null; // 🔥 Variable für das Token
+
+login(email: string, password: string): Observable<any> {
+  return this.http.post<{ token: string }>(`${this.authUrl}/login`, { email, password })
+    .pipe(
+      tap(response => {
+        if (response.token) {
+          this.token = response.token; // 🔥 Speichern in der Variable
+          localStorage.setItem('token', response.token);
+        }
+      })
+    );
+}
+
 
   register(username: string, email: string, password: string, role: string): Observable<any> {
     return this.http.post<any>(`${this.authUrl}/register`, { username, email, password, role });
@@ -39,18 +43,23 @@ export class AuthService {
   }
 
   getUserRole(): Observable<string | null> {
-    const userId = this.getUserId();
-    if (!userId) return of(null);
-  
     const token = localStorage.getItem('token');
-    if (!token) return of(null); // 🔹 Kein Token? Dann abbrechen
+    if (!token) {
+      console.warn("getUserRole(): Kein Token gefunden!");
+      return of(null); // Kein API-Call, wenn kein Token existiert
+    }
   
-    const headers = { Authorization: `Bearer ${token}` }; // 🔹 Token im Header setzen
-  
-    return this.http.get<string>(`https://localhost:7090/api/user/user-role/${userId}`, { headers });
+    return this.http.get<{ role: string }>(`${this.userUrl}/user-role`).pipe(
+      map(response => response.role),
+      catchError(error => {
+        console.warn("getUserRole(): Fehler beim Abrufen der Rolle", error);
+        return of(null);
+      })
+    );
   }
   
-    
+  
+     
 
   getUserRoleSync(): string | null {
     const token = localStorage.getItem('token');

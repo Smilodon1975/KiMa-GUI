@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { Observable, of, catchError } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -10,13 +10,11 @@ export class UserService {
 
   constructor(private http: HttpClient) {}
 
-  // 🔹 Admin: Alle Probanden abrufen
-  getAllUsers(): Observable<any> {
-    return this.http.get<any>(`${this.apiUrl}`);
-  }
-
   // 🔹 Proband: Eigene Daten abrufen
   getMyData(): Observable<any> {
-    return this.http.get<any>(`${this.apiUrl}/me`);
+    return this.http.get<any>(`${this.apiUrl}/me`).pipe(
+      catchError(() => of(null))
+    );
   }
+  
 }

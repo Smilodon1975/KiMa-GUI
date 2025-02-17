@@ -12,6 +12,6 @@ export class AdminService {
 
   // 🔹 Alle User abrufen
   getAllUsers(): Observable<any[]> {
-    return this.http.get<any[]>(`${this.adminUrl}/user`);
+    return this.http.get<any[]>(`${this.adminUrl}/users`);
   }
-}
+}  

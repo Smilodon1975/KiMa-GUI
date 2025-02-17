@@ -1,17 +1,20 @@
-import { HttpInterceptor, HttpRequest, HttpHandler } from '@angular/common/http';
-import { Injectable } from '@angular/core';
+import { HttpInterceptorFn } from '@angular/common/http';
+import { throwError, catchError } from 'rxjs';
 
-@Injectable()
-export class AuthInterceptor implements HttpInterceptor {
-  intercept(req: HttpRequest<any>, next: HttpHandler) {
-    const token = localStorage.getItem('token'); 
+export const authInterceptor: HttpInterceptorFn = (req, next) => {
+    const token = localStorage.getItem('token') || ""; // 🔥 Falls null, leeren String setzen
+    const cloned = token
+      ? req.clone({ setHeaders: { Authorization: `Bearer ${token}` } })
+      : req;
+    return next(cloned).pipe(
+      catchError(error => {
+        if (error.status === 401) {
+          console.warn("Interceptor: Unauthorized - Möglicherweise Token abgelaufen!");
+          localStorage.removeItem('token'); // Token löschen, wenn ungültig
+        }
+        return throwError(() => error);
+      })
+    );
+  };
+  
 
-    if (token) {
-      const cloned = req.clone({
-        setHeaders: { Authorization: `Bearer ${token}` }
-      });
-      return next.handle(cloned);
-    }
-    return next.handle(req);
-  }
-}
