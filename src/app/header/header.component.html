@@ -11,20 +11,18 @@
                     <a class="nav-link text-dark" routerLink="/home">Home</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link text-dark" routerLink="/probanden">Probanden</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link text-dark" routerLink="/kunden">Kunden</a>
-                </li>
+                    <a class="nav-link text-dark" routerLink="/info">Informationen</a>
+                </li>                
                 <li class="nav-item">
                     <a class="nav-link text-dark" routerLink="/login">Login</a>
                 </li>
                 <li class="nav-item" *ngIf="isLoggedIn()">
                     <a class="nav-link text-dark" (click)="logout()" style="cursor: pointer;">Logout</a>
                 </li>
-                <li class="nav-item" *ngIf="authService.getUserRole() === 'Admin'">
-                    <a class="nav-link" routerLink="/admin">Admin-Bereich</a>
-                </li>
+                <li class="nav-item" *ngIf="(authService.getUserRole() | async) === 'Admin'">
+                    <a class="nav-link text-dark" routerLink="/admin">Admin</a>
+                  </li>
+                  
                   
                 <li class="nav-item">
                     <a class="nav-link text-dark" href="https://tcd3b40f5.emailsys1a.net/166/3797/894a492721/subscribe/form.html?_g=1600358208">

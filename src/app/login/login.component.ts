@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { AuthService } from '../services/auth.service';
 import { Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
+import {jwtDecode} from 'jwt-decode';
 
 @Component({
   selector: 'app-login',
@@ -21,12 +22,20 @@ export class LoginComponent {
       next: (response) => {
         localStorage.setItem('token', response.token);
         alert('Login erfolgreich!');
-        this.router.navigate(['/home']);
+  
+        this.authService.getUserRole().subscribe(role => {
+          console.log("Ermittelte Rolle:", role);
+          if (role === 'Admin') {
+            this.router.navigate(['/admin']);
+          } else {
+            this.router.navigate(['/user']);
+          }
+        });
       },
       error: (err) => {
         alert('Login fehlgeschlagen! Überprüfe deine Eingaben.');
       }
     });
   }
+  
 }
-

@@ -1,0 +1,15 @@
+<div class="container mt-4">
+    <h2>Willkommen, Proband!</h2>
+    
+    <div *ngIf="userData; else loading">
+      <p><strong>ID:</strong> {{ userData.id }}</p>
+      <p><strong>Email:</strong> {{ userData.email }}</p>
+  
+      <button class="btn btn-primary mt-2">Daten bearbeiten</button>
+    </div>
+  
+    <ng-template #loading>
+      <p>Lade Benutzerdaten...</p>
+    </ng-template>
+  </div>
+                   

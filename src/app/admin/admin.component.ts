@@ -1,31 +1,57 @@
-import { Component } from '@angular/core';
-import { AuthService } from '../services/auth.service';
-import { HttpClient } from '@angular/common/http';
+import { Component, OnInit } from '@angular/core';
+import { AdminService } from '../services/admin.service';
+import { FormsModule } from '@angular/forms';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-admin',
+  standalone: true,
   templateUrl: './admin.component.html',
-  styleUrl: './admin.component.css'
+  styleUrls: ['./admin.component.css'],
+  imports: [CommonModule,FormsModule]
 })
-export class AdminComponent {
-  users: any[] = [];
+export class AdminComponent implements OnInit {
+  user: any[] = []; // Speichert die geladenen Probanden
+  filteredUser: any[] = []; // Speichert die gefilterten Probanden
+  searchText: string = ''; // Suchtext
+  currentPage: number = 1; // Aktuelle Seite
+  itemsPerPage: number = 10; // Anzahl pro Seite
+  totalPages: number[] = [];
 
-  constructor(private authService: AuthService, private http: HttpClient) {}
+  constructor(private adminService: AdminService) {}
 
-  getUsers() {
-    this.http.get<any[]>('http://localhost:5274/api/admin/users').subscribe({
-      next: (data) => this.users = data,
-      error: (err) => console.error("Fehler beim Abrufen der Benutzer", err)
+  ngOnInit(): void {
+    this.loadUsers();
+  }
+
+  // 🔹 Probanden von der API laden
+  loadUsers(): void {
+    this.adminService.getAllUsers().subscribe(data => {
+      this.user = data;
+      this.filterUsers(); // Suche & Paginierung anwenden
     });
   }
 
-  deleteUser(userId: number) {
-    this.http.delete(`http://localhost:5274/api/admin/delete-user/${userId}`).subscribe({
-      next: () => {
-        this.users = this.users.filter(user => user.id !== userId);
-      },
-      error: (err) => console.error("Fehler beim Löschen des Benutzers", err)
-    });
+  // 🔹 Such- & Paginierungslogik
+  filterUsers(): void {
+    let filtered = this.user;
+
+    if (this.searchText) {
+      filtered = filtered.filter(user =>
+        user.firstName.toLowerCase().includes(this.searchText.toLowerCase()) ||
+        user.email.toLowerCase().includes(this.searchText.toLowerCase())
+      );
+    }
+
+    this.filteredUser = filtered.slice(
+      (this.currentPage - 1) * this.itemsPerPage,
+      this.currentPage * this.itemsPerPage
+    );
+  }
+
+  // 🔹 Seite ändern
+  changePage(page: number): void {
+    this.currentPage = page;
+    this.filterUsers();
   }
 }
-

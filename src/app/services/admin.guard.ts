@@ -10,17 +10,17 @@ export class AdminGuard implements CanActivate {
   constructor(private authService: AuthService, private router: Router) {}
 
   canActivate(): Observable<boolean> {
-    return this.authService.getUserRole(1).pipe(
+    return this.authService.getUserRole().pipe(
       map(role => {
+        console.log("AdminGuard prüft Rolle:", role);
         if (role === 'Admin') {
           return true;
         } else {
-          alert("Kein Zugriff!");
-          this.router.navigate(['/home']);
+          this.router.navigate(['/home']); // Statt user, erstmal auf home zurück
           return false;
         }
       })
     );
-  }
+  }  
 }
 
