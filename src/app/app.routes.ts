@@ -7,6 +7,7 @@ import { LoginComponent } from './login/login.component';
 import { AdminComponent } from './admin/admin.component';
 import { AdminGuard } from './services/admin.guard';
 import { UserComponent } from './user/user.component';
+import { RegisterComponent } from './register/register.component';
 
 const authGuard: CanActivateFn = () => {
   const authService = inject(AuthService);
@@ -26,5 +27,6 @@ export const routes: Routes = [
   { path: 'info', component: InfoComponent }, // 🔹 Info bleibt für alle zugänglich
   { path: 'user', component: UserComponent, canActivate: [authGuard] },
   { path: 'login', component: LoginComponent },
-  { path: 'admin', component: AdminComponent, canActivate: [AdminGuard], data: { role: 'Admin' } }
+  { path: 'admin', component: AdminComponent, canActivate: [AdminGuard], data: { role: 'Admin' } },
+  { path: 'register', component: RegisterComponent },
 ];

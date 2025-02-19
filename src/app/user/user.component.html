@@ -1,15 +1,51 @@
 <div class="container mt-4">
-    <h2>Willkommen, Proband!</h2>
-    
-    <div *ngIf="userData; else loading">
+  <h2>Willkommen, {{ userData?.firstName }}!</h2>
+
+  <!-- 🔹 Erfolgsmeldung -->
+  <div *ngIf="successMessage" class="alert alert-success" role="alert">
+      {{ successMessage }}
+  </div>
+
+  <!-- 🔹 Fehlermeldung -->
+  <div *ngIf="errorMessage" class="alert alert-danger" role="alert">
+      {{ errorMessage }}
+  </div>
+
+  <div *ngIf="userData; else loading">
+    <div *ngIf="!isEditing">
       <p><strong>ID:</strong> {{ userData.id }}</p>
       <p><strong>Email:</strong> {{ userData.email }}</p>
-  
-      <button class="btn btn-primary mt-2">Daten bearbeiten</button>
+      <p><strong>Vorname:</strong> {{ userData.firstName }}</p>
+      <p><strong>Nachname:</strong> {{ userData.lastName }}</p>
+      <p><strong>Telefon:</strong> {{ userData.phone }}</p>
+
+      <button class="btn btn-primary mt-2" (click)="toggleEdit()">Daten bearbeiten</button>
     </div>
-  
-    <ng-template #loading>
-      <p>Lade Benutzerdaten...</p>
-    </ng-template>
+
+    <div *ngIf="isEditing">
+      <form (ngSubmit)="saveChanges()">
+        <div class="mb-3">
+          <label for="firstName" class="form-label">Vorname</label>
+          <input id="firstName" [(ngModel)]="userData.firstName" name="firstName" class="form-control" required />
+        </div>
+
+        <div class="mb-3">
+          <label for="lastName" class="form-label">Nachname</label>
+          <input id="lastName" [(ngModel)]="userData.lastName" name="lastName" class="form-control" required />
+        </div>
+
+        <div class="mb-3">
+          <label for="phone" class="form-label">Telefon</label>
+          <input id="phone" [(ngModel)]="userData.phone" name="phone" class="form-control" />
+        </div>
+
+        <button type="submit" class="btn btn-success">Speichern</button>
+        <button type="button" class="btn btn-secondary ms-2" (click)="toggleEdit()">Abbrechen</button>
+      </form>
+    </div>
   </div>
-                   
+
+  <ng-template #loading>
+    <p>Lade Benutzerdaten...</p>
+  </ng-template>
+</div>

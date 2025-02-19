@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable,of,catchError, map, tap } from 'rxjs';
+import { Observable,of,catchError, map, tap, throwError } from 'rxjs';
 import {jwtDecode} from 'jwt-decode';
 
 
@@ -29,10 +29,16 @@ login(email: string, password: string): Observable<any> {
     );
 }
 
+register(username: string, email: string, password: string, role: string, firstName: string, lastName: string): Observable<any> {
+  return this.http.post<any>(`${this.authUrl}/register`, { username, email, password, role, firstName, lastName }).pipe(
+    catchError(error => {
+      console.error("Registrierung fehlgeschlagen:", error);
+      return throwError(() => error);
+    })
+  );
+}
 
-  register(username: string, email: string, password: string, role: string): Observable<any> {
-    return this.http.post<any>(`${this.authUrl}/register`, { username, email, password, role });
-  }
+
 
   logout(): void {
     localStorage.removeItem('token');

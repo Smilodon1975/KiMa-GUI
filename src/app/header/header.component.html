@@ -12,8 +12,11 @@
                 </li>
                 <li class="nav-item">
                     <a class="nav-link text-dark" routerLink="/info">Informationen</a>
-                </li>                
-                <li class="nav-item">
+                </li>  
+                <li class="nav-item" *ngIf="!authService.isLoggedIn()">
+                    <a class="nav-link text-dark" routerLink="/register">Registrieren</a>
+                </li>               
+                <li class="nav-item" *ngIf="!authService.isLoggedIn()">
                     <a class="nav-link text-dark" routerLink="/login">Login</a>
                 </li>
                 <li class="nav-item" *ngIf="isLoggedIn()">
