@@ -1,51 +1,107 @@
-<div class="container mt-4">
-  <h2>Willkommen, {{ userData?.firstName }}!</h2>
+<div class="container mt-5">
+  <div class="card shadow p-4">
+    <h2 class="text-center">Mein Profil</h2>
 
-  <!-- 🔹 Erfolgsmeldung -->
-  <div *ngIf="successMessage" class="alert alert-success" role="alert">
-      {{ successMessage }}
-  </div>
+    <div *ngIf="successMessage" class="alert alert-success">{{ successMessage }}</div>
+    <div *ngIf="errorMessage" class="alert alert-danger">{{ errorMessage }}</div>
 
-  <!-- 🔹 Fehlermeldung -->
-  <div *ngIf="errorMessage" class="alert alert-danger" role="alert">
-      {{ errorMessage }}
-  </div>
-
-  <div *ngIf="userData; else loading">
-    <div *ngIf="!isEditing">
-      <p><strong>ID:</strong> {{ userData.id }}</p>
-      <p><strong>Email:</strong> {{ userData.email }}</p>
-      <p><strong>Vorname:</strong> {{ userData.firstName }}</p>
-      <p><strong>Nachname:</strong> {{ userData.lastName }}</p>
-      <p><strong>Telefon:</strong> {{ userData.phone }}</p>
-
-      <button class="btn btn-primary mt-2" (click)="toggleEdit()">Daten bearbeiten</button>
-    </div>
-
-    <div *ngIf="isEditing">
-      <form (ngSubmit)="saveChanges()">
+    <div *ngIf="userData; else loading">
+      <form *ngIf="isEditing; else viewMode" (ngSubmit)="onSaveChanges()">
+        <!-- Grunddaten -->
         <div class="mb-3">
-          <label for="firstName" class="form-label">Vorname</label>
-          <input id="firstName" [(ngModel)]="userData.firstName" name="firstName" class="form-control" required />
+          <label for="email" class="form-label">E-Mail (nicht änderbar)</label>
+          <input type="email" class="form-control" id="email" [value]="userData.email" disabled>
+        </div>
+        <div class="mb-3">
+          <label for="username" class="form-label">Benutzername</label>
+          <input type="text" class="form-control" id="username" [(ngModel)]="updatedUserData.userName" name="username">
+          <div *ngIf="errorMessage" class="text-danger mt-1">{{ errorMessage }}</div>
         </div>
 
+        <!-- Persönliche Informationen -->
         <div class="mb-3">
-          <label for="lastName" class="form-label">Nachname</label>
-          <input id="lastName" [(ngModel)]="userData.lastName" name="lastName" class="form-control" required />
+          <label for="title" class="form-label">Titel</label>
+          <input type="text" class="form-control" id="title" [(ngModel)]="updatedUserData.title" name="title">
+          <div *ngIf="errorMessage" class="text-danger mt-1">{{ errorMessage }}</div>
+        </div>
+        <div class="mb-3">
+          <label for="gender" class="form-label">Geschlecht</label>
+          <select class="form-control" id="gender" [(ngModel)]="updatedUserData.gender" name="gender">
+            <option value="">Bitte auswählen</option>
+            <option value="male">Männlich</option>
+            <option value="female">Weiblich</option>
+            <option value="other">Divers</option>
+          </select>
         </div>
 
+        <!-- Telefonnummern -->
         <div class="mb-3">
-          <label for="phone" class="form-label">Telefon</label>
-          <input id="phone" [(ngModel)]="userData.phone" name="phone" class="form-control" />
+          <label for="phonePrivate" class="form-label">Telefon (Privat)</label>
+          <input type="text" class="form-control" id="phonePrivate" [(ngModel)]="updatedUserData.phonePrivate" name="phonePrivate">
+          <div *ngIf="errorMessage" class="text-danger mt-1">{{ errorMessage }}</div>
+        </div>
+        <div class="mb-3">
+          <label for="phoneMobile" class="form-label">Telefon (Mobil)</label>
+          <input type="text" class="form-control" id="phoneMobile" [(ngModel)]="updatedUserData.phoneMobile" name="phoneMobile">
+          <div *ngIf="errorMessage" class="text-danger mt-1">{{ errorMessage }}</div>
+        </div>
+        <div class="mb-3">
+          <label for="phoneWork" class="form-label">Telefon (Arbeit)</label>
+          <input type="text" class="form-control" id="phoneWork" [(ngModel)]="updatedUserData.phoneWork" name="phoneWork">
+          <div *ngIf="errorMessage" class="text-danger mt-1">{{ errorMessage }}</div>
         </div>
 
-        <button type="submit" class="btn btn-success">Speichern</button>
-        <button type="button" class="btn btn-secondary ms-2" (click)="toggleEdit()">Abbrechen</button>
+        <!-- Alter & Geburtsdatum -->
+        <div class="mb-3">
+          <label for="birthDate" class="form-label">Geburtsdatum</label>
+          <input type="date" class="form-control" id="birthDate" [(ngModel)]="updatedUserData.birthDate" name="birthDate">
+          <div *ngIf="errorMessage" class="text-danger mt-1">{{ errorMessage }}</div>
+        </div>
+        <div class="mb-3">
+          <label for="age" class="form-label">Alter</label>
+          <input type="number" class="form-control" id="age" [(ngModel)]="updatedUserData.age" name="age">
+          <div *ngIf="errorMessage" class="text-danger mt-1">{{ errorMessage }}</div>
+        </div>
+
+        <!-- Adresse -->
+        <div class="mb-3">
+          <label for="street" class="form-label">Straße</label>
+          <input type="text" class="form-control" id="street" [(ngModel)]="updatedUserData.street" name="street">
+          <div *ngIf="errorMessage" class="text-danger mt-1">{{ errorMessage }}</div>
+        </div>
+        <div class="mb-3">
+          <label for="zip" class="form-label">PLZ</label>
+          <input type="text" class="form-control" id="zip" [(ngModel)]="updatedUserData.zip" name="zip">
+          <div *ngIf="errorMessage" class="text-danger mt-1">{{ errorMessage }}</div>
+        </div>
+        <div class="mb-3">
+          <label for="city" class="form-label">Stadt</label>
+          <input type="text" class="form-control" id="city" [(ngModel)]="updatedUserData.city" name="city">
+          <div *ngIf="errorMessage" class="text-danger mt-1">{{ errorMessage }}</div>
+        </div>
+        <div class="mb-3">
+          <label for="country" class="form-label">Land</label>
+          <input type="text" class="form-control" id="country" [(ngModel)]="updatedUserData.country" name="country">
+          <div *ngIf="errorMessage" class="text-danger mt-1">{{ errorMessage }}</div>
+        </div>
+
+        <!-- Buttons -->
+        <button type="submit" class="btn btn-success">💾 Änderungen speichern</button>
+        <button type="button" class="btn btn-outline-secondary ms-2" (click)="toggleEdit()">✖ Abbrechen</button>
       </form>
-    </div>
-  </div>
 
-  <ng-template #loading>
-    <p>Lade Benutzerdaten...</p>
-  </ng-template>
+      <ng-template #viewMode>
+        <p><strong>E-Mail:</strong> {{ userData.email }}</p>
+        <p><strong>Benutzername:</strong> {{ userData.userName }}</p>
+        <p><strong>Geburtsdatum:</strong> {{ userData.birthDate || 'Nicht angegeben' }}</p>
+        <p><strong>Telefon (Privat):</strong> {{ userData.phonePrivate || 'Nicht angegeben' }}</p>
+        <p><strong>Adresse:</strong> {{ userData.street || '-' }}, {{ userData.city || '-' }}, {{ userData.zip || '-' }}, {{ userData.country || '-' }}</p>
+        <button class="btn btn-warning" (click)="toggleEdit()">Bearbeiten</button>
+      </ng-template>
+    </div>
+
+    <ng-template #loading>
+      <p>Lade Benutzerdaten...</p>
+    </ng-template>
+  </div>
 </div>

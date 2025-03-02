@@ -8,6 +8,8 @@ import { AdminComponent } from './admin/admin.component';
 import { AdminGuard } from './services/admin.guard';
 import { UserComponent } from './user/user.component';
 import { RegisterComponent } from './register/register.component';
+import { PasswordResetRequestComponent } from './password-reset-request/password-reset-request.component';
+import { PasswordResetComponent } from './password-reset/password-reset.component';
 
 const authGuard: CanActivateFn = () => {
   const authService = inject(AuthService);
@@ -28,5 +30,9 @@ export const routes: Routes = [
   { path: 'user', component: UserComponent, canActivate: [authGuard] },
   { path: 'login', component: LoginComponent },
   { path: 'admin', component: AdminComponent, canActivate: [AdminGuard], data: { role: 'Admin' } },
-  { path: 'register', component: RegisterComponent },
-];
+  { path: 'register', component: RegisterComponent },  
+  { path: 'forgot-password', component: PasswordResetRequestComponent },
+  { path: 'reset-password', component: PasswordResetComponent },
+  ];
+  
+

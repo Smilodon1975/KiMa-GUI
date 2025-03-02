@@ -19,10 +19,10 @@
                 <li class="nav-item" *ngIf="!authService.isLoggedIn()">
                     <a class="nav-link text-dark" routerLink="/login">Login</a>
                 </li>
-                <li class="nav-item" *ngIf="isLoggedIn()">
+                <li class="nav-item" *ngIf="isLoggedIn">
                     <a class="nav-link text-dark" (click)="logout()" style="cursor: pointer;">Logout</a>
                 </li>
-                <li class="nav-item" *ngIf="(authService.getUserRole() | async) === 'Admin'">
+                <li class="nav-item" *ngIf="userRole === 'Admin'">
                     <a class="nav-link text-dark" routerLink="/admin">Admin</a>
                   </li>
                   

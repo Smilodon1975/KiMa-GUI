@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable, of, catchError } from 'rxjs';
+import { UserUpdateModel } from '../models/user-update.model';
 
 @Injectable({
   providedIn: 'root'
@@ -18,8 +19,12 @@ export class UserService {
   }
 
    // 🔹 Benutzerdaten speichern
-   updateUserData(userData: any): Observable<any> {
-    return this.http.put(`${this.userUrl}/update`, userData);
+   updateUserData(userData: UserUpdateModel): Observable<any> {
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${localStorage.getItem("authToken")}` // ✅ Token wird mitgeschickt
+    });
+    return this.http.put(`${this.userUrl}/update`, userData, { headers });
   }
+  
   
 }

@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { AuthService } from '../services/auth.service';
 import { Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
+import { CommonModule } from '@angular/common';
 
 
 @Component({
@@ -9,32 +10,29 @@ import { FormsModule } from '@angular/forms';
   standalone: true,
   templateUrl: './register.component.html',
   styleUrl: './register.component.css',
-  imports: [FormsModule]
+  imports: [FormsModule, CommonModule]
 })
 export class RegisterComponent { 
-  email = '';
-  password = ''; 
-  firstName = '';  
-  lastName = '';  
+  registerData = {
+    email: '',
+    password: '',
+    userName: ''
+  };  
+
+  successMessage: string | null = null;
+  errorMessage: string | null = null;
 
   constructor(private authService: AuthService, private router: Router) {}
 
   onRegister() {
-    this.authService.register( this.email, this.password, this.firstName, this.lastName).subscribe({
-      next: (response) => {
-        alert(response.message); // Jetzt wird die JSON-Nachricht ausgelesen
-        this.router.navigate(['/login']);
+    this.authService.register(this.registerData).subscribe({
+      next: () => {
+        this.successMessage = 'Registrierung erfolgreich!';
+        setTimeout(() => this.router.navigate(['/login']), 2000);
       },
-      error: (err) => {
-        let errorMessage = "Registrierung fehlgeschlagen.";
-        if (err.error && err.error.message) {
-          errorMessage = err.error.message;
-        } else if (typeof err.error === 'object') {
-          errorMessage = JSON.stringify(err.error); // Falls das Backend ein Object sendet
-        }
-        alert(errorMessage);
+      error: (error) => {
+        this.errorMessage = error.error?.message || 'Fehler bei der Registrierung.';
       }
     });
-    
   }
-}
+}  

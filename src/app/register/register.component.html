@@ -1,18 +1,24 @@
-<h2>Registrieren</h2>
-<form (ngSubmit)="onRegister()">
-  <label>Vorname:</label>
-  <input type="text" [(ngModel)]="firstName" name="firstName" required />
-
-  <label>Nachname:</label>
-  <input type="text" [(ngModel)]="lastName" name="lastName" required />
-
-  <label>E-Mail:</label>
-  <input type="email" [(ngModel)]="email" name="email" required />
-
-  <label>Passwort:</label>
-  <input type="password" [(ngModel)]="password" name="password" required />  
-
-  <button type="submit">Registrieren</button>
-</form>
+<div class="container d-flex justify-content-center align-items-center vh-100">
+  <div class="card shadow p-4 w-50">
+    <h2 class="text-center mb-4">Registrierung</h2>
+    <form (ngSubmit)="onRegister()">     
+      <div class="mb-3">
+        <label for="email" class="form-label">E-Mail</label>
+        <input type="email" class="form-control" id="email" [(ngModel)]="registerData.email" name="email" required>
+      </div>
+      <div class="mb-3">
+        <label for="password" class="form-label">Passwort</label>
+        <input type="password" class="form-control" id="password" [(ngModel)]="registerData.password" name="password" required>
+      </div>
+      <div class="mb-3">
+        <label for="username" class="form-label">Username</label>
+        <input type="username" class="form-control" id="username" [(ngModel)]="registerData.userName" name="username">
+      </div>
+      <button type="submit" class="btn btn-success w-100">Registrieren</button>
+    </form>
+    <p *ngIf="successMessage" class="text-success">{{ successMessage }}</p>
+    <p *ngIf="errorMessage" class="text-danger">{{ errorMessage }}</p>
+  </div>
+</div>
 
 

@@ -12,13 +12,15 @@ import {jwtDecode} from 'jwt-decode';
   imports: [FormsModule]
 })
 export class LoginComponent {
-  email = '';
-  password = '';
+  loginData = {
+    email: '',
+    password: ''
+  };
 
   constructor(private authService: AuthService, private router: Router) {}
 
   onSubmit() {
-    this.authService.login(this.email, this.password).subscribe({
+    this.authService.login(this.loginData).subscribe({
       next: (response) => {
         localStorage.setItem('token', response.token);
         alert('Login erfolgreich!');
@@ -36,6 +38,6 @@ export class LoginComponent {
         alert('Login fehlgeschlagen! Überprüfe deine Eingaben.');
       }
     });
-  }
+  } 
   
 }
