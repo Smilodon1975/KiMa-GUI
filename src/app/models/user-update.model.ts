@@ -9,6 +9,7 @@ export interface UserUpdateModel {
   title?: string;
   gender?: string;
   status?: string;
+  password?: string;
 
   // ✅ Telefonnummern
   phonePrivate?: string;
@@ -23,6 +24,7 @@ export interface UserUpdateModel {
   zip?: string;
   city?: string;
   country?: string;
+  role?: string;
   
 }
 

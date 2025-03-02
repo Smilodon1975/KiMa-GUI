@@ -4,6 +4,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { User } from '../models/user.model';
 import { UserUpdateModel } from '../models/user-update.model';
+import * as bootstrap from 'bootstrap';
 
 @Component({
   selector: 'app-user',
@@ -14,24 +15,21 @@ import { UserUpdateModel } from '../models/user-update.model';
 })
 export class UserComponent implements OnInit {
   userData: User | null = null;
-  isEditing = false;
-  updatedUserData: any = {};
+  updatedUserData: UserUpdateModel = {} as UserUpdateModel; 
   successMessage = '';
   errorMessage = '';
 
   constructor(private userService: UserService) {}
 
   ngOnInit(): void {
-    if (!this.userData) { // 🛑 Verhindert wiederholte API-Calls
-      this.loadUserData();
-    }
+    this.loadUserData();
   }
 
   loadUserData(): void {
     this.userService.getMyData().subscribe({
       next: (data) => {
         this.userData = data;
-        this.updatedUserData = { ...data }; // Kopie für Bearbeitung
+        this.updatedUserData = { ...data };
       },
       error: (err) => {
         this.errorMessage = "Fehler beim Laden der Benutzerdaten.";
@@ -40,51 +38,35 @@ export class UserComponent implements OnInit {
     });
   }
 
-  toggleEdit(): void {
-    this.isEditing = !this.isEditing;
-    if (!this.isEditing) {
-      this.updatedUserData = { ...this.userData }; // Änderungen verwerfen
+  openModal(): void {
+    const modalElement = document.getElementById('userModal');
+    if (modalElement) {
+      const modalInstance = new bootstrap.Modal(modalElement);
+      modalInstance.show();
     }
   }
 
-  onSaveChanges() {
-    if (!this.updatedUserData) {
-      alert('Keine Daten zum Speichern vorhanden.');
-      return;
+  closeModal(): void {
+    const modalElement = document.getElementById('userModal');
+    if (modalElement) {
+      const modalInstance = bootstrap.Modal.getInstance(modalElement);
+      if (modalInstance) {
+        modalInstance.hide();
+      }
     }
-  
-    const updatedUser: UserUpdateModel = {
-      id: this.updatedUserData.id, // 🔹 User-ID muss immer gesendet werden
-      userName: this.updatedUserData.userName,
-      email: this.updatedUserData.email,
-      firstName: this.updatedUserData.firstName,
-      lastName: this.updatedUserData.lastName,
-      title: this.updatedUserData.title,
-      gender: this.updatedUserData.gender,
-      status: this.updatedUserData.status,
-      phonePrivate: this.updatedUserData.phonePrivate,
-      phoneMobile: this.updatedUserData.phoneMobile,
-      phoneWork: this.updatedUserData.phoneWork,
-      age: this.updatedUserData.age,
-      birthDate: this.updatedUserData.birthDate,
-      street: this.updatedUserData.street,
-      zip: this.updatedUserData.zip,
-      city: this.updatedUserData.city,
-      country: this.updatedUserData.country,
-    };
-  
-    this.userService.updateUserData(updatedUser).subscribe({
+  }
+
+  onSaveChanges(): void {
+    this.userService.updateUserData(this.updatedUserData).subscribe({
       next: () => {
         this.successMessage = 'Änderungen gespeichert!';
-        this.isEditing = false;
         this.loadUserData(); // 🔹 Benutzerinfo neu laden
+        this.closeModal();
       },
       error: (err) => {
         this.errorMessage = 'Fehler beim Speichern der Änderungen.';
         console.error('Fehler:', err);
-      }
+      },
     });
   }
-  
-  
 }
