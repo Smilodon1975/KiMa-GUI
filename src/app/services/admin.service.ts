@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { UserUpdateModel } from '../models/user-update.model';
 
 @Injectable({
   providedIn: 'root'
@@ -10,8 +11,15 @@ export class AdminService {
 
   constructor(private http: HttpClient) {}
 
-  // 🔹 Alle User abrufen
   getAllUsers(): Observable<any[]> {
     return this.http.get<any[]>(`${this.adminUrl}/users`);
   }
-}  
+
+  updateUserData(userData: UserUpdateModel): Observable<any> {
+    return this.http.put(`${this.adminUrl}/update`, userData);
+  }
+
+  deleteUser(userId: number): Observable<any> {
+    return this.http.delete(`${this.adminUrl}/delete/${userId}`);
+  }
+}
