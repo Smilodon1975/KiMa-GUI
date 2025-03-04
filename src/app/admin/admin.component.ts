@@ -24,11 +24,19 @@ export class AdminComponent implements OnInit {
   private userModal: any;
   successMessage = '';
   errorMessage = '';
+  loginMessage: string | null = '';
 
   constructor(private adminService: AdminService) {}
 
   ngOnInit(): void {
     this.loadUsers();
+    this.loginMessage = localStorage.getItem('loginMessage');
+    if (this.loginMessage) {
+      setTimeout(() => {
+        this.loginMessage = '';
+        localStorage.removeItem('loginMessage');
+      }, 3000);
+    }
   }
 
   loadUsers(): void {

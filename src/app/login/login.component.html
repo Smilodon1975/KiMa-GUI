@@ -3,6 +3,12 @@
 <div class="container d-flex justify-content-center align-items-center vh-100">
   <div class="card shadow p-4 w-50">
     <h2 class="text-center mb-4">Login</h2>
+
+    <div *ngIf="loginMessage" class="alert text-center" [ngClass]="{'alert-success': isSuccess, 'alert-danger': !isSuccess}">
+      {{ loginMessage }}
+    </div>
+    
+
     <form (ngSubmit)="onSubmit()">
       <div class="mb-3">
         <label for="email" class="form-label">E-Mail</label>

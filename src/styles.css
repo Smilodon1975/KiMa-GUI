@@ -52,7 +52,15 @@ a:hover {
     transform: scale(1.1);
 }
 
-
+.alert {
+    opacity: 1;
+    transition: opacity 1s ease-in-out;
+  }
+  
+  .alert.ng-leave {
+    opacity: 0;
+  }
+  
 
 
 

@@ -3,19 +3,19 @@ import { AuthService } from '../services/auth.service';
 import { Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import {jwtDecode} from 'jwt-decode';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-login',
   standalone: true,
   templateUrl: './login.component.html',
   styleUrl: './login.component.css',
-  imports: [FormsModule]
+  imports: [FormsModule, CommonModule]
 })
 export class LoginComponent {
-  loginData = {
-    email: '',
-    password: ''
-  };
+  loginData = {email: '', password: ''};
+  loginMessage: string = '';
+  isSuccess: boolean = false;
 
   constructor(private authService: AuthService, private router: Router) {}
 
@@ -23,7 +23,7 @@ export class LoginComponent {
     this.authService.login(this.loginData).subscribe({
       next: (response) => {
         localStorage.setItem('token', response.token);
-        alert('Login erfolgreich!');
+        localStorage.setItem('loginMessage', 'Login erfolgreich!');
   
         this.authService.getUserRole().subscribe(role => {
           console.log("Ermittelte Rolle:", role);
@@ -35,9 +35,12 @@ export class LoginComponent {
         });
       },
       error: (err) => {
-        alert('Login fehlgeschlagen! Überprüfe deine Eingaben.');
+        this.loginMessage = 'Login fehlgeschlagen! Bitte überprüfe deine Eingaben.';
+        this.isSuccess = false;
+        setTimeout(() => this.loginMessage = '', 3000);
       }
     });
-  } 
+  }
+  
   
 }

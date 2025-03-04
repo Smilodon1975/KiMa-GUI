@@ -3,6 +3,11 @@
     <h2 class="text-center">Hallo {{ userData?.userName }}, willkommen!</h2>
     <p class="text-center">Hier kannst du deine Daten verwalten.</p>
 
+    <div *ngIf="loginMessage" class="alert alert-success text-center">
+      {{ loginMessage }}
+    </div>
+    
+
     <div class="text-center mt-3">
       <button class="btn btn-primary" (click)="openModal()">Meine Daten</button>
     </div>

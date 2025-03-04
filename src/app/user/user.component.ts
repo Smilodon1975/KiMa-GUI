@@ -14,6 +14,7 @@ import * as bootstrap from 'bootstrap';
   imports: [CommonModule, FormsModule]
 })
 export class UserComponent implements OnInit {
+  loginMessage: string | null = '';
   userData: User | null = null;
   updatedUserData: UserUpdateModel = {} as UserUpdateModel; 
   successMessage = '';
@@ -23,6 +24,13 @@ export class UserComponent implements OnInit {
 
   ngOnInit(): void {
     this.loadUserData();
+    this.loginMessage = localStorage.getItem('loginMessage');
+    if (this.loginMessage) {
+      setTimeout(() => {
+        this.loginMessage = '';
+        localStorage.removeItem('loginMessage');
+      }, 3000);
+    }
   }
 
   loadUserData(): void {
