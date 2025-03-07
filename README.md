@@ -1,43 +1,47 @@
-# KiMa API – Benutzer- & Admin-Verwaltung
+# KiMa GUI – Benutzer- & Admin-Frontend
 
-**🔹 KiMa ist eine API zur Verwaltung von Probanden & Admins, mit sicherer Authentifizierung und Benutzersteuerung.**  
-🌐 **Frontend:** [KiMa GUI](https://github.com/dein-username/kima-gui)  
+🔹 **Das Frontend für das KiMa-Projekt** – eine moderne Angular-App zur Verwaltung von Probanden und Administratoren.  
+🔗 **API Backend:** [KiMa API](https://github.com/dein-username/kima-api)
 
 ## 🚀 Features
-- **JWT-Authentifizierung** für sichere Logins
-- **CRUD-Operationen** für Benutzerverwaltung
-- **Passwort-Reset mit E-Mail-Link**
-- **Rollenbasiertes Zugriffssystem (User/Admin)**
-- **Swagger API-Dokumentation**
+- **Login & Registrierung mit JWT**
+- **Admin-Bereich mit Benutzerverwaltung**
+- **Passwort-Reset via E-Mail**
+- **Responsive UI mit Bootstrap**
+- **Paginierung & Filter für Benutzer**
 
 ## 📂 Technologie-Stack
-- **Backend:** .NET Core 7, Entity Framework, MySQL  
-- **Sicherheit:** JWT, ASP.NET Identity  
-- **Doku & API-Tests:** Swagger  
+- **Frontend:** Angular 16, TypeScript, Bootstrap  
+- **HTTP & Auth:** Angular Services, Interceptors  
+- **State-Management:** RxJS  
 
 ## 🔧 Installation & Setup
-### 🔹 1. API klonen & Umgebung vorbereiten
+### 🔹 1. Projekt klonen & Abhängigkeiten installieren
 ```sh
-git clone https://github.com/dein-username/kima-api.git
-cd kima-api
+git clone https://github.com/dein-username/kima-gui.git
+cd kima-gui
+npm install
+🔹 2. Umgebungsvariablen setzen (environment.ts)
+Passe die API-URL an:
 
-Passe appsettings.json an:
-"ConnectionStrings": {
-  "DefaultConnection": "Server=localhost;Database=KiMaDB;User=root;Password=1234;"
-}
+ts
+Kopieren
+Bearbeiten
+export const environment = {
+  production: false,
+  apiUrl: "https://localhost:7090/api"
+};
+🔹 3. Anwendung starten
+sh
+Kopieren
+Bearbeiten
+ng serve
+🔗 Frontend läuft auf: http://localhost:4200
 
-Datenbank migrieren & starten
-dotnet ef database update
-dotnet run
+📡 API-Anbindung
+Das Frontend kommuniziert mit der KiMa API über HTTP-Requests.
 
-🛠 Endpunkte (Beispiele)
-Methode	Endpoint	Beschreibung
-POST	/api/auth/login	Benutzer einloggen
-POST	/api/auth/register	Neuen Benutzer registrieren
-GET	/api/admin/users	Liste aller Benutzer abrufen (Admin)
-PUT	/api/admin/update	Benutzer aktualisieren
-DELETE	/api/admin/delete/{id}	Benutzer löschen
-🚀 Geplante Features
-✅ Zwei-Faktor-Authentifizierung
-✅ Admin-Dashboard mit Statistiken
-✅ Dark Mode für die UI
+📜 Geplante Features
+✅ Dark Mode
+✅ Dashboard mit Statistiken
+✅ Push-Benachrichtigungen
