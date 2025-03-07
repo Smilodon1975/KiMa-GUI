@@ -11,6 +11,7 @@ import { RegisterComponent } from './register/register.component';
 import { PasswordResetRequestComponent } from './password-reset-request/password-reset-request.component';
 import { PasswordResetComponent } from './password-reset/password-reset.component';
 
+// ✅ AuthGuard für geschützte Routen
 const authGuard: CanActivateFn = () => {
   const authService = inject(AuthService);
   const router = inject(Router);
@@ -23,16 +24,15 @@ const authGuard: CanActivateFn = () => {
   }
 };
 
+// ✅ Definiert die Anwendungsrouten
 export const routes: Routes = [
   { path: '', component: HomeComponent },
   { path: 'home', component: HomeComponent },
   { path: 'info', component: InfoComponent }, // 🔹 Info bleibt für alle zugänglich
-  { path: 'user', component: UserComponent, canActivate: [authGuard] },
+  { path: 'user', component: UserComponent, canActivate: [authGuard] }, // 🔹 Geschützt durch AuthGuard
   { path: 'login', component: LoginComponent },
-  { path: 'admin', component: AdminComponent, canActivate: [AdminGuard], data: { role: 'Admin' } },
+  { path: 'admin', component: AdminComponent, canActivate: [AdminGuard], data: { role: 'Admin' } }, // 🔹 Geschützt durch AdminGuard
   { path: 'register', component: RegisterComponent },  
   { path: 'forgot-password', component: PasswordResetRequestComponent },
   { path: 'reset-password', component: PasswordResetComponent },
-  ];
-  
-
+];

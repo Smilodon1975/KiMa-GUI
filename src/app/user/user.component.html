@@ -3,10 +3,10 @@
     <h2 class="text-center">Hallo {{ userData?.userName }}, willkommen!</h2>
     <p class="text-center">Hier kannst du deine Daten verwalten.</p>
 
+    <!-- ✅ Erfolgreiche Login-Meldung -->
     <div *ngIf="loginMessage" class="alert alert-success text-center">
       {{ loginMessage }}
     </div>
-    
 
     <div class="text-center mt-3">
       <button class="btn btn-primary" (click)="openModal()">Meine Daten</button>
@@ -14,9 +14,9 @@
   </div>
 </div>
 
-<!-- 🔹 Modal für Benutzerdaten -->
+<!-- ✅ Modal für Benutzerdaten -->
 <div class="modal fade" id="userModal" tabindex="-1" aria-labelledby="userModalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-lg"> <!-- 🔹 Größeres Modal für bessere Darstellung -->
+  <div class="modal-dialog modal-lg">
     <div class="modal-content">
       <div class="modal-header">
         <h5 class="modal-title" id="userModalLabel">Meine Daten</h5>
@@ -24,6 +24,8 @@
       </div>
       <div class="modal-body">
         <form #userForm="ngForm" (ngSubmit)="onSaveChanges()">
+          
+          <!-- ✅ E-Mail und Benutzername -->
           <div class="row">
             <div class="col-md-6">
               <label for="email" class="form-label">E-Mail</label>
@@ -35,6 +37,7 @@
             </div>
           </div>
 
+          <!-- ✅ Persönliche Daten -->
           <div class="row mt-3">
             <div class="col-md-6">
               <label for="firstName" class="form-label">Vorname</label>
@@ -46,6 +49,7 @@
             </div>
           </div>
 
+          <!-- ✅ Telefonnummern -->
           <div class="row mt-3">
             <div class="col-md-6">
               <label for="phoneMobile" class="form-label">Mobilnummer</label>
@@ -57,6 +61,7 @@
             </div>
           </div>
 
+          <!-- ✅ Adresse -->
           <div class="row mt-3">
             <div class="col-md-6">
               <label for="street" class="form-label">Straße</label>
@@ -79,15 +84,18 @@
             </div>
           </div>
 
+          <!-- ✅ Passwort ändern -->
           <div class="mt-3">
             <label for="password" class="form-label">Passwort (leer lassen, wenn nicht ändern)</label>
             <input type="password" class="form-control" id="password" [(ngModel)]="updatedUserData.password" name="password">
           </div>
 
+          <!-- ✅ Buttons -->
           <div class="text-center mt-4">
             <button type="submit" class="btn btn-success">Speichern</button>
             <button type="button" class="btn btn-secondary ms-2" data-bs-dismiss="modal">Abbrechen</button>
           </div>
+
         </form>
       </div>
     </div>

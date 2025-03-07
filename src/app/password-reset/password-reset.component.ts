@@ -21,6 +21,7 @@ export class PasswordResetComponent {
     private router: Router
   ) {}
 
+  // ✅ Liest E-Mail und Token aus der URL und setzt sie in das Passwort-Reset-Formular
   ngOnInit() {
     this.route.queryParams.subscribe(params => {
       this.passwordResetData.email = params['email'] || '';
@@ -28,12 +29,13 @@ export class PasswordResetComponent {
     });
   }
 
+  // ✅ Sendet das neue Passwort an den AuthService und verarbeitet die Antwort
   resetPassword() {
     this.authService.resetPassword(this.passwordResetData).subscribe({
       next: () => {
         this.successMessage = 'Passwort erfolgreich zurückgesetzt!';
         setTimeout(() => {
-          this.router.navigate(['/login']);
+          this.router.navigate(['/login']); // ✅ Nach erfolgreicher Änderung zum Login weiterleiten
         }, 2000);
       },
       error: () => {
@@ -42,4 +44,3 @@ export class PasswordResetComponent {
     });
   }
 }
-

@@ -7,12 +7,10 @@ import { importProvidersFrom } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 
-
-
 export const appConfig: ApplicationConfig = {
   providers: [
-    importProvidersFrom(CommonModule, FormsModule), // 🔹 Beide Module importieren!
-    provideRouter(routes),   
-    provideHttpClient(withInterceptors([authInterceptor]))
+    importProvidersFrom(CommonModule, FormsModule), // ✅ Importiert CommonModule & FormsModule
+    provideRouter(routes),   // ✅ Registriert die Routen
+    provideHttpClient(withInterceptors([authInterceptor])) // ✅ Setzt den Auth-Interceptor für HTTP-Anfragen
   ]
 };

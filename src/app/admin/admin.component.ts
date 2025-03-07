@@ -30,6 +30,8 @@ export class AdminComponent implements OnInit {
 
   ngOnInit(): void {
     this.loadUsers();
+
+    // ✅ Login-Meldung aus localStorage abrufen und nach 3 Sek. ausblenden
     this.loginMessage = localStorage.getItem('loginMessage');
     if (this.loginMessage) {
       setTimeout(() => {
@@ -39,6 +41,7 @@ export class AdminComponent implements OnInit {
     }
   }
 
+  // ✅ Lädt die Benutzerliste aus dem AdminService
   loadUsers(): void {
     this.adminService.getAllUsers().subscribe({
       next: (data) => {
@@ -52,7 +55,7 @@ export class AdminComponent implements OnInit {
     });
   }
 
-  // 🔹 Pagination berechnen
+  // ✅ Berechnet die Seitenzahlen für die Paginierung
   calculatePagination(): void {
     const pageCount = Math.ceil(this.filteredUsers.length / this.itemsPerPage);
     this.totalPages = Array(pageCount).fill(0).map((_, i) => i + 1);
@@ -62,6 +65,7 @@ export class AdminComponent implements OnInit {
     this.totalPages = Array(Math.ceil(this.users.length / this.itemsPerPage)).fill(0).map((_, i) => i + 1);
   }
 
+  // ✅ Filtert die Benutzer basierend auf dem Suchtext
   filterUsers(): void {
     this.filteredUsers = this.users.filter(user =>
       user.email?.toLowerCase().includes(this.searchText.toLowerCase()) ||
@@ -72,11 +76,12 @@ export class AdminComponent implements OnInit {
     this.calculatePagination();
   }
 
-   // 🔹 Seite wechseln
-   changePage(page: number): void {
+  // ✅ Wechselt die angezeigte Seite in der Paginierung
+  changePage(page: number): void {
     this.currentPage = page;
   }
 
+  // ✅ Öffnet das Modal zur Bearbeitung eines Benutzers
   openModal(user: UserUpdateModel): void {
     this.selectedUser = { ...user } as User;
     const modalElement = document.getElementById('adminUserModal');
@@ -86,6 +91,7 @@ export class AdminComponent implements OnInit {
     }
   }
 
+  // ✅ Speichert Änderungen an den Benutzerdaten
   onSaveChanges(): void {
     this.adminService.updateUserData(this.selectedUser).subscribe({
       next: () => {
@@ -98,13 +104,13 @@ export class AdminComponent implements OnInit {
         this.errorMessage = 'Fehler beim Speichern der Änderungen.';
         console.error('Fehler:', err);
         setTimeout(() => this.errorMessage = '', 3000); // ❌ Fehlermeldung nach 3 Sek. ausblenden
-      
       }
     });
   }
 
+  // ✅ Schließt das Modal
   closeModal(): void {
-    const modalElement = document.getElementById('adminUserModal'); // 💡 Hier Admin-Modal ID nehmen!
+    const modalElement = document.getElementById('adminUserModal'); 
     if (modalElement) {
       const modalInstance = bootstrap.Modal.getInstance(modalElement);
       if (modalInstance) {
@@ -112,8 +118,8 @@ export class AdminComponent implements OnInit {
       }
     }
   }
-  
 
+  // ✅ Löscht den ausgewählten Benutzer nach Bestätigung
   deleteUser(): void {
     if (confirm('Möchtest du diesen Benutzer wirklich löschen?')) {
       this.adminService.deleteUser(this.selectedUser.id).subscribe({
@@ -127,15 +133,4 @@ export class AdminComponent implements OnInit {
       });
     }
   }
-
-  // filterUsers(): void {
-  //   this.filteredUsers = this.users.filter(user =>
-  //     user.email.toLowerCase().includes(this.searchText.toLowerCase()) 
-  //     ||
-  //     user.firstName.toLowerCase().includes(this.searchText.toLowerCase()) ||
-  //     user.lastName.toLowerCase().includes(this.searchText.toLowerCase())
-  //   );
-  // }
-
-  
 }

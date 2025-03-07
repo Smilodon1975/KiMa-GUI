@@ -22,8 +22,11 @@ export class UserComponent implements OnInit {
 
   constructor(private userService: UserService) {}
 
+  // ✅ Initialisiert die Komponente und lädt Benutzerdaten
   ngOnInit(): void {
     this.loadUserData();
+
+    // ✅ Zeigt die Login-Meldung an und blendet sie nach 3 Sekunden aus
     this.loginMessage = localStorage.getItem('loginMessage');
     if (this.loginMessage) {
       setTimeout(() => {
@@ -33,6 +36,7 @@ export class UserComponent implements OnInit {
     }
   }
 
+  // ✅ Lädt die aktuellen Benutzerdaten aus dem Backend
   loadUserData(): void {
     this.userService.getMyData().subscribe({
       next: (data) => {
@@ -46,6 +50,7 @@ export class UserComponent implements OnInit {
     });
   }
 
+  // ✅ Öffnet das Modal zur Bearbeitung der Benutzerdaten
   openModal(): void {
     const modalElement = document.getElementById('userModal');
     if (modalElement) {
@@ -54,6 +59,7 @@ export class UserComponent implements OnInit {
     }
   }
 
+  // ✅ Schließt das Modal
   closeModal(): void {
     const modalElement = document.getElementById('userModal');
     if (modalElement) {
@@ -64,6 +70,7 @@ export class UserComponent implements OnInit {
     }
   }
 
+  // ✅ Speichert die Änderungen am Benutzerprofil
   onSaveChanges(): void {
     this.userService.updateUserData(this.updatedUserData).subscribe({
       next: () => {

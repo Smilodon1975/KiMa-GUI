@@ -4,7 +4,6 @@ import { Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 
-
 @Component({
   selector: 'app-register',
   standalone: true,
@@ -24,11 +23,12 @@ export class RegisterComponent {
 
   constructor(private authService: AuthService, private router: Router) {}
 
+  // ✅ Registriert einen neuen Benutzer und leitet nach Erfolg zum Login weiter
   onRegister() {
     this.authService.register(this.registerData).subscribe({
       next: () => {
         this.successMessage = 'Registrierung erfolgreich!';
-        setTimeout(() => this.router.navigate(['/login']), 2000);
+        setTimeout(() => this.router.navigate(['/login']), 2000); // ✅ Nach 2 Sek. zum Login weiterleiten
       },
       error: (error) => {
         this.errorMessage = error.error?.message || 'Fehler bei der Registrierung.';

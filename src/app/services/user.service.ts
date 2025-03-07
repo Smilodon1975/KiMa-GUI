@@ -7,24 +7,22 @@ import { UserUpdateModel } from '../models/user-update.model';
   providedIn: 'root'
 })
 export class UserService {
-  private userUrl = 'https://localhost:7090/api/user'; // Passe den Port an!
+  private userUrl = 'https://localhost:7090/api/user'; // ✅ API-Endpunkt für Benutzer
 
   constructor(private http: HttpClient) {}
 
-  // 🔹 Proband: Eigene Daten abrufen
+  // ✅ Ruft die eigenen Benutzerdaten ab
   getMyData(): Observable<any> {
     return this.http.get<any>(`${this.userUrl}/me`).pipe(
-      catchError(() => of(null))
+      catchError(() => of(null)) // ❌ Fehler abfangen und `null` zurückgeben
     );
   }
 
-   // 🔹 Benutzerdaten speichern
-   updateUserData(userData: UserUpdateModel): Observable<any> {
+  // ✅ Aktualisiert die Benutzerdaten
+  updateUserData(userData: UserUpdateModel): Observable<any> {
     const headers = new HttpHeaders({
       'Authorization': `Bearer ${localStorage.getItem("authToken")}` // ✅ Token wird mitgeschickt
     });
     return this.http.put(`${this.userUrl}/update`, userData, { headers });
   }
-  
-  
 }
