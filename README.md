@@ -1,27 +1,43 @@
-# KiMaGui
+# KiMa API – Benutzer- & Admin-Verwaltung
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 18.1.2.
+**🔹 KiMa ist eine API zur Verwaltung von Probanden & Admins, mit sicherer Authentifizierung und Benutzersteuerung.**  
+🌐 **Frontend:** [KiMa GUI](https://github.com/dein-username/kima-gui)  
 
-## Development server
+## 🚀 Features
+- **JWT-Authentifizierung** für sichere Logins
+- **CRUD-Operationen** für Benutzerverwaltung
+- **Passwort-Reset mit E-Mail-Link**
+- **Rollenbasiertes Zugriffssystem (User/Admin)**
+- **Swagger API-Dokumentation**
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The application will automatically reload if you change any of the source files.
+## 📂 Technologie-Stack
+- **Backend:** .NET Core 7, Entity Framework, MySQL  
+- **Sicherheit:** JWT, ASP.NET Identity  
+- **Doku & API-Tests:** Swagger  
 
-## Code scaffolding
+## 🔧 Installation & Setup
+### 🔹 1. API klonen & Umgebung vorbereiten
+```sh
+git clone https://github.com/dein-username/kima-api.git
+cd kima-api
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
+Passe appsettings.json an:
+"ConnectionStrings": {
+  "DefaultConnection": "Server=localhost;Database=KiMaDB;User=root;Password=1234;"
+}
 
-## Build
+Datenbank migrieren & starten
+dotnet ef database update
+dotnet run
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory.
-
-## Running unit tests
-
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
-
-## Running end-to-end tests
-
-Run `ng e2e` to execute the end-to-end tests via a platform of your choice. To use this command, you need to first add a package that implements end-to-end testing capabilities.
-
-## Further help
-
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+🛠 Endpunkte (Beispiele)
+Methode	Endpoint	Beschreibung
+POST	/api/auth/login	Benutzer einloggen
+POST	/api/auth/register	Neuen Benutzer registrieren
+GET	/api/admin/users	Liste aller Benutzer abrufen (Admin)
+PUT	/api/admin/update	Benutzer aktualisieren
+DELETE	/api/admin/delete/{id}	Benutzer löschen
+🚀 Geplante Features
+✅ Zwei-Faktor-Authentifizierung
+✅ Admin-Dashboard mit Statistiken
+✅ Dark Mode für die UI
