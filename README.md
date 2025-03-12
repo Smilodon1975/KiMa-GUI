@@ -1,27 +1,47 @@
-# KiMaGui
+# KiMa GUI – Benutzer- & Admin-Frontend
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 18.1.2.
+🔹 **Das Frontend für das KiMa-Projekt** – eine moderne Angular-App zur Verwaltung von Probanden und Administratoren.  
+🔗 **API Backend:** [KiMa API](https://github.com/dein-username/kima-api)
 
-## Development server
+## 🚀 Features
+- **Login & Registrierung mit JWT**
+- **Admin-Bereich mit Benutzerverwaltung**
+- **Passwort-Reset via E-Mail**
+- **Responsive UI mit Bootstrap**
+- **Paginierung & Filter für Benutzer**
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The application will automatically reload if you change any of the source files.
+## 📂 Technologie-Stack
+- **Frontend:** Angular 16, TypeScript, Bootstrap  
+- **HTTP & Auth:** Angular Services, Interceptors  
+- **State-Management:** RxJS  
 
-## Code scaffolding
+## 🔧 Installation & Setup
+### 🔹 1. Projekt klonen & Abhängigkeiten installieren
+```sh
+git clone https://github.com/dein-username/kima-gui.git
+cd kima-gui
+npm install
+🔹 2. Umgebungsvariablen setzen (environment.ts)
+Passe die API-URL an:
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
+ts
+Kopieren
+Bearbeiten
+export const environment = {
+  production: false,
+  apiUrl: "https://localhost:7090/api"
+};
+🔹 3. Anwendung starten
+sh
+Kopieren
+Bearbeiten
+ng serve
+🔗 Frontend läuft auf: http://localhost:4200
 
-## Build
+📡 API-Anbindung
+Das Frontend kommuniziert mit der KiMa API über HTTP-Requests.
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory.
-
-## Running unit tests
-
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
-
-## Running end-to-end tests
-
-Run `ng e2e` to execute the end-to-end tests via a platform of your choice. To use this command, you need to first add a package that implements end-to-end testing capabilities.
-
-## Further help
-
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+📜 Geplante Features
+✅ Dark Mode
+✅ Dashboard mit Statistiken
+✅ Push-Benachrichtigungen
