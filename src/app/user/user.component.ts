@@ -74,14 +74,21 @@ export class UserComponent implements OnInit {
   onSaveChanges(): void {
     this.userService.updateUserData(this.updatedUserData).subscribe({
       next: () => {
-        this.successMessage = 'Änderungen gespeichert!';
-        this.loadUserData(); // 🔹 Benutzerinfo neu laden
+        this.successMessage = '✅ Änderungen erfolgreich gespeichert!';
+        
+        // 🔹 UI direkt aktualisieren
+        this.loadUserData();
         this.closeModal();
+  
+        // 🔹 Erfolgsmeldung nach 3 Sekunden ausblenden
+        setTimeout(() => this.successMessage = '', 3000);
       },
       error: (err) => {
-        this.errorMessage = 'Fehler beim Speichern der Änderungen.';
-        console.error('Fehler:', err);
+        console.error('❌ Fehler beim Speichern:', err);
+        this.errorMessage = '❌ Fehler beim Speichern!';
+        setTimeout(() => this.errorMessage = '', 3000);
       },
     });
   }
+  
 }

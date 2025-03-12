@@ -118,13 +118,15 @@ export class AuthService {
 
   // ✅ Passwort-Reset anfordern
   requestPasswordReset(email: string) {
-    return this.http.post(`${this.authUrl}/forgot-password`, { email });
+    return this.http.post(`${this.authUrl}/request-password-reset`, { email });
   }
 
   // ✅ Neues Passwort setzen
   resetPassword(data: { email: string; token: string; newPassword: string }) {
-    return this.http.post(`${this.authUrl}/auth/reset-password`, data);
+    console.log("🚀 Sende Reset-Passwort-Anfrage mit:", data);
+    return this.http.post(`${this.authUrl}/reset-password`, data);
   }
+  
 
   // ✅ Prüft, ob das gespeicherte Token gültig ist
   private isTokenValid(): boolean {

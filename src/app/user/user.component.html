@@ -3,10 +3,17 @@
     <h2 class="text-center">Hallo {{ userData?.userName }}, willkommen!</h2>
     <p class="text-center">Hier kannst du deine Daten verwalten.</p>
 
-    <!-- ✅ Erfolgreiche Login-Meldung -->
-    <div *ngIf="loginMessage" class="alert alert-success text-center">
-      {{ loginMessage }}
-    </div>
+<!-- ✅ Erfolgs- & Fehlermeldungen anzeigen -->
+<div *ngIf="loginMessage" class="alert alert-success text-center">
+  {{ loginMessage }}
+</div>
+<div *ngIf="successMessage" class="alert alert-success text-center">
+  {{ successMessage }}
+</div>
+<div *ngIf="errorMessage" class="alert alert-danger text-center">
+  {{ errorMessage }}
+</div>
+
 
     <div class="text-center mt-3">
       <button class="btn btn-primary" (click)="openModal()">Meine Daten</button>

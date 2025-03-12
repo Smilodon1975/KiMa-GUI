@@ -33,6 +33,6 @@ export const routes: Routes = [
   { path: 'login', component: LoginComponent },
   { path: 'admin', component: AdminComponent, canActivate: [AdminGuard], data: { role: 'Admin' } }, // 🔹 Geschützt durch AdminGuard
   { path: 'register', component: RegisterComponent },  
-  { path: 'forgot-password', component: PasswordResetRequestComponent },
+  { path: 'password-reset-request', component: PasswordResetRequestComponent },
   { path: 'reset-password', component: PasswordResetComponent },
 ];

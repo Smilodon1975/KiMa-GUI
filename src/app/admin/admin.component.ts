@@ -112,25 +112,41 @@ export class AdminComponent implements OnInit {
   closeModal(): void {
     const modalElement = document.getElementById('adminUserModal'); 
     if (modalElement) {
-      const modalInstance = bootstrap.Modal.getInstance(modalElement);
-      if (modalInstance) {
-        modalInstance.hide();
-      }
+      const modalInstance = bootstrap.Modal.getInstance(modalElement) || new bootstrap.Modal(modalElement);
+      console.log("🚀 Versuche, das Modal zu schließen...");
+      modalInstance.hide();
+    } else {
+      console.warn("⚠️ Modal-Element nicht gefunden!");
     }
   }
+  
+  
 
   // ✅ Löscht den ausgewählten Benutzer nach Bestätigung
-  deleteUser(): void {
-    if (confirm('Möchtest du diesen Benutzer wirklich löschen?')) {
-      this.adminService.deleteUser(this.selectedUser.id).subscribe({
-        next: () => {
-          this.loadUsers();
-          this.closeModal();
-        },
-        error: (err) => {
-          console.error('Fehler beim Löschen des Benutzers:', err);
-        }
-      });
-    }
+  // ✅ Löscht den Benutzer & aktualisiert die Liste sofort
+deleteUser(): void {
+  if (confirm('Möchtest du diesen Benutzer wirklich löschen?')) {
+    this.adminService.deleteUser(this.selectedUser.id).subscribe({
+      next: () => {
+        // 🔹 Benutzer aus der Liste entfernen, ohne die ganze Seite zu laden
+        this.users = this.users.filter(user => user.id !== this.selectedUser.id);
+        this.filteredUsers = this.filteredUsers.filter(user => user.id !== this.selectedUser.id);
+        this.updatePagination(); // 🔹 Paginierung aktualisieren
+        
+        // 🔹 Modal schließen
+        this.closeModal();
+
+        // 🔹 Erfolgsmeldung anzeigen
+        this.successMessage = 'Benutzer erfolgreich gelöscht!';
+        setTimeout(() => this.successMessage = '', 3000);
+      },
+      error: (err) => {
+        console.error('Fehler beim Löschen des Benutzers:', err);
+        this.errorMessage = 'Fehler beim Löschen des Benutzers!';
+        setTimeout(() => this.errorMessage = '', 3000);
+      }
+    });
   }
+}
+
 }

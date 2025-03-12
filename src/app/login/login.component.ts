@@ -17,7 +17,7 @@ export class LoginComponent {
   loginMessage: string = '';
   isSuccess: boolean = false;
 
-  constructor(private authService: AuthService, private router: Router) {}
+  constructor(private authService: AuthService, public router: Router) {}
 
   // ✅ Login-Formular absenden und Authentifizierung durchführen
   onSubmit() {
@@ -45,4 +45,10 @@ export class LoginComponent {
       }
     });
   }
+
+  testClick() {
+    console.log("Passwort vergessen wurde geklickt!");
+  }
+  
+
 }

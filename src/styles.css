@@ -11,10 +11,40 @@
     --link-hover-color: #27ae60;
 }
 
-body {
-    background-color: var(--primary-color);
-    /* color: var(--text-color); */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;   
 }
+
+
+/* 🔹 Stellt sicher, dass das gesamte Viewport-Höhe genutzt wird */
+html, body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+}
+
+/* 🔹 Der Hauptinhalt nimmt die volle Höhe ein */
+.content-wrapper {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    min-height: 100vh;
+}
+
+/* 🔹 Footer bleibt immer unten */
+footer {
+    background-color: #212529;
+    color: white;
+    text-align: center;  
+    width: 100%; 
+    margin-top: auto;     
+}
+
 
 /* Allgemeine Link-Stile */
     a {
@@ -60,6 +90,7 @@ a:hover {
   .alert.ng-leave {
     opacity: 0;
   }
+
   
 
 

@@ -21,9 +21,10 @@
       <button type="submit" class="btn btn-primary w-100">Einloggen</button>
       <p class="text-center mt-3"><a href="/register">Noch keinen Account? Registrieren</a></p>
     </form>
-      <div class="mt-3">
-        <a routerLink="/password-reset-request" class="text-decoration-none">Passwort vergessen?</a>
+    <div class="mt-3">
+      <button class="btn btn-link" (click)="router.navigate(['/password-reset-request'])">Passwort vergessen?</button>
     </div>
+    
     
   </div>
 </div>
