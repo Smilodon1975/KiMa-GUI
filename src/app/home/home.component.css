@@ -1,0 +1,38 @@
+.IngoKirschbaum {
+    max-width: 70%;  /* Bild darf nur 50% der Containerbreite einnehmen */
+    height: auto;
+    display: block; /* Damit `margin: auto` funktioniert */
+    margin-left: auto; /* Bild rückt nach rechts */
+    margin-right: auto; /* Falls nötig, um es zu zentrieren */
+}
+
+/* 🔹 Abschnitts-Trennung */
+section {
+    padding: 50px 0; /* Mehr Abstand oben und unten */
+    border-bottom: 2px solid #ddd; /* Dünne Linie zwischen den Abschnitten */
+    background-color: #f8f9fa; /* Leichter Hintergrund für Kontrast */
+}
+
+/* 🔹 Letzte Section ohne Trennlinie */
+section:last-of-type {
+    border-bottom: none;
+}
+
+.card-img-top {
+    max-height: 200px;  /* Begrenzte Höhe */
+    object-fit: cover;  /* Bild wird beschnitten, um nicht verzerrt zu sein */
+    width: 100%;  /* Volle Breite nutzen */
+}
+
+.card {
+    display: flex;
+    flex-direction: column;
+    height: 100%;  /* Alle Cards gleiche Höhe */
+}
+
+.card-body {
+    flex-grow: 1;  /* Inhalt dehnt sich gleichmäßig aus */
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
