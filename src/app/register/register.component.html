@@ -1,15 +1,25 @@
+
+
 <div class="container d-flex justify-content-center align-items-center vh-100">
   <div class="card shadow p-4 w-50">
     <h2 class="text-center mb-4">Registrierung</h2>
+    <p class="text-center">Bitte füllen Sie das Formular aus, um sich zu registrieren.</p>
     <form (ngSubmit)="onRegister()">     
       <div class="mb-3">
         <label for="email" class="form-label">E-Mail</label>
         <input type="email" class="form-control" id="email" [(ngModel)]="registerData.email" name="email" required>
       </div>
+
       <div class="mb-3">
         <label for="password" class="form-label">Passwort</label>
         <input type="password" class="form-control" id="password" [(ngModel)]="registerData.password" name="password" required>
-      </div>
+    </div>
+    
+    <div class="mb-3">
+        <label for="confirmPassword" class="form-label">Passwort wiederholen</label>
+        <input type="password" class="form-control" id="confirmPassword" [(ngModel)]="confirmPassword" name="confirmPassword" required>
+    </div>   
+    
       <div class="mb-3">
         <label for="username" class="form-label">Username</label>
         <input type="username" class="form-control" id="username" [(ngModel)]="registerData.userName" name="username">
@@ -18,6 +28,9 @@
     </form>
     <p *ngIf="successMessage" class="text-success">{{ successMessage }}</p>
     <p *ngIf="errorMessage" class="text-danger">{{ errorMessage }}</p>
+    
+     <p *ngIf="passwordMismatch" class="text-danger">Die Passwörter stimmen nicht überein!</p>
+
   </div>
 </div>
 

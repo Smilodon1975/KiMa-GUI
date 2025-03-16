@@ -14,6 +14,8 @@ import { FormsModule } from '@angular/forms';
 export class PasswordResetComponent {
   passwordResetData = { email: '', token: '', newPassword: '' };
   successMessage = '';
+  confirmNewPassword: string = '';
+  passwordMismatch: boolean = false;
 
   constructor(
     private authService: AuthService,
@@ -31,12 +33,17 @@ export class PasswordResetComponent {
 
   // ✅ Sendet das neue Passwort an den AuthService und verarbeitet die Antwort
   resetPassword() {
+    if (this.passwordResetData.newPassword !== this.confirmNewPassword) {
+      this.passwordMismatch = true;
+      return;
+    }
+  
+    this.passwordMismatch = false; // Zurücksetzen, falls erfolgreich
+  
     this.authService.resetPassword(this.passwordResetData).subscribe({
       next: () => {
-        this.successMessage = 'Passwort erfolgreich zurückgesetzt!';
-        setTimeout(() => {
-          this.router.navigate(['/login']); // ✅ Nach erfolgreicher Änderung zum Login weiterleiten
-        }, 2000);
+        this.successMessage = 'Passwort erfolgreich geändert!';
+        setTimeout(() => this.router.navigate(['/login']), 2000);
       },
       error: () => {
         this.successMessage = 'Fehler beim Zurücksetzen des Passworts!';

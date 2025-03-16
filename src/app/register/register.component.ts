@@ -16,8 +16,10 @@ export class RegisterComponent {
     email: '',
     password: '',
     userName: ''
+    
   };  
-
+  confirmPassword: string = '';
+  passwordMismatch: boolean = false;
   successMessage: string | null = null;
   errorMessage: string | null = null;
 
@@ -25,10 +27,16 @@ export class RegisterComponent {
 
   // ✅ Registriert einen neuen Benutzer und leitet nach Erfolg zum Login weiter
   onRegister() {
+    if (this.registerData.password !== this.confirmPassword) {
+      this.passwordMismatch = true;
+      return;
+    }
+  
+    this.passwordMismatch = false; // Zurücksetzen, falls erfolgreich
+  
     this.authService.register(this.registerData).subscribe({
       next: () => {
-        this.successMessage = 'Registrierung erfolgreich!';
-        setTimeout(() => this.router.navigate(['/login']), 2000); // ✅ Nach 2 Sek. zum Login weiterleiten
+        this.router.navigate(['/welcome']);
       },
       error: (error) => {
         this.errorMessage = error.error?.message || 'Fehler bei der Registrierung.';

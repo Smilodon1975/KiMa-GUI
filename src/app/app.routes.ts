@@ -10,6 +10,8 @@ import { UserComponent } from './user/user.component';
 import { RegisterComponent } from './register/register.component';
 import { PasswordResetRequestComponent } from './password-reset-request/password-reset-request.component';
 import { PasswordResetComponent } from './password-reset/password-reset.component';
+import { WelcomeComponent } from './welcome/welcome.component';
+
 
 // ✅ AuthGuard für geschützte Routen
 const authGuard: CanActivateFn = () => {
@@ -35,4 +37,5 @@ export const routes: Routes = [
   { path: 'register', component: RegisterComponent },  
   { path: 'password-reset-request', component: PasswordResetRequestComponent },
   { path: 'reset-password', component: PasswordResetComponent },
+  { path: 'welcome', component: WelcomeComponent },
 ];

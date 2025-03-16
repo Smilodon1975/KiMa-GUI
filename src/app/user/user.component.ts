@@ -19,6 +19,8 @@ export class UserComponent implements OnInit {
   updatedUserData: UserUpdateModel = {} as UserUpdateModel; 
   successMessage = '';
   errorMessage = '';
+  confirmPassword: string = '';
+  passwordMismatch: boolean = false;
 
   constructor(private userService: UserService) {}
 
@@ -72,23 +74,56 @@ export class UserComponent implements OnInit {
 
   // ✅ Speichert die Änderungen am Benutzerprofil
   onSaveChanges(): void {
+    if (this.updatedUserData.password && this.updatedUserData.password !== this.confirmPassword) {
+      this.passwordMismatch = true;
+      return;
+    }
+  
+    this.passwordMismatch = false; // Zurücksetzen, falls erfolgreich
+  
+    console.log("🚀 Sende folgende Daten an die API:", this.updatedUserData);
+  
     this.userService.updateUserData(this.updatedUserData).subscribe({
       next: () => {
-        this.successMessage = '✅ Änderungen erfolgreich gespeichert!';
-        
-        // 🔹 UI direkt aktualisieren
+        this.successMessage = 'Änderungen gespeichert!';
         this.loadUserData();
         this.closeModal();
-  
-        // 🔹 Erfolgsmeldung nach 3 Sekunden ausblenden
-        setTimeout(() => this.successMessage = '', 3000);
       },
       error: (err) => {
-        console.error('❌ Fehler beim Speichern:', err);
-        this.errorMessage = '❌ Fehler beim Speichern!';
-        setTimeout(() => this.errorMessage = '', 3000);
+        this.errorMessage = 'Fehler beim Speichern der Änderungen.';
+        console.error('❌ API Fehler:', err);
       },
     });
   }
+
+  getUserAge(birthDate: string | null | undefined): string {
+    if (!birthDate) return "Nicht bekannt";
+  
+    const birth = new Date(birthDate);
+    if (isNaN(birth.getTime())) return "Ungültiges Datum";
+  
+    const today = new Date();
+    let age = today.getFullYear() - birth.getFullYear();
+    const monthDiff = today.getMonth() - birth.getMonth();
+  
+    if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birth.getDate())) {
+      age--; // Falls der Geburtstag noch nicht war, ein Jahr abziehen
+    }
+  
+    return `${age} Jahre`;
+  }
+  
+  getGenderTranslation(gender: string | null | undefined): string {
+    if (!gender) return "Nicht angegeben";
+    
+    const genderMap: Record<string, string> = {
+      "male": "Männlich",
+      "female": "Weiblich",
+      "other": "Divers"
+    };
+  
+    return genderMap[gender] || "Unbekannt";
+  }
+  
   
 }

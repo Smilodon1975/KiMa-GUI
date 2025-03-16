@@ -25,6 +25,9 @@ export class AdminComponent implements OnInit {
   successMessage = '';
   errorMessage = '';
   loginMessage: string | null = '';
+  isEditMode = false;
+  confirmPassword: string = '';
+  passwordMismatch: boolean = false;
 
   constructor(private adminService: AdminService) {}
 
@@ -83,30 +86,48 @@ export class AdminComponent implements OnInit {
 
   // ✅ Öffnet das Modal zur Bearbeitung eines Benutzers
   openModal(user: UserUpdateModel): void {
-    this.selectedUser = { ...user } as User;
+    this.selectedUser = { ...user };
+    this.isEditMode = false; // Erstmal nur Ansicht anzeigen
     const modalElement = document.getElementById('adminUserModal');
     if (modalElement) {
       const modalInstance = new bootstrap.Modal(modalElement);
       modalInstance.show();
     }
   }
+  
+  enableEditMode(): void {
+    this.isEditMode = true;
+  }
+  
+  disableEditMode(): void {
+    this.isEditMode = false;
+  }
 
   // ✅ Speichert Änderungen an den Benutzerdaten
   onSaveChanges(): void {
+    // ✅ Falls ein Passwort eingegeben wurde, prüfen, ob beide Felder übereinstimmen
+    if (this.selectedUser.password && this.selectedUser.password !== this.confirmPassword) {
+      this.passwordMismatch = true;
+      return;
+    }
+  
+    this.passwordMismatch = false; // Falls erfolgreich, zurücksetzen
+  
     this.adminService.updateUserData(this.selectedUser).subscribe({
       next: () => {
-        this.successMessage = 'Änderungen erfolgreich gespeichert!';
-        setTimeout(() => this.successMessage = '', 3000); // ✅ Erfolgsmeldung nach 3 Sek. ausblenden
+        this.successMessage = 'Änderungen gespeichert!';
+        setTimeout(() => this.successMessage = '', 3000);
         this.loadUsers();
         this.closeModal();
       },
       error: (err) => {
         this.errorMessage = 'Fehler beim Speichern der Änderungen.';
         console.error('Fehler:', err);
-        setTimeout(() => this.errorMessage = '', 3000); // ❌ Fehlermeldung nach 3 Sek. ausblenden
-      }
+        setTimeout(() => this.errorMessage = '', 3000);
+      },
     });
   }
+  
 
   // ✅ Schließt das Modal
   closeModal(): void {
@@ -148,5 +169,39 @@ deleteUser(): void {
     });
   }
 }
+
+getUserAge(birthDate: string | null | undefined): string {
+  if (!birthDate) {
+    return "Nicht bekannt"; // Falls kein Geburtsdatum eingetragen ist
+  }
+
+  const birth = new Date(birthDate);
+  if (isNaN(birth.getTime())) {
+    return "Ungültiges Datum"; // Falls das Geburtsdatum fehlerhaft ist
+  }
+
+  const today = new Date();
+  let age = today.getFullYear() - birth.getFullYear();
+  const monthDiff = today.getMonth() - birth.getMonth();
+
+  if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birth.getDate())) {
+    age--; // Falls der Geburtstag dieses Jahr noch nicht war, ein Jahr abziehen
+  }
+
+  return `${age} Jahre`;
+}
+
+getGenderTranslation(gender: string | null | undefined): string {
+  if (!gender) return "Nicht angegeben";
+  
+  const genderMap: Record<string, string> = {
+    "male": "Männlich",
+    "female": "Weiblich",
+    "other": "Divers"
+  };
+
+  return genderMap[gender] || "Unbekannt";
+}
+
 
 }
