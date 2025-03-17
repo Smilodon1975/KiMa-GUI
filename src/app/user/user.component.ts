@@ -124,6 +124,30 @@ export class UserComponent implements OnInit {
   
     return genderMap[gender] || "Unbekannt";
   }
+
+  getPasswordStrength(password: string): string {
+    if (!password || password.length < 8) return "❌ Ungültig (mind. 8 Zeichen)";
+  
+    let strengthPoints = 0;
+    if (password.match(/[A-Z]/)) strengthPoints++; // Großbuchstaben
+    if (password.match(/[a-z]/)) strengthPoints++; // Kleinbuchstaben
+    if (password.match(/[0-9]/)) strengthPoints++; // Zahl
+    if (password.match(/[\W_]/)) strengthPoints++; // Sonderzeichen
+  
+    switch (strengthPoints) {
+      case 0:
+      case 1:
+        return "⚠️ Schwach";
+      case 2:
+        return "🟡 Mittel";
+      case 3:
+        return "🟢 Stark";
+      case 4:
+        return "🟢💪 Sehr stark!";
+      default:
+        return "❌ Ungültig";
+    }
+  }
   
   
 }

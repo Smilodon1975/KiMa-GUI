@@ -43,10 +43,17 @@ export class AuthService {
     return this.http.post<any>(`${this.authUrl}/register`, registerData).pipe(
       catchError(error => {
         console.error("Registrierung fehlgeschlagen:", error);
-        return throwError(() => error);
+  
+        if (error.error && error.error.errors) {
+          return throwError(() => error.error.errors.join(" "));
+        }
+  
+        return throwError(() => "Registrierung fehlgeschlagen. Bitte überprüfe deine Eingaben.");
       })
     );
   }
+  
+  
 
   // ✅ Führt Logout durch
   logout(): void {

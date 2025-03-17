@@ -4,19 +4,39 @@
   <div class="card shadow p-4 w-50">
     <h2 class="text-center mb-4">Registrierung</h2>
     <p class="text-center">Bitte füllen Sie das Formular aus, um sich zu registrieren.</p>
+
+    <p *ngIf="successMessage" class="text-success">{{ successMessage }}</p>
+    <p *ngIf="errorMessage" class="text-danger">{{ errorMessage }}</p>
+    
+
     <form (ngSubmit)="onRegister()">     
       <div class="mb-3">
-        <label for="email" class="form-label">E-Mail</label>
+        <label for="email" class="form-label">* E-Mail</label>
         <input type="email" class="form-control" id="email" [(ngModel)]="registerData.email" name="email" required>
       </div>
 
+
+
       <div class="mb-3">
-        <label for="password" class="form-label">Passwort</label>
+        <label for="password" class="form-label">* Passwort</label>
         <input type="password" class="form-control" id="password" [(ngModel)]="registerData.password" name="password" required>
-    </div>
+        <small class="text-muted">Passwörter sollten sicher sein: Großbuchstaben, Zahlen & Sonderzeichen empfohlen.</small>
+        <p class="mt-1" [ngClass]="{
+              'text-danger': getPasswordStrength(registerData.password) === '❌ Ungültig (mind. 8 Zeichen)',
+              'text-warning': getPasswordStrength(registerData.password) === '⚠️ Schwach',
+              'text-primary': getPasswordStrength(registerData.password) === '🟡 Mittel',
+              'text-success': getPasswordStrength(registerData.password) === '🟢 Stark' || 
+                              getPasswordStrength(registerData.password) === '🟢💪 Sehr stark!'
+            }">
+          {{ getPasswordStrength(registerData.password) }}
+        </p>
+      </div>
+      
+
+
     
     <div class="mb-3">
-        <label for="confirmPassword" class="form-label">Passwort wiederholen</label>
+        <label for="confirmPassword" class="form-label">* Passwort wiederholen</label>
         <input type="password" class="form-control" id="confirmPassword" [(ngModel)]="confirmPassword" name="confirmPassword" required>
     </div>   
     

@@ -28,19 +28,51 @@ export class RegisterComponent {
   // ✅ Registriert einen neuen Benutzer und leitet nach Erfolg zum Login weiter
   onRegister() {
     if (this.registerData.password !== this.confirmPassword) {
-      this.passwordMismatch = true;
+      this.errorMessage = "Die Passwörter stimmen nicht überein!";
       return;
     }
   
-    this.passwordMismatch = false; // Zurücksetzen, falls erfolgreich
-  
     this.authService.register(this.registerData).subscribe({
       next: () => {
-        this.router.navigate(['/welcome']);
+        this.successMessage = "Registrierung erfolgreich 💚! Du wirst nun weitergeleitet";
+        setTimeout(() => this.router.navigate(['/welcome']), 3000);
       },
       error: (error) => {
-        this.errorMessage = error.error?.message || 'Fehler bei der Registrierung.';
+        this.errorMessage = error;
       }
     });
   }
+  
+
+  validatePassword(): boolean {
+    const password = this.registerData.password;
+    const regex = /^(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*]).{8,}$/;
+    return regex.test(password);
+  }
+  
+  getPasswordStrength(password: string): string {
+    if (!password || password.length < 8) return "❌ Ungültig (mind. 8 Zeichen)";
+  
+    let strengthPoints = 0;
+    if (password.match(/[A-Z]/)) strengthPoints++; // Großbuchstaben
+    if (password.match(/[a-z]/)) strengthPoints++; // Kleinbuchstaben
+    if (password.match(/[0-9]/)) strengthPoints++; // Zahl
+    if (password.match(/[\W_]/)) strengthPoints++; // Sonderzeichen
+  
+    switch (strengthPoints) {
+      case 0:
+      case 1:
+        return "⚠️ Schwach";
+      case 2:
+        return "🟡 Mittel";
+      case 3:
+        return "🟢 Stark";
+      case 4:
+        return "🟢💪 Sehr stark!";
+      default:
+        return "❌ Ungültig";
+    }
+  }
+  
+
 }  
