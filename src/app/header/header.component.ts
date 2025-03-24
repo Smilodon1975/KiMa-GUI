@@ -26,9 +26,10 @@ import { CommonModule } from '@angular/common';
       this.userRole = role;
     });
   }
+  
 
   logout(): void {
     this.authService.logout();
-    this.router.navigate(['/home']); 
+    this.router.navigate(['/home'], { queryParams: { logout: 'true' } }); 
   }
 }

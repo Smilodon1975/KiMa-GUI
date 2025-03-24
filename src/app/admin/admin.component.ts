@@ -5,6 +5,8 @@ import { FormsModule } from '@angular/forms';
 import * as bootstrap from 'bootstrap';
 import { User } from '../models/user.model';
 import { UserUpdateModel } from '../models/user-update.model';
+import { CountryService } from '../services/country.service';
+
 
 @Component({
   selector: 'app-admin',
@@ -28,11 +30,15 @@ export class AdminComponent implements OnInit {
   isEditMode = false;
   confirmPassword: string = '';
   passwordMismatch: boolean = false;
+  popularCountries: string[] = [];
+  allCountries: string[] = [];
 
-  constructor(private adminService: AdminService) {}
+  constructor(private adminService: AdminService, private countryService: CountryService) {}
 
   ngOnInit(): void {
     this.loadUsers();
+    this.popularCountries = this.countryService.getPopularCountries();
+    this.allCountries = this.countryService.getAllCountries();
 
     // ✅ Login-Meldung aus localStorage abrufen und nach 3 Sek. ausblenden
     this.loginMessage = localStorage.getItem('loginMessage');

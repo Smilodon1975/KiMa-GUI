@@ -1,3 +1,5 @@
+
+
 <section class="container text-center my-5">
     <h1 class="text-primary">Willkommen bei Kirschbaum Marktforschung</h1>
     <p class="lead">
@@ -6,6 +8,11 @@
         wertvolle Einblicke zu gewinnen und fundierte Entscheidungen zu treffen.
     </p>
 </section>
+
+<div *ngIf="successMessage" [ngClass]="{'fade-out': fadeOut}" class="alert alert-success text-center">
+    {{ successMessage }}
+  </div>
+
 
 <section class="container my-5">
     <div class="row align-items-center">

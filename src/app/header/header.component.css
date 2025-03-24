@@ -1,0 +1,17 @@
+/* Entferne eventuelle Standard-Hover-Styles */
+a.logo {
+    text-decoration: none;
+  }
+  
+  /* Sanfter Übergang für das Bild */
+  a.logo img {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+  
+  /* Hover-Effekt: leichte Vergrößerung und Schatten */
+  a.logo:hover img {
+    transform: scale(1.05);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    border-bottom: none !important;
+  }
+  

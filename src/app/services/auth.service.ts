@@ -44,15 +44,49 @@ export class AuthService {
       catchError(error => {
         console.error("Registrierung fehlgeschlagen:", error);
   
-        if (error.error && error.error.errors) {
-          return throwError(() => error.error.errors.join(" "));
-        }
+        let errorMessage = "Registrierung fehlgeschlagen. Bitte überprüfe deine Eingaben.";
   
-        return throwError(() => "Registrierung fehlgeschlagen. Bitte überprüfe deine Eingaben.");
+        if (error.error) {
+          // Wenn das Fehlerobjekt eine "errors"-Eigenschaft hat
+          if (error.error.errors) {
+            const errorsObj = error.error.errors;
+            let errorMessages: string[] = [];
+            // Iteriere über alle Schlüssel im errors-Objekt
+            for (const key in errorsObj) {
+              if (errorsObj.hasOwnProperty(key)) {
+                const messages = errorsObj[key];
+                if (Array.isArray(messages)) {
+                  errorMessages.push(...messages);
+                } else {
+                  errorMessages.push(messages.toString());
+                }
+              }
+            }
+            errorMessage = errorMessages.join(" ");
+          } else if (typeof error.error === "string") {
+            // Falls error.error direkt ein String ist
+            errorMessage = error.error;
+          } else {
+            // Falls es ein Objekt ist, versuche es zu stringifizieren
+            errorMessage = JSON.stringify(error.error);
+          }
+        }
+        return throwError(() => errorMessage);
+      })
+    );
+  }  
+
+
+  confirmEmail(email: string, token: string): Observable<any> {
+    const url = `${this.authUrl}/confirm-email?email=${encodeURIComponent(email)}&token=${encodeURIComponent(token)}`;
+    return this.http.get(url, { responseType: 'text' }).pipe(
+      catchError(error => {
+        console.error("E-Mail-Bestätigung fehlgeschlagen:", error);
+        return throwError(() => error);
       })
     );
   }
-  
+ 
   
 
   // ✅ Führt Logout durch
@@ -129,7 +163,7 @@ export class AuthService {
   }
 
   // ✅ Neues Passwort setzen
-  resetPassword(data: { email: string; token: string; newPassword: string }) {
+  resetPassword(data: { email: string; token: string; newPassword: string; userName: string }) {
     console.log("🚀 Sende Reset-Passwort-Anfrage mit:", data);
     return this.http.post(`${this.authUrl}/reset-password`, data);
   }

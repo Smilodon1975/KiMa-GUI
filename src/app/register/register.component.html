@@ -21,19 +21,16 @@
         <label for="password" class="form-label">* Passwort</label>
         <input type="password" class="form-control" id="password" [(ngModel)]="registerData.password" name="password" required>
         <small class="text-muted">Passwörter sollten sicher sein: Großbuchstaben, Zahlen & Sonderzeichen empfohlen.</small>
-        <p class="mt-1" [ngClass]="{
-              'text-danger': getPasswordStrength(registerData.password) === '❌ Ungültig (mind. 8 Zeichen)',
-              'text-warning': getPasswordStrength(registerData.password) === '⚠️ Schwach',
-              'text-primary': getPasswordStrength(registerData.password) === '🟡 Mittel',
-              'text-success': getPasswordStrength(registerData.password) === '🟢 Stark' || 
-                              getPasswordStrength(registerData.password) === '🟢💪 Sehr stark!'
-            }">
+        <p *ngIf="registerData.password && registerData.password.length > 0" class="mt-1" [ngClass]="{
+          'text-danger': getPasswordStrength(registerData.password) === '❌ Ungültig (mind. 8 Zeichen)',
+          'text-warning': getPasswordStrength(registerData.password) === '⚠️ Schwach',
+          'text-primary': getPasswordStrength(registerData.password) === '🟡 Mittel',
+          'text-success': getPasswordStrength(registerData.password) === '🟢 Stark' || 
+                          getPasswordStrength(registerData.password) === '🟢💪 Sehr stark!'
+        }">
           {{ getPasswordStrength(registerData.password) }}
         </p>
-      </div>
-      
-
-
+      </div>  
     
     <div class="mb-3">
         <label for="confirmPassword" class="form-label">* Passwort wiederholen</label>
@@ -46,9 +43,7 @@
       </div>
       <button type="submit" class="btn btn-success w-100">Registrieren</button>
     </form>
-    <p *ngIf="successMessage" class="text-success">{{ successMessage }}</p>
-    <p *ngIf="errorMessage" class="text-danger">{{ errorMessage }}</p>
-    
+        
      <p *ngIf="passwordMismatch" class="text-danger">Die Passwörter stimmen nicht überein!</p>
 
   </div>

@@ -11,6 +11,7 @@ import { RegisterComponent } from './register/register.component';
 import { PasswordResetRequestComponent } from './password-reset-request/password-reset-request.component';
 import { PasswordResetComponent } from './password-reset/password-reset.component';
 import { WelcomeComponent } from './welcome/welcome.component';
+import { ConfirmEmailComponent } from './confirm-email/confirm-email.component';
 
 
 // ✅ AuthGuard für geschützte Routen
@@ -38,4 +39,6 @@ export const routes: Routes = [
   { path: 'password-reset-request', component: PasswordResetRequestComponent },
   { path: 'reset-password', component: PasswordResetComponent },
   { path: 'welcome', component: WelcomeComponent },
+  { path: 'confirm-email', component: ConfirmEmailComponent },
+
 ];

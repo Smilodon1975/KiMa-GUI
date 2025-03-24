@@ -5,13 +5,17 @@ import { FormsModule } from '@angular/forms';
 import { User } from '../models/user.model';
 import { UserUpdateModel } from '../models/user-update.model';
 import * as bootstrap from 'bootstrap';
+import { CountryService } from '../services/country.service';
+import { Router } from '@angular/router';
+
+
 
 @Component({
   selector: 'app-user',
   templateUrl: './user.component.html',
   styleUrls: ['./user.component.css'],
   standalone: true,
-  imports: [CommonModule, FormsModule]
+  imports: [CommonModule, FormsModule],
 })
 export class UserComponent implements OnInit {
   loginMessage: string | null = '';
@@ -19,24 +23,40 @@ export class UserComponent implements OnInit {
   updatedUserData: UserUpdateModel = {} as UserUpdateModel; 
   successMessage = '';
   errorMessage = '';
+  fadeOut: boolean = false;
   confirmPassword: string = '';
   passwordMismatch: boolean = false;
+  popularCountries: string[] = [];
+  allCountries: string[] = [];
+  deletePassword: string = '';
+  deleteErrorMessage: string = '';
+  deleteSuccessMessage: string = '';
+  deleteFadeOut: boolean = false;
 
-  constructor(private userService: UserService) {}
+  constructor(private userService: UserService, private countryService: CountryService, private router: Router) {}
 
   // ✅ Initialisiert die Komponente und lädt Benutzerdaten
   ngOnInit(): void {
     this.loadUserData();
-
-    // ✅ Zeigt die Login-Meldung an und blendet sie nach 3 Sekunden aus
+    this.popularCountries = this.countryService.getPopularCountries();
+    this.allCountries = this.countryService.getAllCountries();
+  
+    // Zeige die Login-Meldung an (aus localStorage)
     this.loginMessage = localStorage.getItem('loginMessage');
     if (this.loginMessage) {
+      // Nach 2 Sekunden soll die Meldung anfangen zu verblassen
+      setTimeout(() => {
+        this.fadeOut = true;
+      }, 2000);
+      // Nach insgesamt 3 Sekunden wird die Meldung komplett entfernt
       setTimeout(() => {
         this.loginMessage = '';
+        this.fadeOut = false;
         localStorage.removeItem('loginMessage');
       }, 3000);
     }
   }
+  
 
   // ✅ Lädt die aktuellen Benutzerdaten aus dem Backend
   loadUserData(): void {
@@ -79,13 +99,23 @@ export class UserComponent implements OnInit {
       return;
     }
   
-    this.passwordMismatch = false; // Zurücksetzen, falls erfolgreich
+    this.passwordMismatch = false; // Rücksetzen, falls alles passt
   
     console.log("🚀 Sende folgende Daten an die API:", this.updatedUserData);
   
     this.userService.updateUserData(this.updatedUserData).subscribe({
       next: () => {
         this.successMessage = 'Änderungen gespeichert!';
+        // Nach 2 Sekunden soll die Meldung anfangen zu verblassen
+        setTimeout(() => {
+          this.fadeOut = true;
+        }, 2000);
+        // Nach 3 Sekunden wird die Meldung komplett entfernt und das Fade zurückgesetzt
+        setTimeout(() => {
+          this.successMessage = '';
+          this.fadeOut = false;
+        }, 3000);
+  
         this.loadUserData();
         this.closeModal();
       },
@@ -95,6 +125,7 @@ export class UserComponent implements OnInit {
       },
     });
   }
+
 
   getUserAge(birthDate: string | null | undefined): string {
     if (!birthDate) return "Nicht bekannt";
@@ -148,6 +179,57 @@ export class UserComponent implements OnInit {
         return "❌ Ungültig";
     }
   }
-  
-  
+
+
+
+   // ================================
+  // Account-Löschung mit Passwort-Eingabe
+  // ================================
+
+// Methode, um das Account-Lösch-Modal zu öffnen
+openDeleteModal(): void {
+  const modalElement = document.getElementById('deleteAccountModal');
+  if (modalElement) {
+    const deleteModal = new bootstrap.Modal(modalElement);
+    deleteModal.show();
+  }
+}
+
+
+  // Diese Methode ruft den Service auf, um den Account zu löschen
+  deleteAccount(): void {
+    if (!this.deletePassword) {
+      this.errorMessage = "Bitte gib dein Passwort zur Bestätigung ein.";
+      return;
+    }
+    
+    this.deleteErrorMessage = '';
+
+    this.userService.deleteAccount(this.deletePassword).subscribe({
+      next: () => {
+        this.deleteSuccessMessage = "Dein Account wurde erfolgreich gelöscht.";
+        setTimeout(() => {
+          this.deleteFadeOut = true;
+        }, 2000);
+        setTimeout(() => {
+          this.deleteSuccessMessage = '';
+          this.deleteFadeOut = false;
+          // Schließe das Modal
+          const modalElement = document.getElementById('deleteAccountModal');
+          if (modalElement) {
+            const deleteModal = bootstrap.Modal.getInstance(modalElement);
+            if (deleteModal) {
+              deleteModal.hide();
+            }
+          }
+          localStorage.removeItem('token');
+          this.router.navigate(['/home']);
+        }, 3000);
+      },
+      error: (err) => {
+        this.deleteErrorMessage = "Beim Löschen deines Accounts ist ein Fehler aufgetreten. Bitte überprüfe dein Passwort.";
+        console.error(err);
+      }
+    });
+  }
 }

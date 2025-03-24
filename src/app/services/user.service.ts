@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Observable, of, catchError } from 'rxjs';
+import { Observable, of, catchError, throwError } from 'rxjs';
 import { UserUpdateModel } from '../models/user-update.model';
 
 @Injectable({
@@ -25,4 +25,17 @@ export class UserService {
     });
     return this.http.put(`${this.userUrl}/update`, userData, { headers });
   }
+
+  deleteAccount(password: string): Observable<any> {
+    return this.http.post(`${this.userUrl}/delete-account`, { password })
+      .pipe(
+        catchError(error => {
+          console.error("Fehler beim Löschen des Accounts:", error);
+          return throwError(() => error);
+        })
+      );
+  }
+  
+  
+
 }

@@ -12,7 +12,7 @@ import { FormsModule } from '@angular/forms';
   imports: [CommonModule, FormsModule]
 })
 export class PasswordResetComponent {
-  passwordResetData = { email: '', token: '', newPassword: '' };
+  passwordResetData = { email: '', token: '', newPassword: '', userName: '' };
   successMessage = '';
   confirmNewPassword: string = '';
   passwordMismatch: boolean = false;
@@ -28,6 +28,7 @@ export class PasswordResetComponent {
     this.route.queryParams.subscribe(params => {
       this.passwordResetData.email = params['email'] || '';
       this.passwordResetData.token = params['token'] || '';
+      this.passwordResetData.userName = params['userName'] || ''; 
     });
   }
 
@@ -50,4 +51,29 @@ export class PasswordResetComponent {
       }
     });
   }
+
+  getPasswordStrength(password: string): string {
+    if (!password || password.length < 8) return "❌ Ungültig (mind. 8 Zeichen)";
+  
+    let strengthPoints = 0;
+    if (password.match(/[A-Z]/)) strengthPoints++; // Großbuchstaben
+    if (password.match(/[a-z]/)) strengthPoints++; // Kleinbuchstaben
+    if (password.match(/[0-9]/)) strengthPoints++; // Zahl
+    if (password.match(/[\W_]/)) strengthPoints++; // Sonderzeichen
+  
+    switch (strengthPoints) {
+      case 0:
+      case 1:
+        return "⚠️ Schwach";
+      case 2:
+        return "🟡 Mittel";
+      case 3:
+        return "🟢 Stark";
+      case 4:
+        return "🟢💪 Sehr stark!";
+      default:
+        return "❌ Ungültig";
+    }
+  }
+
 }

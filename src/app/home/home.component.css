@@ -36,3 +36,9 @@ section:last-of-type {
     flex-direction: column;
     justify-content: space-between;
 }
+
+.fade-out {
+    transition: opacity 1s ease-out;
+    opacity: 0;
+  }
+  

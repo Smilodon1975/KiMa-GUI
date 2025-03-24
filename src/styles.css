@@ -59,6 +59,11 @@ a:hover {
     border-bottom: 2px solid var(--link-hover-color);
 }
 
+a.logo:hover {
+    border-bottom: none !important;
+  }
+  
+
 /* Button: Nach oben */
 .btn_oben {
     position: fixed;
