@@ -1,0 +1,51 @@
+<!-- admin-faq.component.html -->
+<section class="container my-5">
+    <h2 class="text-center">FAQ Verwaltung</h2>
+    <button class="btn btn-success mb-3" (click)="openEditModal()">Neues FAQ hinzufügen</button>
+  
+    <ul class="list-group">
+      <li class="list-group-item d-flex justify-content-between align-items-center" *ngFor="let faq of faqs">
+        <div>
+          <strong>{{ faq.question }}</strong>
+          <p>{{ faq.answer }}</p>
+        </div>
+        <div>
+          <button class="btn btn-primary btn-sm me-2" (click)="editFAQ(faq)">Bearbeiten</button>
+          <button class="btn btn-danger btn-sm" (click)="deleteFAQ(faq.id)">Löschen</button>
+        </div>
+      </li>
+    </ul>
+  </section>
+  
+  <!-- Modal für FAQ Bearbeitung/Hinzufügen -->
+  <div class="modal fade" id="faqModal" tabindex="-1" aria-labelledby="faqModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="faqModalLabel">{{ selectedFAQ ? 'FAQ bearbeiten' : 'Neues FAQ hinzufügen' }}</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Schließen"></button>
+        </div>
+        <div class="modal-body">
+          <form #faqForm="ngForm">
+            <div class="mb-3">
+              <label for="question" class="form-label">Frage</label>
+              <input type="text" class="form-control" id="question" [(ngModel)]="faqData.question" name="question" required>
+            </div>
+            <div class="mb-3">
+              <label for="answer" class="form-label">Antwort</label>
+              <textarea class="form-control" id="answer" rows="3" [(ngModel)]="faqData.answer" name="answer" required></textarea>
+            </div>
+            <div class="mb-3">
+              <label for="order" class="form-label">Reihenfolge</label>
+              <input type="number" class="form-control" id="order" [(ngModel)]="faqData.order" name="order" required>
+            </div>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Abbrechen</button>
+          <button type="button" class="btn btn-primary" (click)="saveFAQ()">Speichern</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  

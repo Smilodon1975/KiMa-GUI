@@ -6,6 +6,8 @@ import * as bootstrap from 'bootstrap';
 import { User } from '../models/user.model';
 import { UserUpdateModel } from '../models/user-update.model';
 import { CountryService } from '../services/country.service';
+import { Router } from '@angular/router';
+import { RouterModule } from '@angular/router';
 
 
 @Component({
@@ -13,7 +15,7 @@ import { CountryService } from '../services/country.service';
   templateUrl: './admin.component.html',
   styleUrls: ['./admin.component.css'],
   standalone: true,
-  imports: [CommonModule, FormsModule]
+  imports: [CommonModule, FormsModule, RouterModule],
 })
 export class AdminComponent implements OnInit {
   users: UserUpdateModel[] = [];
@@ -33,7 +35,7 @@ export class AdminComponent implements OnInit {
   popularCountries: string[] = [];
   allCountries: string[] = [];
 
-  constructor(private adminService: AdminService, private countryService: CountryService) {}
+  constructor(private adminService: AdminService, private countryService: CountryService, private router: Router) {}
 
   ngOnInit(): void {
     this.loadUsers();

@@ -12,6 +12,7 @@ import { PasswordResetRequestComponent } from './password-reset-request/password
 import { PasswordResetComponent } from './password-reset/password-reset.component';
 import { WelcomeComponent } from './welcome/welcome.component';
 import { ConfirmEmailComponent } from './confirm-email/confirm-email.component';
+import { AdminFaqComponent } from './admin-faq/admin-faq.component';
 
 
 // ✅ AuthGuard für geschützte Routen
@@ -40,5 +41,6 @@ export const routes: Routes = [
   { path: 'reset-password', component: PasswordResetComponent },
   { path: 'welcome', component: WelcomeComponent },
   { path: 'confirm-email', component: ConfirmEmailComponent },
+  { path: 'admin-faq', component: AdminFaqComponent },
 
 ];
