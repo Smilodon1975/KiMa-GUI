@@ -1,0 +1,99 @@
+<!-- admin-news.component.html -->
+<section class="container my-5">
+    <h2 class="text-center">News Verwaltung</h2>
+    <button class="btn btn-success mb-3" (click)="openEditModal()">Neue News hinzufügen</button>
+  
+    <ul class="list-group">
+      <li
+        class="list-group-item d-flex justify-content-between align-items-center"
+        *ngFor="let news of newsList"
+      >
+        <div>
+          <strong>{{ news.title }}</strong>
+          <p>{{ news.content }}</p>
+          <small class="text-muted">
+            Veröffentlicht am: {{ news.publishDate | date: 'shortDate' }}
+          </small>
+        </div>
+        <div>
+          <button class="btn btn-primary btn-sm me-2" (click)="editNews(news)">
+            Bearbeiten
+          </button>
+          <button class="btn btn-danger btn-sm" (click)="deleteNews(news.id)">
+            Löschen
+          </button>
+        </div>
+      </li>
+    </ul>
+  </section>
+  
+  <!-- Modal für News Bearbeitung/Hinzufügen -->
+  <div
+    class="modal fade"
+    id="newsModal"
+    tabindex="-1"
+    aria-labelledby="newsModalLabel"
+    aria-hidden="true"
+  >
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="newsModalLabel">
+            {{ selectedNews ? 'News bearbeiten' : 'Neue News hinzufügen' }}
+          </h5>
+          <button
+            type="button"
+            class="btn-close"
+            data-bs-dismiss="modal"
+            aria-label="Schließen"
+          ></button>
+        </div>
+        <div class="modal-body">
+          <form #newsForm="ngForm">
+            <div class="mb-3">
+              <label for="title" class="form-label">Titel</label>
+              <input
+                type="text"
+                class="form-control"
+                id="title"
+                [(ngModel)]="newsData.title"
+                name="title"
+                required
+              />
+            </div>
+            <div class="mb-3">
+              <label for="content" class="form-label">Inhalt</label>
+              <textarea
+                class="form-control"
+                id="content"
+                rows="4"
+                [(ngModel)]="newsData.content"
+                name="content"
+                required
+              ></textarea>
+            </div>
+            <div class="mb-3">
+              <label for="publishDate" class="form-label">Veröffentlichungsdatum</label>
+              <input
+                type="date"
+                class="form-control"
+                id="publishDate"
+                [(ngModel)]="newsData.publishDate"
+                name="publishDate"
+                required
+              />
+            </div>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+            Abbrechen
+          </button>
+          <button type="button" class="btn btn-primary" (click)="saveNews()">
+            Speichern
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+  

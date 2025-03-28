@@ -63,3 +63,28 @@
         </div>
     </div>
 </section>
+
+<!-- News-Sektion in home.component.html -->
+<section class="container my-5">
+    <h2 class="text-center text-primary">Aktuelle News</h2>
+    <div class="row" *ngIf="newsList?.length; else noNews">
+      <div class="col-md-4" *ngFor="let news of newsList">
+        <div class="card mb-3">
+          <div class="card-body">
+            <h5 class="card-title">{{ news.title }}</h5>
+            <p class="card-text">{{ news.content }}</p>
+            <p class="card-text">
+              <small class="text-muted">{{ news.publishDate | date:'mediumDate' }}</small>
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <ng-template #noNews>
+      <p class="text-center">Keine aktuellen News.</p>
+    </ng-template>
+    <div class="text-center mt-3">
+      <a routerLink="/news" class="btn btn-outline-primary">Mehr News</a>
+    </div>
+  </section>
+  
