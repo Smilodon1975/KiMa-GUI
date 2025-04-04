@@ -44,7 +44,7 @@
 
     <!-- ✅ Buttons -->
 <div class="text-center mt-3">
-  <button class="btn btn-primary" (click)="openModal()">Bearbeiten</button>
+  <button class="btn btn-more" (click)="openModal()">Bearbeiten</button>
   <button class="btn btn-danger ms-2" (click)="openDeleteModal()">Account löschen</button></div>
   </div>
 </div>
@@ -200,18 +200,86 @@
 
           <!-- ✅ Buttons -->
           <div class="text-center mt-4">
-            <button type="submit" class="btn btn-success">Speichern</button>
+            <button type="submit" class="btn btn-more">Speichern</button>
             <button type="button" class="btn btn-secondary ms-2" data-bs-dismiss="modal">Abbrechen</button>
           </div>
+
+ <!-- Button zum Ausklappen der Zusatzinformationen -->
+<button type="button" class="btn btn-secondary mt-3" (click)="showExtra = !showExtra">
+  {{ showExtra ? 'Weniger anzeigen' : 'Erweiterte Angaben anzeigen' }}
+</button>
+
+<!-- Ausklappbarer Bereich für Zusatzinformationen -->
+<div *ngIf="showExtra" class="mt-3">
+  <h5>Fahrzeugdaten</h5>
+  <div class="mb-3">
+    <label for="vehicleCategory" class="form-label">Fahrzeugkategorie</label>
+    <select class="form-control" id="vehicleCategory" [(ngModel)]="updatedUserData.profile.vehicleCategory" name="vehicleCategory">
+      <option value="None">Keine</option>
+      <option value="Car">Auto</option>
+      <option value="Motorcycle">Motorrad</option>
+      <option value="Other">Andere</option>
+    </select>
+  </div>
+  <div class="mb-3" *ngIf="updatedUserData.profile.vehicleCategory !== 'None'">
+    <label for="vehicleDetails" class="form-label">Fahrzeugdetails</label>
+    <input type="text" class="form-control" id="vehicleDetails" [(ngModel)]="updatedUserData.profile.vehicleDetails" name="vehicleDetails" placeholder="z.B. Audi TT">
+  </div>
+  
+  <h5>Weitere Angaben</h5>
+  <div class="mb-3">
+    <label for="occupation" class="form-label">Beruf</label>
+    <input type="text" class="form-control" id="occupation" [(ngModel)]="updatedUserData.profile.occupation" name="occupation">
+  </div>
+  <div class="mb-3">
+    <label for="educationLevel" class="form-label">Bildungsniveau</label>
+    <input type="text" class="form-control" id="educationLevel" [(ngModel)]="updatedUserData.profile.educationLevel" name="educationLevel">
+  </div>
+  <div class="mb-3">
+    <label for="region" class="form-label">Region</label>
+    <input type="text" class="form-control" id="region" [(ngModel)]="updatedUserData.profile.region" name="region">
+  </div>
+  <div class="mb-3">
+    <label for="age" class="form-label">Alter</label>
+    <input type="number" class="form-control" id="age" [(ngModel)]="updatedUserData.profile.age" name="age">
+  </div>
+  <div class="mb-3">
+    <label for="incomeLevel" class="form-label">Einkommensniveau</label>
+    <select class="form-control" id="incomeLevel" [(ngModel)]="updatedUserData.profile.incomeLevel" name="incomeLevel">
+      <option value="">Bitte wählen</option>
+      <option value="low">Niedrig</option>
+      <option value="medium">Mittel</option>
+      <option value="high">Hoch</option>
+    </select>
+  </div>
+  
+  <h5>Interessen</h5>
+  <div class="form-check">
+    <input class="form-check-input" type="checkbox" id="techInterest" [(ngModel)]="updatedUserData.profile.isInterestedInTechnology" name="isInterestedInTechnology">
+    <label class="form-check-label" for="techInterest">Technologie</label>
+  </div>
+  <div class="form-check">
+    <input class="form-check-input" type="checkbox" id="sportsInterest" [(ngModel)]="updatedUserData.profile.isInterestedInSports" name="isInterestedInSports">
+    <label class="form-check-label" for="sportsInterest">Sport</label>
+  </div>
+  <div class="form-check">
+    <input class="form-check-input" type="checkbox" id="entertainmentInterest" [(ngModel)]="updatedUserData.profile.isInterestedInEntertainment" name="isInterestedInEntertainment">
+    <label class="form-check-label" for="entertainmentInterest">Unterhaltung</label>
+  </div>
+  <div class="form-check">
+    <input class="form-check-input" type="checkbox" id="travelInterest" [(ngModel)]="updatedUserData.profile.isInterestedInTravel" name="isInterestedInTravel">
+    <label class="form-check-label" for="travelInterest">Reisen</label>
+  </div>
+</div>
+
+
+
 
         </form>
       </div>
     </div>
   </div>
 </div>
-
-
-
 
 
 <!-- Modal für Account-Löschung -->
@@ -240,7 +308,7 @@
         </p>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Abbrechen</button>
+        <button type="button" class="btn btn-more" data-bs-dismiss="modal">Abbrechen</button>
         <button type="button" class="btn btn-danger" (click)="deleteAccount()">Account löschen</button>
       </div>
     </div>

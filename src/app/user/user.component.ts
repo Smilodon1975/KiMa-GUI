@@ -3,6 +3,8 @@ import { UserService } from '../services/user.service';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { User } from '../models/user.model';
+import { UserProfile } from '../models/user-profile.model';
+import { VehicleCategory } from '../models/user-profile.model';
 import { UserUpdateModel } from '../models/user-update.model';
 import * as bootstrap from 'bootstrap';
 import { CountryService } from '../services/country.service';
@@ -20,6 +22,7 @@ import { Router } from '@angular/router';
 export class UserComponent implements OnInit {
   loginMessage: string | null = '';
   userData: User | null = null;
+  userProfile: UserProfile | null = null; // Benutzerprofil
   updatedUserData: UserUpdateModel = {} as UserUpdateModel; 
   successMessage = '';
   errorMessage = '';
@@ -32,6 +35,7 @@ export class UserComponent implements OnInit {
   deleteErrorMessage: string = '';
   deleteSuccessMessage: string = '';
   deleteFadeOut: boolean = false;
+  showExtra: boolean = false;
 
   constructor(private userService: UserService, private countryService: CountryService, private router: Router) {}
 
@@ -58,22 +62,24 @@ export class UserComponent implements OnInit {
   }
   
 
-  // ✅ Lädt die aktuellen Benutzerdaten aus dem Backend
-  loadUserData(): void {
-    this.userService.getMyData().subscribe({
-      next: (data) => {
-        this.userData = data;
-        this.updatedUserData = { ...data };
-      },
-      error: (err) => {
-        this.errorMessage = "Fehler beim Laden der Benutzerdaten.";
-        console.error("Fehler beim Laden der Benutzerdaten:", err);
-      }
-    });
-  }
+  // ✅ Lädt die aktuellen Benutzerdaten aus dem Backend  
+    loadUserData(): void {
+      this.userService.getMyData().subscribe({
+        next: (data) => {
+          this.userData = data;
+          this.updatedUserData = { ...data };
+        },
+        error: (err) => {
+          this.errorMessage = "Fehler beim Laden der Benutzerdaten.";
+          console.error("Fehler beim Laden der Benutzerdaten:", err);
+        }
+      });
+    } 
+
 
   // ✅ Öffnet das Modal zur Bearbeitung der Benutzerdaten
   openModal(): void {
+    
     const modalElement = document.getElementById('userModal');
     if (modalElement) {
       const modalInstance = new bootstrap.Modal(modalElement);

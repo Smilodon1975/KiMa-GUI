@@ -1,14 +1,15 @@
 /* Globale CSS-Variablen */
 :root {
-    --main-brand-color: #A71417;
+    --main-brand-color: #CCCCCC;
     --primary-color: #f0f0f0;
-    --secondary-color: #333333;
-    --light-secondary-color: #ffffff;
+    --secondary-color: #1abc9c;
+    --light-secondary-color: #16a085;
+    --headline-color: #0056b3;
     --text-color: #f0f0f0;
     --secondary-text-color: #333333;
-    --link-color: #f0f0f0;
-    --link-color2: #A71417;
-    --link-hover-color: #27ae60;
+    --link-color: #0056b3;
+    --link-color2: #F0F0F0;
+    --link-hover-color: #3388ff;
 }
 
 * {
@@ -17,14 +18,23 @@
     box-sizing: border-box;   
 }
 
-
 /* 🔹 Stellt sicher, dass das gesamte Viewport-Höhe genutzt wird */
 html, body {
     height: 100%;
     margin: 0;
     padding: 0;
     display: flex;
-    flex-direction: column;
+    flex-direction: column;    
+}
+
+main {
+    flex: 1;
+    background-color: var(--main-brand-color); /* Farbe für den Hauptinhalt */
+}
+
+/* Überschriften explizit anpassen */
+h1, h2, h3, h4, h5, h6 {
+    color: var(--headline-color) !important; /* Setzt die Textfarbe für alle Überschriften */
 }
 
 /* 🔹 Der Hauptinhalt nimmt die volle Höhe ein */
@@ -36,19 +46,9 @@ html, body {
     min-height: 100vh ;
 }
 
-/* 🔹 Footer bleibt immer unten */
-footer {
-    background-color: #212529;
-    color: white;
-    text-align: center;  
-    width: 100%; 
-    margin-top: auto;     
-}
-
-
 /* Allgemeine Link-Stile */
     a {
-    color: var(--link-color2);
+    color: var(--link-color) !important;
     text-decoration: none;
     font-weight: 600;
     transition: color 0.3s ease, border-bottom 0.3s ease;
@@ -56,35 +56,62 @@ footer {
 
 a:hover {
     color: var(--link-hover-color);
-    border-bottom: 2px solid var(--link-hover-color);
+    border-bottom: 2px solid var(--link-hover-color);   
 }
 
 a.logo:hover {
     border-bottom: none !important;
-  }
-  
+  }  
 
-/* Button: Nach oben */
+  .btn-more{
+    background-color: var(--secondary-color) !important;
+    color: var(--text-color) !important;
+    border-radius: 5px !important;
+    padding: 10px 20px !important;
+    font-size: 16px !important;
+    
+    text-decoration: none !important;
+    transition: background-color 0.3s ease, transform 0.2s ease !important;
+  }
+
+  .btn-more:hover {
+    background-color: var(--light-secondary-color) !important;
+    transform: scale(1.05) !important;
+    text-decoration: none !important;
+  }
+
+
+
+/*Button zum Seitenanfang*/
 .btn_oben {
     position: fixed;
     bottom: 20px;
     right: 20px;
-    background-color: var(--main-brand-color);
+    background-color: var(--secondary-color) !important;
     padding: 15px;
     border-radius: 50%;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
     transition: background-color 0.3s ease, transform 0.2s ease;
 }
 
-.btn_oben a {
-    color: var(--text-color);
-    font-size: 24px;
+.btn_oben:hover {
+    background-color:var(--light-secondary-color) !important;
+    transform: scale(1.1);    
     text-decoration: none;
 }
 
-.btn_oben:hover {
-    background-color: var(--link-hover-color);
-    transform: scale(1.1);
+.btn_oben a {
+    color: var(--link-color2) !important;
+    text-decoration: none;
+    font-weight: 600;
+    transition: color 0.3s ease, border-bottom 0.3s ease;
+}
+
+.btn_oben a:hover {
+    color: var(--link-hover-color) !important;
+    text-decoration: none;
+    font-weight: 600;
+    transition: color 0.3s ease, border-bottom 0.3s ease;
 }
 
 .alert {

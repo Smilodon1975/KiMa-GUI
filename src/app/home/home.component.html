@@ -1,7 +1,7 @@
 
 
 <section class="container text-center my-5">
-    <h1 class="text-primary">Willkommen bei Kirschbaum Marktforschung</h1>
+    <h1 class="">Willkommen bei Kirschbaum Marktforschung</h1>
     <p class="lead">
         Marktforschung ist der Schlüssel zum Verständnis von Märkten, 
         Kunden und Wettbewerbern. Entdecken Sie, wie wir Ihnen helfen können, 
@@ -25,7 +25,7 @@
                  class="img-fluid rounded shadow IngoKirschbaum" alt="Ingo Kirschbaum">
         </div>
         <div class="col-md-6">
-            <h2 class="text-primary">Über uns</h2>
+            <h2 class="">Über uns</h2>
             <p>
                 Wir sind ein Marktforschungsunternehmen, das sich auf die 
                 Durchführung von Studien und Umfragen spezialisiert hat. 
@@ -38,7 +38,7 @@
 </section>
 
 <section class="container my-5">
-    <h2 class="text-center text-primary">Unsere Dienstleistungen</h2>
+    <h2 class="text-center">Unsere Dienstleistungen</h2>
     <div class="row justify-content-center">
         <div class="col-md-5">
             <div class="card shadow-sm p-3 text-center">
@@ -46,7 +46,7 @@
                 <div class="card-body">
                     <h3 class="card-title">Probanden-Rekrutierung</h3>
                     <p>Wir rekrutieren Probanden und vermitteln sie an eine Vielzahl von Projekten.</p>
-                    <a routerLink="/info" class="btn btn-primary">Mehr erfahren</a>
+                    <a routerLink="/info" class="btn btn-more">Mehr erfahren</a>
                 </div>
             </div>
         </div>
@@ -57,7 +57,7 @@
                 <div class="card-body">
                     <h3 class="card-title">Projektmanagement</h3>
                     <p>Wir führen Marktforschungsprojekte für Ihr Unternehmen durch.</p>
-                    <a routerLink="/kunden" class="btn btn-primary">Mehr erfahren</a>
+                    <a routerLink="/info" class="btn btn-more">Mehr erfahren</a>
                 </div>
             </div>
         </div>
@@ -66,7 +66,7 @@
 
 <!-- News-Sektion in home.component.html -->
 <section class="container my-5">
-    <h2 class="text-center text-primary">Aktuelle News</h2>
+    <h2 class="text-center">Aktuelle News</h2>
     <div class="row" *ngIf="newsList?.length; else noNews">
       <div class="col-md-4" *ngFor="let news of newsList">
         <div class="card mb-3">
@@ -84,7 +84,7 @@
       <p class="text-center">Keine aktuellen News.</p>
     </ng-template>
     <div class="text-center mt-3">
-      <a routerLink="/news" class="btn btn-outline-primary">Mehr News</a>
+      <a routerLink="/news" class="btn btn-more">Mehr News</a>
     </div>
   </section>
   

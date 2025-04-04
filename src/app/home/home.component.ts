@@ -1,12 +1,15 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { NewsService, INews } from '../services/news.service'; // Pfad ggf. anpassen
+import { NewsService, INews } from '../services/news.service'; 
+import { RouterModule } from '@angular/router';
+import { Router } from '@angular/router';
+
 
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, RouterModule],
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.css']
 })
@@ -15,10 +18,7 @@ export class HomeComponent implements OnInit {
   fadeOut: boolean = false;
   newsList: INews[] = []; // Hier werden die News gespeichert
 
-  constructor(
-    private route: ActivatedRoute,
-    private newsService: NewsService  // NewsService injizieren
-  ) {}
+  constructor(private route: ActivatedRoute, private newsService: NewsService , private router: Router) {}
 
   ngOnInit(): void {
     // Prüfe Query-Parameter (z. B. Logout-Meldung)

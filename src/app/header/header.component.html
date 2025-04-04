@@ -1,15 +1,15 @@
 
-<header class="container-fluid bg-light shadow-sm py-3">
+<header class="container-fluid  shadow-sm py-3">
     <div class="d-flex align-items-center justify-content-between">
-        <!-- Logo links -->
-<!-- Logo links -->
+      
+
 <div class="col-auto">
     <a routerLink="/home" class="ms-3 logo" style="text-decoration: none;">
       <img
-        src="assets/Images/kima_logo_schwarz_rot_text_rgb.png"
-        srcset="assets/Images/kima_logo_schwarz_rot_text_rgb_small.png 300w, 
-          assets/Images/kima_logo_schwarz_rot_text_rgb_medium.png 600w, 
-          assets/Images/kima_logo_schwarz_rot_text_rgb.png 1200w"
+        src="assets\Images\kima_logo_gruen_rot_text_rgb.png"
+        srcset="assets/kima_logo_gruen_rot_text_rgb.png 300w, 
+          assets/Images/kima_logo_gruen_rot_text_rgb.png 600w, 
+          assets/Images/kima_logo_gruen_rot_text_rgb.png 1200w"
         sizes="(max-width: 600px) 300px, 600px"
         alt="Kirschbaum"
         class="img-fluid"
@@ -22,30 +22,30 @@
         <nav>
             <ul class="nav justify-content-end me-3">
                 <li class="nav-item">
-                    <a class="nav-link text-dark" routerLink="/home">Home</a>
+                    <a class="nav-link " routerLink="/home">Home</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link text-dark" routerLink="/info">Informationen</a>
+                    <a class="nav-link " routerLink="/info">Informationen</a>
                 </li>  
                 <li class="nav-item" *ngIf="!authService.isLoggedIn()">
-                    <a class="nav-link text-dark" routerLink="/register">Registrieren</a>
+                    <a class="nav-link " routerLink="/register">Registrieren</a>
                 </li>               
                 <li class="nav-item" *ngIf="!authService.isLoggedIn()">
-                    <a class="nav-link text-dark" routerLink="/login">Login</a>
+                    <a class="nav-link " routerLink="/login">Login</a>
                 </li>
                 <li class="nav-item" *ngIf="isLoggedIn">
-                    <a class="nav-link text-dark" (click)="logout()" style="cursor: pointer;">Logout</a>
+                    <a class="nav-link " (click)="logout()" style="cursor: pointer;">Logout</a>
                 </li>
                 <li class="nav-item" *ngIf="userRole === 'Admin'">
-                    <a class="nav-link text-dark" routerLink="/admin">Admin</a>
+                    <a class="nav-link " routerLink="/admin">Admin</a>
                   </li>
                   <li class="nav-item" *ngIf="userRole === 'Proband'">
-                    <a class="nav-link text-dark" routerLink="/user">User</a>
+                    <a class="nav-link " routerLink="/user">User</a>
                   </li>
                   
                   
                 <li class="nav-item">
-                    <a class="nav-link text-dark" href="https://tcd3b40f5.emailsys1a.net/166/3797/894a492721/subscribe/form.html?_g=1600358208">
+                    <a class="nav-link " href="https://tcd3b40f5.emailsys1a.net/166/3797/894a492721/subscribe/form.html?_g=1600358208">
                         Newsletter
                     </a>
                 </li>

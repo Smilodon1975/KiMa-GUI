@@ -1,3 +1,25 @@
+:root {
+  --main-brand-color: #4a4a4a;
+  --primary-color: #f0f0f0;
+  --secondary-color: #1abc9c;
+  --light-secondary-color: #16a085;
+  --text-color: #f0f0f0;
+  --secondary-text-color: #333333;
+  --link-color: #0056b3;
+  --link-color2: #F0F0F0;
+  --link-hover-color: #3388ff;
+}
+
+/* 🔹 Header-Stile */
+header {
+  background-color: var(--primary-color) !important ;
+  color: var(--light-secondary-color) !important;
+  padding: 20px;
+  text-align: center;
+  font-size: 16px;    
+  position: relative; /* Positionierung für den Logo-Hover-Effekt */
+}
+
 /* Entferne eventuelle Standard-Hover-Styles */
 a.logo {
     text-decoration: none;
