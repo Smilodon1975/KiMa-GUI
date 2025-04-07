@@ -9,8 +9,8 @@ import { UserUpdateModel } from '../models/user-update.model';
 import * as bootstrap from 'bootstrap';
 import { CountryService } from '../services/country.service';
 import { Router } from '@angular/router';
-
-
+import { switchMap, catchError, tap, finalize } from 'rxjs/operators'; // RxJS Operatoren importieren
+import { of, throwError } from 'rxjs'; // of und throwError importieren
 
 @Component({
   selector: 'app-user',
@@ -36,6 +36,7 @@ export class UserComponent implements OnInit {
   deleteSuccessMessage: string = '';
   deleteFadeOut: boolean = false;
   showExtra: boolean = false;
+  isLoading: boolean = false;
 
   constructor(private userService: UserService, private countryService: CountryService, private router: Router) {}
 
@@ -62,73 +63,186 @@ export class UserComponent implements OnInit {
   }
   
 
-  // ✅ Lädt die aktuellen Benutzerdaten aus dem Backend  
-    loadUserData(): void {
-      this.userService.getMyData().subscribe({
-        next: (data) => {
-          this.userData = data;
-          this.updatedUserData = { ...data };
-        },
-        error: (err) => {
-          this.errorMessage = "Fehler beim Laden der Benutzerdaten.";
-          console.error("Fehler beim Laden der Benutzerdaten:", err);
-        }
-      });
-    } 
+   // Lädt die aktuellen Benutzerdaten UND Profildaten
+   loadUserData(): void {
+    this.userService.getMyData().subscribe({
+      next: (data: User) => { 
+        console.log("Daten empfangen von API (getMyData):", data);
+        // Typisieren als User
+        this.userData = data;
+        // Initialisiere updatedUserData mit User-Daten UND Profildaten
+        this.updatedUserData = {
+            // Kopiere Basis-User-Daten
+            id: data.id,
+            email: data.email,
+            userName: data.userName,
+            firstName: data.firstName,
+            lastName: data.lastName,
+            title: data.title,
+            gender: data.gender,
+            phonePrivate: data.phonePrivate,
+            phoneMobile: data.phoneMobile,
+            phoneWork: data.phoneWork,
+            birthDate: data.birthDate,
+            street: data.street,
+            zip: data.zip,
+            city: data.city,
+            country: data.country,
+            // Initialisiere das Profil-Objekt - WICHTIG!
+            // Entweder aus data.profile (falls API es mitschickt) oder als leeres Objekt/Default
+            profile: data.userProfile ? { ...data.userProfile } : this.getDefaultProfile()
+            // Kein Passwort hier initialisieren
+        };
+        console.log("Geladene Daten für Bearbeitung:", this.updatedUserData);
+      },
+      error: (err) => {
+        this.errorMessage = "Fehler beim Laden der Benutzerdaten.";
+        console.error("Fehler beim Laden der Benutzerdaten:", err);
+      }
+    });
+  }
+
+  // Hilfsmethode, um ein leeres/default Profil zu erstellen
+  getDefaultProfile(): UserProfile {
+      return {
+          vehicleCategory: 'None',
+          vehicleDetails: '',
+          occupation: '',
+          educationLevel: '',
+          region: '',
+          age: undefined, // oder null, je nach Typ
+          incomeLevel: '',
+          isInterestedInTechnology: false,
+          isInterestedInSports: false,
+          isInterestedInEntertainment: false,
+          isInterestedInTravel: false
+      };
+  }
 
 
   // ✅ Öffnet das Modal zur Bearbeitung der Benutzerdaten
   openModal(): void {
-    
-    const modalElement = document.getElementById('userModal');
-    if (modalElement) {
-      const modalInstance = new bootstrap.Modal(modalElement);
-      modalInstance.show();
+    // Stelle sicher, dass die Daten frisch geladen sind oder zumindest initialisiert wurden
+    if (!this.updatedUserData || !this.updatedUserData.profile) {
+        // Ggf. loadUserData() erneut aufrufen oder sicherstellen,
+        // dass updatedUserData korrekt initialisiert wurde in loadUserData()
+        console.warn("Bearbeitungsdaten nicht vollständig initialisiert.");
+        // Fallback: Initialisieren
+        this.updatedUserData = { ...this.userData, profile: this.userData?.userProfile ? {...this.userData.userProfile} : this.getDefaultProfile() } as UserUpdateModel;
     }
-  }
+
+   const modalElement = document.getElementById('userModal');
+   if (modalElement) {
+     const modalInstance = new bootstrap.Modal(modalElement);
+     modalInstance.show();
+   }
+ }
 
   // ✅ Schließt das Modal
   closeModal(): void {
-    const modalElement = document.getElementById('userModal');
-    if (modalElement) {
-      const modalInstance = bootstrap.Modal.getInstance(modalElement);
-      if (modalInstance) {
-        modalInstance.hide();
-      }
-    }
-  }
+    // Reset state if needed
+    this.passwordMismatch = false;
+    this.confirmPassword = '';
+    this.errorMessage = ''; // Reset error on close
+   const modalElement = document.getElementById('userModal');
+   if (modalElement) {
+     const modalInstance = bootstrap.Modal.getInstance(modalElement);
+     if (modalInstance) {
+       modalInstance.hide();
+     }
+   }
+ }
 
   // ✅ Speichert die Änderungen am Benutzerprofil
+  // ✅ Speichert die Änderungen (User UND Profil)
   onSaveChanges(): void {
+    this.isLoading = true; // Ladeanzeige starten
+    this.errorMessage = ''; // Alte Fehler zurücksetzen
+    this.successMessage = '';
+
+    // Passwort-Check
     if (this.updatedUserData.password && this.updatedUserData.password !== this.confirmPassword) {
       this.passwordMismatch = true;
+      this.isLoading = false; // Ladeanzeige stoppen
       return;
     }
-  
-    this.passwordMismatch = false; // Rücksetzen, falls alles passt
-  
-    console.log("🚀 Sende folgende Daten an die API:", this.updatedUserData);
-  
-    this.userService.updateUserData(this.updatedUserData).subscribe({
+    this.passwordMismatch = false;
+
+    // 1. Bereite die Daten für die zwei separaten Aufrufe vor
+    const baseUserData = { // Objekt für PUT /api/user/update
+        id: this.updatedUserData.id,
+        email: this.updatedUserData.email,
+        userName: this.updatedUserData.userName,
+        firstName: this.updatedUserData.firstName,
+        lastName: this.updatedUserData.lastName,
+        title: this.updatedUserData.title,
+        gender: this.updatedUserData.gender,
+        phonePrivate: this.updatedUserData.phonePrivate,
+        phoneMobile: this.updatedUserData.phoneMobile,
+        phoneWork: this.updatedUserData.phoneWork,
+        birthDate: this.updatedUserData.birthDate,
+        street: this.updatedUserData.street,
+        zip: this.updatedUserData.zip,
+        city: this.updatedUserData.city,
+        country: this.updatedUserData.country,
+        // Passwort nur mitsenden, wenn es gesetzt wurde
+        ...(this.updatedUserData.password && { password: this.updatedUserData.password })
+    };
+
+    // Stelle sicher, dass profile nicht null/undefined ist
+     const profileData = this.updatedUserData.profile || this.getDefaultProfile(); // Objekt für PUT /api/userprofile
+
+
+    console.log("Sende Basis-User-Daten:", baseUserData);
+    console.log("Sende Profil-Daten:", profileData);
+
+// 2. Führe die Aufrufe sequenziell aus (erst User, dann Profil)
+    this.userService.updateUserData(baseUserData).pipe(
+      // Wenn User-Update erfolgreich war, fahre mit Profil-Update fort
+      switchMap(() => {
+        // Nur Profil updaten, wenn es auch Profildaten gibt
+        // (sollte durch Initialisierung immer der Fall sein, aber sicher ist sicher)
+    
+        if (profileData) {
+             console.log("User-Update erfolgreich, starte Profil-Update...");
+            return this.userService.updateUserProfileData(profileData);
+        } else {
+            console.log("User-Update erfolgreich, keine Profildaten zum Senden.");
+            return of(null); // Gibt ein leeres Observable zurück, um die Kette fortzusetzen
+        }
+      }),
+      // Fehlerbehandlung für *beide* Aufrufe
+      catchError((err) => {
+        console.error('❌ Fehler beim Speichern:', err);
+        // Versuche, eine spezifischere Fehlermeldung aus der API-Antwort zu extrahieren
+        this.errorMessage = err?.error?.message || err?.error?.title || 'Fehler beim Speichern der Änderungen.';
+        return throwError(() => err); // Fehler weitergeben, um finalize zu erreichen
+      }),
+      // Wird immer ausgeführt, egal ob Erfolg oder Fehler
+      finalize(() => {
+        this.isLoading = false; // Ladeanzeige beenden
+      })
+    ).subscribe({
       next: () => {
-        this.successMessage = 'Änderungen gespeichert!';
-        // Nach 2 Sekunden soll die Meldung anfangen zu verblassen
-        setTimeout(() => {
-          this.fadeOut = true;
-        }, 2000);
-        // Nach 3 Sekunden wird die Meldung komplett entfernt und das Fade zurückgesetzt
-        setTimeout(() => {
-          this.successMessage = '';
-          this.fadeOut = false;
-        }, 3000);
-  
-        this.loadUserData();
-        this.closeModal();
+         // Dieser Block wird nur erreicht, wenn *beide* Aufrufe erfolgreich waren
+        console.log("Profil-Update erfolgreich (oder übersprungen).");
+        this.successMessage = 'Änderungen erfolgreich gespeichert!';
+         // Timer für Erfolgsmeldung
+         setTimeout(() => this.fadeOut = true, 2000);
+         setTimeout(() => {
+             this.successMessage = '';
+             this.fadeOut = false;
+         }, 3000);
+
+        this.loadUserData(); // Daten neu laden
+        this.closeModal(); // Modal schließen
       },
-      error: (err) => {
-        this.errorMessage = 'Fehler beim Speichern der Änderungen.';
-        console.error('❌ API Fehler:', err);
-      },
+      // Fehlerfall wird bereits im catchError behandelt, aber zur Sicherheit:
+      error: () => {
+         // Hier sollte man normalerweise nicht landen, wenn catchError verwendet wird,
+         // aber zur Sicherheit Ladeanzeige beenden.
+         this.isLoading = false;
+       }
     });
   }
 

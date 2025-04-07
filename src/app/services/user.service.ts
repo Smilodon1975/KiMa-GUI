@@ -2,12 +2,15 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable, of, catchError, throwError } from 'rxjs';
 import { UserUpdateModel } from '../models/user-update.model';
+import { UserProfile } from '../models/user-profile.model';
+import { User } from '../models/user.model';
 
 @Injectable({
   providedIn: 'root'
 })
 export class UserService {
-  private userUrl = 'https://localhost:7090/api/user'; // ✅ API-Endpunkt für Benutzer
+  private userUrl = 'https://localhost:7090/api/user'; 
+  private profileUrl = 'https://localhost:7090/api/userprofile'; 
 
   constructor(private http: HttpClient) {}
 
@@ -18,12 +21,20 @@ export class UserService {
     );
   }
 
-  // ✅ Aktualisiert die Benutzerdaten
-  updateUserData(userData: UserUpdateModel): Observable<any> {
-    const headers = new HttpHeaders({
-      'Authorization': `Bearer ${localStorage.getItem("authToken")}` // ✅ Token wird mitgeschickt
-    });
-    return this.http.put(`${this.userUrl}/update`, userData, { headers });
+  // Aktualisiert die *Basis*-Benutzerdaten (ohne Profil!)
+  // Nimmt jetzt nur noch die relevanten Felder entgegen
+  updateUserData(userData: Omit<User, 'id' | 'profile' | 'createdAt' | 'role' | 'status' | 'age'> & { password?: string }): Observable<any> {
+    return this.http.put(`${this.userUrl}/update`, userData); // Schickt nur User-Daten
+  }
+
+  // Aktualisiert die UserProfile-Daten
+  updateUserProfileData(profileData: UserProfile): Observable<any> {
+      // Headers werden hier wahrscheinlich auch benötigt, wenn der Endpunkt geschützt ist
+     const headers = new HttpHeaders({
+       'Authorization': `Bearer ${localStorage.getItem("authToken")}`
+     });
+     // Sendet die Profildaten an den PUT /api/userprofile Endpunkt
+    return this.http.put(this.profileUrl, profileData, { headers });
   }
 
   deleteAccount(password: string): Observable<any> {

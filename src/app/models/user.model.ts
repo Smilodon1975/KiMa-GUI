@@ -20,5 +20,5 @@ export interface User {
   zip?: string;
   city?: string;
   country?: string;  
-  profile?: UserProfile; // Optional im Basis‑Objekt
+  userProfile?: UserProfile; // Optional im Basis‑Objekt
 }

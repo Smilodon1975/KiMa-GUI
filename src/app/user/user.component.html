@@ -29,7 +29,11 @@
       <p><strong>Titel:</strong> {{ userData?.title || 'Kein Titel' }}</p>
       <p><strong>Geschlecht:</strong> {{ getGenderTranslation(userData?.gender) }}</p>
       <p><strong>Erstellt am:</strong> {{ userData?.createdAt | date:'dd.MM.yyyy' }}</p>
-
+      <p><strong>Fahrzeugtyp:</strong> {{ userData?.userProfile?.vehicleCategory || 'Nicht angegeben' }}</p>
+      <p><strong>Fahrzeugdetails:</strong> {{ userData?.userProfile?.vehicleDetails || 'Nicht angegeben' }}</p>
+      <p><strong>Beruf:</strong> {{ userData?.userProfile?.occupation || 'Nicht angegeben' }}</p>
+      <p><strong>Bildungsniveau:</strong> {{ userData?.userProfile?.educationLevel || 'Nicht angegeben' }}</p>
+     <p><strong>Region:</strong> {{ userData?.userProfile?.region || 'Nicht angegeben' }}</p>   
       
     </div>
     <div class="col-md-6">
@@ -39,7 +43,13 @@
       <p><strong>Telefon Arbeit:</strong> {{ userData?.phoneWork || 'Nicht angegeben' }}</p>
       <p><strong>Geburtsdatum:</strong> {{ userData?.birthDate ? (userData?.birthDate | date:'dd.MM.yyyy') : 'Nicht bekannt' }}</p>
       <p><strong>Alter:</strong> {{ getUserAge(userData?.birthDate) }}</p>
-</div>
+      <p><strong>Einkommensniveau:</strong> {{ userData?.userProfile?.incomeLevel || 'Nicht angegeben' }}</p>
+
+      <p><strong>Interesse an Technologie:</strong> {{ userData?.userProfile?.isInterestedInTechnology ? 'Ja' : 'Nein' }}</p>
+      <p><strong>Interesse an Sport:</strong> {{ userData?.userProfile?.isInterestedInSports ? 'Ja' : 'Nein' }}</p>
+      <p><strong>Interesse an Unterhaltung:</strong> {{ userData?.userProfile?.isInterestedInEntertainment ? 'Ja' : 'Nein' }}</p>
+      <p><strong>Interesse an Reisen:</strong> {{ userData?.userProfile?.isInterestedInTravel ? 'Ja' : 'Nein' }}</p>
+</div>userProfile
 </div>
 
     <!-- ✅ Buttons -->
