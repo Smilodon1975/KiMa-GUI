@@ -1,57 +1,53 @@
 
-<header class="container-fluid  shadow-sm py-3">
-    <div class="d-flex align-items-center justify-content-between">
-      
+<nav class="navbar navbar-expand-lg kima-navbar shadow-sm py-3">
 
-<div class="col-auto">
-    <a routerLink="/home" class="ms-3 logo" style="text-decoration: none;">
-      <img
-        src="assets\Images\kima_logo_gruen_rot_text_rgb.png"
-        srcset="assets/kima_logo_gruen_rot_text_rgb.png 300w, 
-          assets/Images/kima_logo_gruen_rot_text_rgb.png 600w, 
-          assets/Images/kima_logo_gruen_rot_text_rgb.png 1200w"
-        sizes="(max-width: 600px) 300px, 600px"
-        alt="Kirschbaum"
-        class="img-fluid"
-        style="max-width: 150px;"
-      />
-    </a>
-  </div>
-  
-        <!-- Navigationsleiste -->
-        <nav>
-            <ul class="nav justify-content-end me-3">
+    <header class="container-fluid  shadow-sm py-3">
+
+
+        <a class="navbar-brand logo ms-lg-3" routerLink="/home"> 
+        <img ngSrc="assets/Images/kima_logo_gruen_rot_text_rgb.png"   
+        width="800"  height="269" priority 
+            sizes="(max-width: 767px) 70vw, (max-width: 991px) 45vw, 35vw"  
+            alt="Kirschbaum Logo"
+            class="d-inline-block align-top" 
+            style="max-height: 40px; width: auto;"
+        />
+        </a>
+
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
+            <ul class="navbar-nav"> 
                 <li class="nav-item">
-                    <a class="nav-link " routerLink="/home">Home</a>
+                    
+                    <a class="nav-link" routerLink="/home" routerLinkActive="active-nav-link" [routerLinkActiveOptions]="{exact: true}">Home</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link " routerLink="/info">Informationen</a>
-                </li>  
-                <li class="nav-item" *ngIf="!authService.isLoggedIn()">
-                    <a class="nav-link " routerLink="/register">Registrieren</a>
-                </li>               
-                <li class="nav-item" *ngIf="!authService.isLoggedIn()">
-                    <a class="nav-link " routerLink="/login">Login</a>
+                    <a class="nav-link" routerLink="/info" routerLinkActive="active-nav-link">Informationen</a>
                 </li>
-                <li class="nav-item" *ngIf="isLoggedIn">
-                    <a class="nav-link " (click)="logout()" style="cursor: pointer;">Logout</a>
+                
+                <li class="nav-item" *ngIf="!isLoggedIn"> 
+                    <a class="nav-link" routerLink="/register" routerLinkActive="active-nav-link">Registrieren</a>
+                </li>
+                <li class="nav-item" *ngIf="!isLoggedIn">
+                    <a class="nav-link" routerLink="/login" routerLinkActive="active-nav-link">Login</a>
                 </li>
                 <li class="nav-item" *ngIf="userRole === 'Admin'">
-                    <a class="nav-link " routerLink="/admin">Admin</a>
-                  </li>
-                  <li class="nav-item" *ngIf="userRole === 'Proband'">
-                    <a class="nav-link " routerLink="/user">User</a>
-                  </li>
-                  
-                  
+                    <a class="nav-link" routerLink="/admin" routerLinkActive="active-nav-link">Admin</a>
+                </li>
+                <li class="nav-item" *ngIf="userRole === 'Proband'">
+                        <a class="nav-link" routerLink="/user" routerLinkActive="active-nav-link">Mein Bereich</a>
+                </li>
                 <li class="nav-item">
-                    <a class="nav-link " href="https://tcd3b40f5.emailsys1a.net/166/3797/894a492721/subscribe/form.html?_g=1600358208">
-                        Newsletter
-                    </a>
+                    <a class="nav-link" href="https://tcd3b40f5.emailsys1a.net/166/3797/894a492721/subscribe/form.html?_g=1600358208" target="_blank">Newsletter</a>
+                </li>
+                <li class="nav-item" *ngIf="isLoggedIn">
+                    <a class="nav-link" (click)="logout()" style="cursor: pointer;">Logout</a>
                 </li>
             </ul>
-        </nav>
-    </div>
-</header>
+        </div>
+    </header>
 
-
+</nav>

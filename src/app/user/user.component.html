@@ -1,334 +1,515 @@
 
 
 <div class="container mt-5">
-  <div class="card shadow p-4">
-    <h2 class="text-center">Hallo {{ userData?.userName }}, willkommen!</h2>
-    <p class="text-center">Hier kannst du deine Daten verwalten.</p>
+  <div class="row justify-content-center">
+    <div class="col-lg-8 col-md-10">
 
-<!-- ✅ Erfolgs- & Fehlermeldungen anzeigen -->
+        <div class="card shadow p-4">
+              <h2 class="text-center">Hallo {{ userData?.userName }}, willkommen!</h2>
+              <p class="text-center">Hier kannst du deine Daten verwalten.</p>
 
-<div *ngIf="errorMessage" class="alert alert-danger text-center">
-  {{ errorMessage }}
-</div>
-<div *ngIf="loginMessage" [ngClass]="{'fade-out': fadeOut}" class="alert alert-success text-center">
-  {{ loginMessage }}
-</div>
-<div *ngIf="successMessage" [ngClass]="{'fade-out': fadeOut}" class="alert alert-success text-center">
-  {{ successMessage }}
-</div>
+              <!-- ✅ Erfolgs- & Fehlermeldungen anzeigen -->
 
-<!-- ✅ Direkt die Benutzerdaten anzeigen -->
-<div class="card shadow p-4 mt-4">
-  <h4 class="text-center mb-4">Deine persönlichen Daten</h4>
-  <div class="row">
-    <div class="col-md-6">
-      <p><strong>E-Mail:</strong> {{ userData?.email }}</p>
-      <p><strong>Benutzername:</strong> {{ userData?.userName }}</p>
-      <p><strong>Vorname:</strong> {{ userData?.firstName || 'Nicht bekannt' }}</p>
-      <p><strong>Nachname:</strong> {{ userData?.lastName || 'Nicht bekannt' }}</p>
-      <p><strong>Titel:</strong> {{ userData?.title || 'Kein Titel' }}</p>
-      <p><strong>Geschlecht:</strong> {{ getGenderTranslation(userData?.gender) }}</p>
-      <p><strong>Erstellt am:</strong> {{ userData?.createdAt | date:'dd.MM.yyyy' }}</p>
-      <p><strong>Fahrzeugtyp:</strong> {{ userData?.userProfile?.vehicleCategory || 'Nicht angegeben' }}</p>
-      <p><strong>Fahrzeugdetails:</strong> {{ userData?.userProfile?.vehicleDetails || 'Nicht angegeben' }}</p>
-      <p><strong>Beruf:</strong> {{ userData?.userProfile?.occupation || 'Nicht angegeben' }}</p>
-      <p><strong>Bildungsniveau:</strong> {{ userData?.userProfile?.educationLevel || 'Nicht angegeben' }}</p>
-     <p><strong>Region:</strong> {{ userData?.userProfile?.region || 'Nicht angegeben' }}</p>   
-      
-    </div>
-    <div class="col-md-6">
-      <p><strong>Adresse:</strong> {{ userData?.street }}, {{ userData?.zip }} {{ userData?.city }}, {{ userData?.country }}</p>
-      <p><strong>Telefon Privat:</strong> {{ userData?.phonePrivate || 'Nicht angegeben' }}</p>
-      <p><strong>Telefon Mobil:</strong> {{ userData?.phoneMobile || 'Nicht angegeben' }}</p>
-      <p><strong>Telefon Arbeit:</strong> {{ userData?.phoneWork || 'Nicht angegeben' }}</p>
-      <p><strong>Geburtsdatum:</strong> {{ userData?.birthDate ? (userData?.birthDate | date:'dd.MM.yyyy') : 'Nicht bekannt' }}</p>
-      <p><strong>Alter:</strong> {{ getUserAge(userData?.birthDate) }}</p>
-      <p><strong>Einkommensniveau:</strong> {{ userData?.userProfile?.incomeLevel || 'Nicht angegeben' }}</p>
+                <div *ngIf="errorMessage" class="alert alert-danger text-center">
+                  {{ errorMessage }}
+                </div>
+                <div *ngIf="loginMessage" [ngClass]="{'fade-out': fadeOut}" class="alert alert-success text-center">
+                  {{ loginMessage }}
+                </div>
+                <div *ngIf="successMessage" [ngClass]="{'fade-out': fadeOut}" class="alert alert-success text-center">
+                  {{ successMessage }}
+                </div>
 
-      <p><strong>Interesse an Technologie:</strong> {{ userData?.userProfile?.isInterestedInTechnology ? 'Ja' : 'Nein' }}</p>
-      <p><strong>Interesse an Sport:</strong> {{ userData?.userProfile?.isInterestedInSports ? 'Ja' : 'Nein' }}</p>
-      <p><strong>Interesse an Unterhaltung:</strong> {{ userData?.userProfile?.isInterestedInEntertainment ? 'Ja' : 'Nein' }}</p>
-      <p><strong>Interesse an Reisen:</strong> {{ userData?.userProfile?.isInterestedInTravel ? 'Ja' : 'Nein' }}</p>
-</div>userProfile
-</div>
 
-    <!-- ✅ Buttons -->
-<div class="text-center mt-3">
-  <button class="btn btn-more" (click)="openModal()">Bearbeiten</button>
-  <button class="btn btn-danger ms-2" (click)="openDeleteModal()">Account löschen</button></div>
-  </div>
-</div>
 
-<!-- ✅ Modal für Bearbeitung der Daten -->
-<div class="modal fade" id="userModal" tabindex="-1" aria-labelledby="userModalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-lg">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="userModalLabel">Meine Daten bearbeiten</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <div class="modal-body">
-        <form #userForm="ngForm" (ngSubmit)="onSaveChanges()">
+
+
+                    <!-- Anzeige Benutzerdaten ------------------------------------------------------------------------------->
+
+
+                    <div *ngIf="userData"> <!--Haupt-Container erst anzeigen, wenn userData geladen ist -->
+
+                      <div class="card shadow-sm mb-4"> <!-- mb-4 für Abstand nach unten -->
+                        <div class="card-header">
+                          Persönliche Angaben
+                        </div>
+                        <div class="card-body">
+                          <dl class="row"> <!-- dl mit row für Grid-Layout -->
+                            <dt class="col-sm-4">Benutzername:</dt>
+                            <dd class="col-sm-8">{{ userData.userName }}</dd>
+                    
+                            <dt class="col-sm-4">Vorname:</dt>
+                            <dd class="col-sm-8">{{ userData.firstName || 'Nicht bekannt' }}</dd>
+                    
+                            <dt class="col-sm-4">Nachname:</dt>
+                            <dd class="col-sm-8">{{ userData.lastName || 'Nicht bekannt' }}</dd>
+                    
+                            <dt class="col-sm-4">Titel:</dt>
+                            <dd class="col-sm-8">{{ userData.title || 'Kein Titel' }}</dd>
+                    
+                            <dt class="col-sm-4">Geschlecht:</dt>
+                            <dd class="col-sm-8">{{ getGenderTranslation(userData.gender) }}</dd>
+                    
+                            <dt class="col-sm-4">Geburtsdatum:</dt>
+                            <dd class="col-sm-8">{{ userData.birthDate ? (userData.birthDate | date:'dd.MM.yyyy') : 'Nicht bekannt' }}</dd>
+                    
+                            <dt class="col-sm-4">Alter:</dt>
+                            <dd class="col-sm-8">{{ getUserAge(userData.birthDate) }}</dd>
+                    
+                            <dt class="col-sm-4">Registriert seit:</dt>
+                            <dd class="col-sm-8">{{ userData.createdAt | date:'dd.MM.yyyy' }}</dd>
+                          </dl>
+                        </div>
+                      </div>
+                    
+                      <div class="card shadow-sm mb-4">
+                        <div class="card-header">
+                          Kontaktdaten
+                        </div>
+                        <div class="card-body">
+                          <dl class="row">
+                            <dt class="col-sm-4">E-Mail:</dt>
+                            <dd class="col-sm-8">{{ userData.email }}</dd>
+                    
+                            <dt class="col-sm-4">Telefon (Mobil):</dt>
+                            <dd class="col-sm-8">{{ userData.phoneMobile || 'Nicht angegeben' }}</dd>
+                    
+                            <dt class="col-sm-4">Telefon (Privat):</dt>
+                            <dd class="col-sm-8">{{ userData.phonePrivate || 'Nicht angegeben' }}</dd>
+                    
+                            <dt class="col-sm-4">Telefon (Arbeit):</dt>
+                            <dd class="col-sm-8">{{ userData.phoneWork || 'Nicht angegeben' }}</dd>
+                          </dl>
+                        </div>
+                      </div>
+                    
+                      <div class="card shadow-sm mb-4">
+                        <div class="card-header">
+                          Adresse
+                        </div>
+                        <div class="card-body">
+                          <dl class="row">
+                            <dt class="col-sm-4">Straße:</dt>
+                            <dd class="col-sm-8">{{ userData.street || 'Nicht angegeben' }}</dd>
+                    
+                            <dt class="col-sm-4">PLZ / Ort:</dt>
+                            <dd class="col-sm-8">{{ userData.zip || 'n.a.' }} {{ userData.city || 'n.a.' }}</dd>
+                    
+                            <dt class="col-sm-4">Land:</dt>
+                            <dd class="col-sm-8">{{ userData.country || 'Nicht angegeben' }}</dd>
+                          </dl>
+                        </div>
+                      </div>
+                    
+                      <div class="card shadow-sm mb-4" *ngIf="userData.userProfile"> <!-- *ngIf hier! -->
+                        <div class="card-header">
+                          Marktforschungs-Profil
+                        </div>
+                        <div class="card-body">
+                          <dl class="row">
+                            <dt class="col-sm-4">Fahrzeugtyp:</dt>
+                            <!-- Kein ?. mehr nötig bei profile, da die ganze Karte nur bei vorhandenem Profil gezeigt wird -->
+                            <dd class="col-sm-8">{{ (userData.userProfile.vehicleCategory | titlecase) || 'Nicht angegeben' }}</dd>
+                    
+                            <!-- Fahrzeugdetails nur anzeigen, wenn sie Sinn machen -->
+                            <ng-container *ngIf="userData.userProfile.vehicleCategory && userData.userProfile.vehicleCategory !== 'None'">
+                                <dt class="col-sm-4">Fahrzeugdetails:</dt>
+                                <dd class="col-sm-8">{{ userData.userProfile.vehicleDetails || 'Nicht angegeben' }}</dd>
+                            </ng-container>
+                    
+                            <dt class="col-sm-4">Beruf:</dt>
+                            <dd class="col-sm-8">{{ userData.userProfile.occupation || 'Nicht angegeben' }}</dd>
+                    
+                            <dt class="col-sm-4">Bildungsniveau:</dt>
+                            <dd class="col-sm-8">{{ userData.userProfile.educationLevel || 'Nicht angegeben' }}</dd>
+                    
+                            <dt class="col-sm-4">Region:</dt>
+                            <dd class="col-sm-8">{{ userData.userProfile.region || 'Nicht angegeben' }}</dd>
+                    
+                            <dt class="col-sm-4">Einkommensniveau:</dt>
+                            <dd class="col-sm-8">{{ userData.userProfile.incomeLevel || 'Nicht angegeben' }}</dd>
+                          </dl>
+                    
+                          <!-- Interessen könnten hier auch rein oder als eigene Karte -->
+                          <h5>Interessen</h5>
+                          <p>
+                            <span *ngIf="userData.userProfile.isInterestedInTechnology" class="badge bg-info me-1">Technologie</span>
+                            <span *ngIf="userData.userProfile.isInterestedInSports" class="badge bg-info me-1">Sport</span>
+                            <span *ngIf="userData.userProfile.isInterestedInEntertainment" class="badge bg-info me-1">Unterhaltung</span>
+                            <span *ngIf="userData.userProfile.isInterestedInTravel" class="badge bg-info me-1">Reisen</span>
+                            <span *ngIf="!userData.userProfile.isInterestedInTechnology && !userData.userProfile.isInterestedInSports && !userData.userProfile.isInterestedInEntertainment && !userData.userProfile.isInterestedInTravel">
+                                Keine Interessen angegeben
+                              </span>
+                          </p>
+                        </div>
+                      </div>
+                    
+                      <div class="alert alert-light" *ngIf="!userData.userProfile">
+                          Es wurden noch keine zusätzlichen Profildaten für die Marktforschung hinterlegt.
+                      </div>
+                    
+                    
+                      <div class="text-center mt-3">
+                        <button class="btn btn-more" (click)="openModal()">Bearbeiten</button>
+                        <button class="btn btn-danger ms-2" (click)="openDeleteModal()">Account löschen</button>
+                      </div>
+                    
+                    </div>
+                    
+                    <div *ngIf="!userData" class="text-center mt-5">
+                      <div class="spinner-border" role="status">
+                        <span class="visually-hidden">Lade Benutzerdaten...</span>
+                      </div>
+                    </div>
+
+                  <!-- Anzeige Benutzerdaten Ende----------------------------------------------------------------------------->
+
           
-          <!-- ✅ E-Mail und Benutzername -->
-          <div class="row">
-            <div class="col-md-6">
-              <label for="email" class="form-label">E-Mail</label>
-              <input type="email" class="form-control" id="email" [(ngModel)]="updatedUserData.email" name="email" disabled>
-            </div>
-            <div class="col-md-6">
-              <label for="username" class="form-label">Benutzername</label>
-              <input type="text" class="form-control" id="username" [(ngModel)]="updatedUserData.userName" name="userName">
+
+                  <!-- ✅ Modal für Bearbeitung der Daten ---------------------------------------------------------------------------->
+
+        <div class="modal fade" id="userModal" tabindex="-1" aria-labelledby="userModalLabel" aria-hidden="true">
+          <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title" id="userModalLabel">Meine Daten bearbeiten</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+              </div>
+              <div class="modal-body">
+                <form #userForm="ngForm" (ngSubmit)="onSaveChanges()">
+
+                    <h5>Persönliche Angaben</h5>
+                    <!-- ✅ E-Mail und Benutzername -->
+                    <div class="row">
+                      <div class="col-md-6">
+                        <label for="email" class="form-label">E-Mail</label>
+                        <input type="email" class="form-control" id="email" [(ngModel)]="updatedUserData.email" name="email" disabled>
+                      </div>
+                      <div class="col-md-6">
+                        <label for="username" class="form-label">Benutzername</label>
+                        <input type="text" class="form-control" id="username" [(ngModel)]="updatedUserData.userName" name="userName">
+                      </div>
+                    </div>
+
+                    <!-- ✅ Vorname & Nachname -->
+                    <div class="row mt-3">
+                      <div class="col-md-6">
+                        <label for="firstName" class="form-label">Vorname</label>
+                        <input type="text" class="form-control" id="firstName" [(ngModel)]="updatedUserData.firstName" name="firstName">
+                      </div>
+                      <div class="col-md-6">
+                        <label for="lastName" class="form-label">Nachname</label>
+                        <input type="text" class="form-control" id="lastName" [(ngModel)]="updatedUserData.lastName" name="lastName">
+                      </div>
+                    </div>
+
+                    <!-- ✅ Geschlecht & Titel -->
+                    <div class="row mt-3">
+                      <div class="col-md-6">
+                        <label for="title" class="form-label">Titel</label>
+                        <select class="form-control" id="title" [(ngModel)]="updatedUserData.title" name="title">
+                          <option value="">Kein Titel</option>
+                          <option value="Dr.">Dr.</option>
+                          <option value="Prof.">Prof.</option>
+                          <option value="Prof. Dr.">Prof. Dr.</option>
+                          <option value="Dipl.-Ing.">Dipl.-Ing.</option>
+                          <option value="M.Sc.">M.Sc.</option>
+                          <option value="M.A.">M.A.</option>
+                          <option value="B.Sc.">B.Sc.</option>
+                          <option value="B.A.">B.A.</option>
+                          <option value="Mag.">Mag.</option>
+                          <option value="MBA">MBA</option>
+                        </select>
+                      </div>
+                      <div class="col-md-6">
+                        <label for="gender" class="form-label">Geschlecht</label>
+                        <select class="form-control" id="gender" [(ngModel)]="updatedUserData.gender" name="gender">
+                          <option value="male">Männlich</option>
+                          <option value="female">Weiblich</option>
+                          <option value="other">Divers</option>
+                        </select>
+                      </div>
+                    </div>
+
+                    <hr class="my-4">
+                    <!-- ✅ Adresse -->
+                    <h5>Adresse & Kontakt</h5>
+                    <div class="row mt-3">
+                      <div class="col-md-6">
+                        <label for="street" class="form-label">Straße</label>
+                        <input type="text" class="form-control" id="street" [(ngModel)]="updatedUserData.street" name="street">
+                      </div>
+                      <div class="col-md-6">
+                        <label for="zip" class="form-label">PLZ</label>
+                        <input type="text" class="form-control" id="zip" [(ngModel)]="updatedUserData.zip" name="zip">
+                      </div>
+                    </div>
+
+                    <div class="row mt-3">
+                      <div class="col-md-6">
+                        <label for="city" class="form-label">Stadt</label>
+                        <input type="text" class="form-control" id="city" [(ngModel)]="updatedUserData.city" name="city">
+                      </div>
+                      <div class="col-md-6">
+                      <label for="country" class="form-label">Land</label>
+                        <select class="form-control" id="country" [(ngModel)]="updatedUserData.country" name="country">
+                          <optgroup label="Beliebte Länder">
+                            <option *ngFor="let country of popularCountries" [value]="country">{{ country }}</option>
+                          </optgroup>
+                          <optgroup label="Alle Länder">
+                            <option *ngFor="let country of allCountries" [value]="country">{{ country }}</option>
+                          </optgroup>
+                        </select>
+                      </div> 
+                    </div>  
+
+                    <!-- ✅ Telefonnummern -->
+                    <div class="row mt-3">
+                      <div class="col-md-6">
+                        <label for="phoneMobile" class="form-label">Mobilnummer</label>
+                        <input type="text" class="form-control" id="phoneMobile" [(ngModel)]="updatedUserData.phoneMobile" name="phoneMobile">
+                      </div>
+                      <div class="col-md-6">
+                        <label for="phonePrivate" class="form-label">Telefon (Privat)</label>
+                        <input type="text" class="form-control" id="phonePrivate" [(ngModel)]="updatedUserData.phonePrivate" name="phonePrivate">
+                      </div>
+                    </div>
+
+                    <div class="row mt-3">
+                      <div class="col-md-6">
+                        <label class="form-label">Telefon Arbeit</label>
+                        <input type="text" class="form-control" [(ngModel)]="updatedUserData.phoneWork" name="phoneWork">
+                      </div>            
+                      <!-- ✅ Geburtsdatum -->
+                      <div class="col-md-6">
+                        <label for="birthDate" class="form-label">Geburtsdatum</label>
+                        <input type="date" class="form-control" id="birthDate" [(ngModel)]="updatedUserData.birthDate" name="birthDate">
+                      </div>
+                    </div>
+                    
+                    <hr class="my-4">
+
+                    <!-- ✅ Neues Passwort setzen -------------------------------------->
+                    <h5>Passwort ändern (Optional)</h5>
+                    <div class="mt-3">
+                      <label for="password" class="form-label">Neues Passwort</label>
+                      <input type="password" class="form-control" id="password" [(ngModel)]="updatedUserData.password" name="password">
+                    </div>
+
+                    <div class="mt-2">
+                      <label for="confirmPassword" class="form-label">Neues Passwort wiederholen</label>
+                      <input type="password" class="form-control" id="confirmPassword" [(ngModel)]="confirmPassword" name="confirmPassword">
+                    </div>
+                    
+                    <small class="text-muted d-block mt-2">
+                      Ihr Passwort sollte mindestens 8 Zeichen lang sein. Großbuchstaben, Zahlen & Sonderzeichen werden empfohlen.
+                    </small>
+                    
+                    <p *ngIf="updatedUserData.password && updatedUserData.password.length > 0" class="mt-1" [ngClass]="{
+                      'text-danger': getPasswordStrength(updatedUserData.password) === '❌ Ungültig (mind. 8 Zeichen)',
+                      'text-warning': getPasswordStrength(updatedUserData.password) === '⚠️ Schwach',
+                      'text-primary': getPasswordStrength(updatedUserData.password) === '🟡 Mittel',
+                      'text-success': getPasswordStrength(updatedUserData.password) === '🟢 Stark' || 
+                                      getPasswordStrength(updatedUserData.password) === '🟢💪 Sehr stark!'}">
+                                  {{ getPasswordStrength(updatedUserData.password) }}
+                    </p>
+                    
+                    <p *ngIf="passwordMismatch" class="text-danger">Die Passwörter stimmen nicht überein!</p>    
+
+
+                    <!-- ✅ Buttons -->
+                    <div class="text-center mt-4">
+                      <button type="submit" class="btn btn-more">Speichern</button>
+                      <button type="button" class="btn btn-secondary ms-2" data-bs-dismiss="modal">Abbrechen</button>
+                    </div>
+                      <button type="button" class="btn btn-secondary mt-3" (click)="showExtra = !showExtra">
+                      {{ showExtra ? 'Weniger anzeigen' : 'Erweiterte Angaben anzeigen' }}
+                    </button> 
+
+
+                    <hr class="my-4">
+                    <!-- Ausklappbarer Bereich für Zusatzinformationen ------------------------------------------------------------------------>
+                   
+                    <div *ngIf="showExtra" class="mt-3">
+
+                      <h5>Fahrzeugdaten</h5>
+                      <div class="mb-3">
+                        <label for="vehicleCategory" class="form-label">Fahrzeugkategorie</label>
+                        <div class="input-group">
+                        <select class="form-control" id="vehicleCategory" [(ngModel)]="updatedUserData.userProfile.vehicleCategory" name="vehicleCategory">
+                          <option value="None">Keine</option>
+                          <option value="Car">Auto</option>
+                          <option value="Motorcycle">Motorrad</option>
+                          <option value="Other">Andere</option>
+                        </select>
+                          <button type="button" class="btn btn-outline-secondary"
+                            title="Eingabe löschen"
+                            (click)="clearProfileField('vehicleCategory')">
+                               &times;
+                            </button>
+                        </div>
+                      </div>
+
+                      <div class="mb-3" *ngIf="updatedUserData.userProfile.vehicleCategory !== 'None'">
+                        <label for="vehicleDetails" class="form-label">Fahrzeugdetails</label>
+                        <div class="input-group">
+                          <input type="text" class="form-control" id="vehicleDetails" [(ngModel)]="updatedUserData.userProfile.vehicleDetails" name="vehicleDetails" placeholder="z.B. Audi TT">
+                            <button type="button" class="btn btn-outline-secondary"
+                              title="Eingabe löschen"
+                              (click)="clearProfileField('vehicleDetails')">
+                                &times;
+                            </button>
+                        </div>
+                      </div>
+                      
+                      <h5>Weitere Angaben</h5>
+                      <div class="mb-3">
+                        <label for="occupation" class="form-label">Beruf</label>
+                        <div class="input-group">
+                          <input type="text" class="form-control" id="occupation" [(ngModel)]="updatedUserData.userProfile.occupation" name="occupation">
+                            <button type="button" class="btn btn-outline-secondary"
+                              title="Eingabe löschen"
+                              (click)="clearProfileField('occupation')">
+                                &times;
+                            </button>
+                        </div>            
+                      </div>
+
+                      <div class="mb-3">
+                        <label for="educationLevel" class="form-label">Bildungsniveau</label>
+                        <div class="input-group">
+                        <input type="text" class="form-control" id="educationLevel" [(ngModel)]="updatedUserData.userProfile.educationLevel" name="educationLevel">
+                          <button type="button" class="btn btn-outline-secondary"
+                          title="Eingabe löschen"
+                          (click)="clearProfileField('educationLevel')">
+                            &times;
+                          </button>
+                        </div> 
+                      </div>
+
+                      <div class="mb-3">
+                        <label for="region" class="form-label">Region</label>
+                        <div class="input-group">
+                        <input type="text" class="form-control" id="region" [(ngModel)]="updatedUserData.userProfile.region" name="region">
+                            <button type="button" class="btn btn-outline-secondary"
+                              title="Eingabe löschen"
+                              (click)="clearProfileField('region')">
+                                &times;
+                            </button>
+                        </div> 
+                      </div>
+
+                      <div class="mb-3">
+                        <label for="age" class="form-label">Alter</label>
+                        <div class="input-group">
+                        <input type="number" class="form-control" id="age" [(ngModel)]="updatedUserData.userProfile.age" name="age">
+                          <button type="button" class="btn btn-outline-secondary"
+                            title="Eingabe löschen"
+                            (click)="clearProfileField('age')">
+                              &times;
+                          </button>
+                        </div>
+                      </div>
+
+                      <div class="mb-3">
+                        <label for="incomeLevel" class="form-label">Einkommensniveau</label>
+                        <div class="input-group">
+                        <select class="form-control" id="incomeLevel" [(ngModel)]="updatedUserData.userProfile.incomeLevel" name="incomeLevel">
+                          <option value="">Bitte wählen</option>
+                          <option value="low"><1000€</option>
+                          <option value="medium">1000-5000€</option>
+                          <option value="high">>5000€</option>
+                        </select>
+                          <button type="button" class="btn btn-outline-secondary"
+                            title="Eingabe löschen"
+                            (click)="clearProfileField('incomeLevel')">
+                              &times;
+                          </button>
+                        </div>
+                      </div>
+                      
+                      <h5>Interessen</h5>
+                      <div class="form-check">
+                        <input class="form-check-input" type="checkbox" id="techInterest" [(ngModel)]="updatedUserData.userProfile.isInterestedInTechnology" name="isInterestedInTechnology">
+                        <label class="form-check-label" for="techInterest">Technologie</label>
+                      </div>
+
+                      <div class="form-check">
+                        <input class="form-check-input" type="checkbox" id="sportsInterest" [(ngModel)]="updatedUserData.userProfile.isInterestedInSports" name="isInterestedInSports">
+                        <label class="form-check-label" for="sportsInterest">Sport</label>
+                      </div>
+
+                      <div class="form-check">
+                        <input class="form-check-input" type="checkbox" id="entertainmentInterest" [(ngModel)]="updatedUserData.userProfile.isInterestedInEntertainment" name="isInterestedInEntertainment">
+                        <label class="form-check-label" for="entertainmentInterest">Unterhaltung</label>
+                      </div>
+
+                      <div class="form-check">
+                        <input class="form-check-input" type="checkbox" id="travelInterest" [(ngModel)]="updatedUserData.userProfile.isInterestedInTravel" name="isInterestedInTravel">
+                        <label class="form-check-label" for="travelInterest">Reisen</label>
+                      </div>
+
+                      <!-- ✅ Buttons -->
+                      <div class="text-center mt-4">
+                        <button type="submit" class="btn btn-more">Speichern</button>
+                        <button type="button" class="btn btn-secondary ms-2" data-bs-dismiss="modal">Abbrechen</button>
+                      </div>
+
+                        <button type="button" class="btn btn-secondary mt-3" (click)="showExtra = !showExtra">
+                        {{ showExtra ? 'Weniger anzeigen' : 'Erweiterte Angaben anzeigen' }}
+                      </button> 
+
+                    </div>
+
+                    <!-- Ausklappbarer Bereich für Zusatzinformationen Ende-------------------------------------------------------------------->
+
+                  </form>
+                </div>
+              </div>
             </div>
           </div>
 
-          <!-- ✅ Vorname & Nachname -->
-      <div class="row mt-3">
-        <div class="col-md-6">
-          <label for="firstName" class="form-label">Vorname</label>
-          <input type="text" class="form-control" id="firstName" [(ngModel)]="updatedUserData.firstName" name="firstName">
-        </div>
-        <div class="col-md-6">
-          <label for="lastName" class="form-label">Nachname</label>
-          <input type="text" class="form-control" id="lastName" [(ngModel)]="updatedUserData.lastName" name="lastName">
-        </div>
-      </div>
+                <!-- ✅ Modal für Bearbeitung der Daten Ende------------------------------------------------------------------------------->
 
-          <!-- ✅ Geschlecht & Titel -->
-          <div class="row mt-3">
-            <div class="col-md-6">
-              <label for="title" class="form-label">Titel</label>
-              <select class="form-control" id="title" [(ngModel)]="updatedUserData.title" name="title">
-                <option value="">Kein Titel</option>
-                <option value="Dr.">Dr.</option>
-                <option value="Prof.">Prof.</option>
-                <option value="Prof. Dr.">Prof. Dr.</option>
-                <option value="Dipl.-Ing.">Dipl.-Ing.</option>
-                <option value="M.Sc.">M.Sc.</option>
-                <option value="M.A.">M.A.</option>
-                <option value="B.Sc.">B.Sc.</option>
-                <option value="B.A.">B.A.</option>
-                <option value="Mag.">Mag.</option>
-                <option value="MBA">MBA</option>
-              </select>
-            </div>
-            <div class="col-md-6">
-              <label for="gender" class="form-label">Geschlecht</label>
-              <select class="form-control" id="gender" [(ngModel)]="updatedUserData.gender" name="gender">
-                <option value="male">Männlich</option>
-                <option value="female">Weiblich</option>
-                <option value="other">Divers</option>
-              </select>
+
+
+          <!-- Modal für Account-Löschung ------------------------------------------------------------------------------------------>
+
+          <div class="modal fade" id="deleteAccountModal" tabindex="-1" aria-labelledby="deleteAccountModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title" id="deleteAccountModalLabel">Account löschen</h5>
+                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Schließen"></button>
+                </div>
+                <div class="modal-body">
+                  <p>Bist du sicher, dass du deinen Account löschen möchtest? Diese Aktion kann nicht rückgängig gemacht werden.</p>
+                  <p>Bitte gib dein aktuelles Passwort zur Bestätigung ein:</p>
+                  <input 
+                    type="password" 
+                    class="form-control" 
+                    [(ngModel)]="deletePassword" 
+                    name="deletePassword" 
+                    placeholder="Passwort eingeben" 
+                    required>
+                  <!-- Fehlermeldung, falls kein Passwort eingegeben oder Fehler auftritt -->
+                  <p *ngIf="deleteErrorMessage" class="text-danger mt-2">{{ deleteErrorMessage }}</p>
+                  <!-- Erfolgsmeldung, falls gelöscht -->
+                  <p *ngIf="deleteSuccessMessage" [ngClass]="{'fade-out': deleteFadeOut}" class="text-success mt-2">
+                    {{ deleteSuccessMessage }}
+                  </p>
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-more" data-bs-dismiss="modal">Abbrechen</button>
+                  <button type="button" class="btn btn-danger" (click)="deleteAccount()">Account löschen</button>
+                </div>
+              </div>
             </div>
           </div>
 
-          <!-- ✅ Adresse -->
-          <div class="row mt-3">
-            <div class="col-md-6">
-              <label for="street" class="form-label">Straße</label>
-              <input type="text" class="form-control" id="street" [(ngModel)]="updatedUserData.street" name="street">
-            </div>
-            <div class="col-md-6">
-              <label for="zip" class="form-label">PLZ</label>
-              <input type="text" class="form-control" id="zip" [(ngModel)]="updatedUserData.zip" name="zip">
-            </div>
-          </div>
-
-          <div class="row mt-3">
-            <div class="col-md-6">
-              <label for="city" class="form-label">Stadt</label>
-              <input type="text" class="form-control" id="city" [(ngModel)]="updatedUserData.city" name="city">
-            </div>
-
-            <div class="col-md-6">
-              <label for="country" class="form-label">Land</label>
-              <select class="form-control" id="country" [(ngModel)]="updatedUserData.country" name="country">
-                <optgroup label="Beliebte Länder">
-                  <option *ngFor="let country of popularCountries" [value]="country">{{ country }}</option>
-                </optgroup>
-                <optgroup label="Alle Länder">
-                  <option *ngFor="let country of allCountries" [value]="country">{{ country }}</option>
-                </optgroup>
-              </select>
-            </div>   
-
-          <!-- ✅ Telefonnummern -->
-          <div class="row mt-3">
-            <div class="col-md-6">
-              <label for="phoneMobile" class="form-label">Mobilnummer</label>
-              <input type="text" class="form-control" id="phoneMobile" [(ngModel)]="updatedUserData.phoneMobile" name="phoneMobile">
-            </div>
-            <div class="col-md-6">
-              <label for="phonePrivate" class="form-label">Telefon (Privat)</label>
-              <input type="text" class="form-control" id="phonePrivate" [(ngModel)]="updatedUserData.phonePrivate" name="phonePrivate">
-            </div>
-          </div>
-          <div class="row mt-3">
-            <div class="col-md-6">
-              <label class="form-label">Telefon Arbeit</label>
-              <input type="text" class="form-control" [(ngModel)]="updatedUserData.phoneWork" name="phoneWork">
-            </div>
-            
-            <!-- ✅ Geburtsdatum -->
-            <div class="col-md-6">
-              <label for="birthDate" class="form-label">Geburtsdatum</label>
-              <input type="date" class="form-control" id="birthDate" [(ngModel)]="updatedUserData.birthDate" name="birthDate">
-            </div>
-          </div>
-          
-          <!-- ✅ Neues Passwort setzen -->
-        <div class="mt-3">
-          <label for="password" class="form-label">Neues Passwort</label>
-          <input type="password" class="form-control" id="password" [(ngModel)]="updatedUserData.password" name="password">
-        </div>
-
-        <div class="mt-2">
-          <label for="confirmPassword" class="form-label">Neues Passwort wiederholen</label>
-          <input type="password" class="form-control" id="confirmPassword" [(ngModel)]="confirmPassword" name="confirmPassword">
-        </div>
-
-        <!-- 🔹 Empfehlung für ein sicheres Passwort -->
-        <small class="text-muted d-block mt-2">
-          Ihr Passwort sollte mindestens 8 Zeichen lang sein. Großbuchstaben, Zahlen & Sonderzeichen werden empfohlen.
-        </small>
-
-        <!-- 🔹 Live-Anzeige der Passwortstärke -->
-        <p *ngIf="updatedUserData.password && updatedUserData.password.length > 0" class="mt-1" [ngClass]="{
-          'text-danger': getPasswordStrength(updatedUserData.password) === '❌ Ungültig (mind. 8 Zeichen)',
-          'text-warning': getPasswordStrength(updatedUserData.password) === '⚠️ Schwach',
-          'text-primary': getPasswordStrength(updatedUserData.password) === '🟡 Mittel',
-          'text-success': getPasswordStrength(updatedUserData.password) === '🟢 Stark' || 
-                          getPasswordStrength(updatedUserData.password) === '🟢💪 Sehr stark!'
-        }">
-          {{ getPasswordStrength(updatedUserData.password) }}
-        </p>
-
-        <!-- ❌ Falls die Passwörter nicht übereinstimmen -->
-        <p *ngIf="passwordMismatch" class="text-danger">Die Passwörter stimmen nicht überein!</p>
-
-        </div>
-
-          <!-- ✅ Buttons -->
-          <div class="text-center mt-4">
-            <button type="submit" class="btn btn-more">Speichern</button>
-            <button type="button" class="btn btn-secondary ms-2" data-bs-dismiss="modal">Abbrechen</button>
-          </div>
-
- <!-- Button zum Ausklappen der Zusatzinformationen -->
-<button type="button" class="btn btn-secondary mt-3" (click)="showExtra = !showExtra">
-  {{ showExtra ? 'Weniger anzeigen' : 'Erweiterte Angaben anzeigen' }}
-</button>
-
-<!-- Ausklappbarer Bereich für Zusatzinformationen -->
-<div *ngIf="showExtra" class="mt-3">
-  <h5>Fahrzeugdaten</h5>
-  <div class="mb-3">
-    <label for="vehicleCategory" class="form-label">Fahrzeugkategorie</label>
-    <select class="form-control" id="vehicleCategory" [(ngModel)]="updatedUserData.profile.vehicleCategory" name="vehicleCategory">
-      <option value="None">Keine</option>
-      <option value="Car">Auto</option>
-      <option value="Motorcycle">Motorrad</option>
-      <option value="Other">Andere</option>
-    </select>
-  </div>
-  <div class="mb-3" *ngIf="updatedUserData.profile.vehicleCategory !== 'None'">
-    <label for="vehicleDetails" class="form-label">Fahrzeugdetails</label>
-    <input type="text" class="form-control" id="vehicleDetails" [(ngModel)]="updatedUserData.profile.vehicleDetails" name="vehicleDetails" placeholder="z.B. Audi TT">
-  </div>
-  
-  <h5>Weitere Angaben</h5>
-  <div class="mb-3">
-    <label for="occupation" class="form-label">Beruf</label>
-    <input type="text" class="form-control" id="occupation" [(ngModel)]="updatedUserData.profile.occupation" name="occupation">
-  </div>
-  <div class="mb-3">
-    <label for="educationLevel" class="form-label">Bildungsniveau</label>
-    <input type="text" class="form-control" id="educationLevel" [(ngModel)]="updatedUserData.profile.educationLevel" name="educationLevel">
-  </div>
-  <div class="mb-3">
-    <label for="region" class="form-label">Region</label>
-    <input type="text" class="form-control" id="region" [(ngModel)]="updatedUserData.profile.region" name="region">
-  </div>
-  <div class="mb-3">
-    <label for="age" class="form-label">Alter</label>
-    <input type="number" class="form-control" id="age" [(ngModel)]="updatedUserData.profile.age" name="age">
-  </div>
-  <div class="mb-3">
-    <label for="incomeLevel" class="form-label">Einkommensniveau</label>
-    <select class="form-control" id="incomeLevel" [(ngModel)]="updatedUserData.profile.incomeLevel" name="incomeLevel">
-      <option value="">Bitte wählen</option>
-      <option value="low">Niedrig</option>
-      <option value="medium">Mittel</option>
-      <option value="high">Hoch</option>
-    </select>
-  </div>
-  
-  <h5>Interessen</h5>
-  <div class="form-check">
-    <input class="form-check-input" type="checkbox" id="techInterest" [(ngModel)]="updatedUserData.profile.isInterestedInTechnology" name="isInterestedInTechnology">
-    <label class="form-check-label" for="techInterest">Technologie</label>
-  </div>
-  <div class="form-check">
-    <input class="form-check-input" type="checkbox" id="sportsInterest" [(ngModel)]="updatedUserData.profile.isInterestedInSports" name="isInterestedInSports">
-    <label class="form-check-label" for="sportsInterest">Sport</label>
-  </div>
-  <div class="form-check">
-    <input class="form-check-input" type="checkbox" id="entertainmentInterest" [(ngModel)]="updatedUserData.profile.isInterestedInEntertainment" name="isInterestedInEntertainment">
-    <label class="form-check-label" for="entertainmentInterest">Unterhaltung</label>
-  </div>
-  <div class="form-check">
-    <input class="form-check-input" type="checkbox" id="travelInterest" [(ngModel)]="updatedUserData.profile.isInterestedInTravel" name="isInterestedInTravel">
-    <label class="form-check-label" for="travelInterest">Reisen</label>
-  </div>
-</div>
-
-
-
-
-        </form>
-      </div>
-    </div>
-  </div>
-</div>
-
-
-<!-- Modal für Account-Löschung -->
-<div class="modal fade" id="deleteAccountModal" tabindex="-1" aria-labelledby="deleteAccountModalLabel" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="deleteAccountModalLabel">Account löschen</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Schließen"></button>
-      </div>
-      <div class="modal-body">
-        <p>Bist du sicher, dass du deinen Account löschen möchtest? Diese Aktion kann nicht rückgängig gemacht werden.</p>
-        <p>Bitte gib dein aktuelles Passwort zur Bestätigung ein:</p>
-        <input 
-          type="password" 
-          class="form-control" 
-          [(ngModel)]="deletePassword" 
-          name="deletePassword" 
-          placeholder="Passwort eingeben" 
-          required>
-        <!-- Fehlermeldung, falls kein Passwort eingegeben oder Fehler auftritt -->
-        <p *ngIf="deleteErrorMessage" class="text-danger mt-2">{{ deleteErrorMessage }}</p>
-        <!-- Erfolgsmeldung, falls gelöscht -->
-        <p *ngIf="deleteSuccessMessage" [ngClass]="{'fade-out': deleteFadeOut}" class="text-success mt-2">
-          {{ deleteSuccessMessage }}
-        </p>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-more" data-bs-dismiss="modal">Abbrechen</button>
-        <button type="button" class="btn btn-danger" (click)="deleteAccount()">Account löschen</button>
-      </div>
-    </div>
-  </div>
-</div>
-
-     
-
-
+          <!-- Modal für Account-Löschung Ende-------------------------------------------------------------------------------------->
     
- 
-
-
+      </div>
+    </div>
+  </div>
+</div>

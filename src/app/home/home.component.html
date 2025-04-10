@@ -1,28 +1,43 @@
 
 
-<section class="container text-center my-5">
-    <h1 class="">Willkommen bei Kirschbaum Marktforschung</h1>
-    <p class="lead">
-        Marktforschung ist der Schlüssel zum Verständnis von Märkten, 
-        Kunden und Wettbewerbern. Entdecken Sie, wie wir Ihnen helfen können, 
+<section class="text-center py-5 text-bg-secondary"> 
+  <div class="container"> 
+  
+    <h1 class="display-4 fw-bold text-white">Willkommen bei Kirschbaum Marktforschung</h1> 
+    <p class="lead text-white-50 mb-4">
+        Marktforschung ist der Schlüssel zum Verständnis von Märkten,
+        Kunden und Wettbewerbern. Entdecken Sie, wie wir Ihnen helfen können,
         wertvolle Einblicke zu gewinnen und fundierte Entscheidungen zu treffen.
-    </p>
+    </p>    
+    <div *ngIf="!authService.isLoggedIn()"> 
+        <a routerLink="/register" class="btn btn-lg btn-light"> 
+            Jetzt als Proband registrieren
+        </a>
+        <p class="mt-2 mb-0"><small>Oder <a routerLink="/login" class="text-white text-decoration-underline">loggen Sie sich ein</a>.</small></p>
+    </div>     
+     <div *ngIf="authService.isLoggedIn()">
+        <p class="text-white-50">Entdecken Sie aktuelle Studien in Ihrem <a routerLink="/user" class="text-white text-decoration-underline">persönlichen Bereich</a>.</p>
+     </div>
+  </div>
 </section>
+
+<div *ngIf="successMessage" [ngClass]="{'fade-out': fadeOut}" class="alert alert-success text-center container mt-4">
+    {{ successMessage }}
+</div>
 
 <div *ngIf="successMessage" [ngClass]="{'fade-out': fadeOut}" class="alert alert-success text-center">
     {{ successMessage }}
-  </div>
+</div>
 
 
 <section class="container my-5">
     <div class="row align-items-center">
         <div class="col-md-6">
-            <img src="assets/Images/IngoKirschbaum.jpg" 
-                 srcset="assets/Images/IngoKirschbaum.jpg 300w, 
-                 assets/Images/IngoKirschbaum.jpg 600w, 
-                 assets/Images/IngoKirschbaum.jpg 1200w"
-                 sizes="(max-width: 600px) 300px, 600px"
-                 class="img-fluid rounded shadow IngoKirschbaum" alt="Ingo Kirschbaum">
+            <img ngSrc="assets/Images/IngoKirschbaum-1000W.jpg" 
+            width="1000"  height="667" priority 
+            sizes="(max-width: 767px) 70vw, (max-width: 991px) 45vw, 35vw" 
+            class="img-fluid rounded shadow mx-auto d-block" alt="Ingo Kirschbaum"
+            style="max-width: 70%; height: auto;">
         </div>
         <div class="col-md-6">
             <h2 class="">Über uns</h2>
@@ -86,5 +101,4 @@
     <div class="text-center mt-3">
       <a routerLink="/news" class="btn btn-more">Mehr News</a>
     </div>
-  </section>
-  
+</section>  

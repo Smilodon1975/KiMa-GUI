@@ -9,7 +9,7 @@ export interface UserProfile {
   region?: string;       // z. B. Wohnort oder Region
   age?: number;
   // Wir verwenden hier eine leere Zeichenkette als Default, wenn nichts gewählt wurde
-  incomeLevel?: 'low' | 'medium' | 'high' | '';
+  incomeLevel?: '<1000€' | '1000-5000€' | '>5000€' | '';
   isInterestedInTechnology: boolean;
   isInterestedInSports: boolean;
   isInterestedInEntertainment: boolean;

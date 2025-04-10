@@ -40,5 +40,4 @@ section:last-of-type {
 .fade-out {
     transition: opacity 1s ease-out;
     opacity: 0;
-  }
-  
+  }  

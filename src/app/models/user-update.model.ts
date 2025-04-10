@@ -6,7 +6,7 @@ export interface UserUpdateModel extends User {
   // Falls ein neues Passwort eingegeben wird:
   password?: string;
   // Profil ist hier Pflicht – initialisiere es mit Default‑Werten
-  profile: UserProfile;
+  userProfile: UserProfile;
 }
 
 

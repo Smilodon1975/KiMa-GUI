@@ -4,21 +4,23 @@ import { ActivatedRoute } from '@angular/router';
 import { NewsService, INews } from '../services/news.service'; 
 import { RouterModule } from '@angular/router';
 import { Router } from '@angular/router';
+import { NgOptimizedImage } from '@angular/common';
+import { AuthService } from '../services/auth.service';
 
 
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [CommonModule, RouterModule],
+  imports: [CommonModule, RouterModule, NgOptimizedImage],
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.css']
 })
 export class HomeComponent implements OnInit {
   successMessage: string = '';
   fadeOut: boolean = false;
-  newsList: INews[] = []; // Hier werden die News gespeichert
+  newsList: INews[] = []; // Array für News-Objekte
 
-  constructor(private route: ActivatedRoute, private newsService: NewsService , private router: Router) {}
+  constructor(private route: ActivatedRoute, private newsService: NewsService , private router: Router, public authService: AuthService) {}
 
   ngOnInit(): void {
     // Prüfe Query-Parameter (z. B. Logout-Meldung)
