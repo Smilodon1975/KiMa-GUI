@@ -1,29 +1,8 @@
-:root {
-    --main-brand-color: #4a4a4a;
-    --primary-color: #f0f0f0;
-    --secondary-color: #1abc9c;
-    --light-secondary-color: #16a085;
-    --text-color: #f0f0f0;
-    --secondary-text-color: #333333;
-    --link-color: #0056b3;
-    --link-color2: #F0F0F0;
-    --link-hover-color: #3388ff;
-}
 
 
-
-/* 🔹 Footer bleibt immer unten */
 footer {
-    background-color:var(--primary-color) !important;
-    color: var(--secondary-text-color) !important;   
-    text-align: center;  
-    width: 100%; 
-    margin-top: auto;     
+    margin-top: auto; /* Stellt sicher, dass er unten klebt */
+    width: 100%; /* Kann auch weg, wenn text-bg-* volle Breite macht */
 }
 
-footer a {
-    color: var(--link-color2) !important;
-    text-decoration: none;
-    font-weight: 600;
-    transition: color 0.3s ease, border-bottom 0.3s ease;
-}
+

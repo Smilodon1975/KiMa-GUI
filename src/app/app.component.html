@@ -8,8 +8,10 @@
 </main>
 <app-footer></app-footer>
 
-<div id="btn_oben" class="btn btn_oben btn-lg position-fixed bottom-0 end-0 m-3 rounded-circle">
-    <a href="javascript:void(0);" onclick="window.scrollTo(0,0);">
-        <i class="fas fa-arrow-up"></i>
-    </a>
-</div>
+<button type="button"
+        id="btn_oben"
+        class="btn btn-secondary btn-lg position-fixed bottom-0 end-0 m-3 rounded-circle shadow-sm"
+        (click)="scrollToTop()" 
+        aria-label="Nach oben scrollen"> 
+    <i class="bi bi-arrow-up"></i> 
+</button>

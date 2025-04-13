@@ -13,5 +13,8 @@ import { FooterComponent } from './footer/footer.component';
 })
 export class AppComponent {
   title = 'KiMa_Gui';
+  scrollToTop(): void {
+    window.scrollTo({ top: 0, behavior: 'smooth' }); 
+  }
 }
 

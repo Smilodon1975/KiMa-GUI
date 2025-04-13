@@ -37,7 +37,7 @@ export class HomeComponent implements OnInit {
 
     // News laden
     this.newsService.getNews().subscribe({
-      next: (data) => this.newsList = data,
+      next: (data) => this.newsList = data.slice(0, 3),
       error: (err) => console.error("Fehler beim Laden der News:", err)
     });
   }

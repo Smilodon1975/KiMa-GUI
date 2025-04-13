@@ -17,10 +17,10 @@
 /* Entferne eventuelle Standard-Hover-Styles */
 a.navbar-brand.logo {
   text-decoration: none;
-  border-bottom: none !important; /* Wichtig, um globalen Hover zu verhindern */
+  border-bottom: none ; /* Wichtig, um globalen Hover zu verhindern */
 }
 a.navbar-brand.logo:hover {
-  border-bottom: none !important; /* Wichtig, um globalen Hover zu verhindern */
+  border-bottom: none ; /* Wichtig, um globalen Hover zu verhindern */
 }
 
 /* Sanfter Übergang für das Bild im Logo-Link */

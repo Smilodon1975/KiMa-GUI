@@ -1,104 +1,113 @@
 
 
-<section class="text-center py-5 text-bg-secondary"> 
-  <div class="container"> 
+<section class="text-center py-5 text-bg-secondary section-dark"> 
+    <div class="container">
+      <h1 class="display-4 fw-bold text-white">Willkommen bei Kirschbaum Marktforschung</h1>
+      <p class="lead text-white-25 mb-4">
+          Marktforschung ist der Schlüssel zum Verständnis von Märkten,
+          Kunden und Wettbewerbern. Entdecken Sie, wie wir Ihnen helfen können,
+          wertvolle Einblicke zu gewinnen und fundierte Entscheidungen zu treffen.
+      </p>
+      <div *ngIf="!authService.isLoggedIn()">
+          <a routerLink="/register" class="btn btn-lg btn-light text-dark">
+              Jetzt als Proband registrieren</a>
+          <p class="mt-2 mb-0"><small>Oder <a routerLink="/login" class="text-white text-decoration-underline">loggen Sie sich ein</a>.</small></p>
+      </div>
+       <div *ngIf="authService.isLoggedIn()">
+          <p class="text-white-50">Entdecken Sie aktuelle Studien in Ihrem <a routerLink="/user" class="text-white text-decoration-underline">persönlichen Bereich</a>.</p>
+       </div>
+    </div>
+  </section>
   
-    <h1 class="display-4 fw-bold text-white">Willkommen bei Kirschbaum Marktforschung</h1> 
-    <p class="lead text-white-50 mb-4">
-        Marktforschung ist der Schlüssel zum Verständnis von Märkten,
-        Kunden und Wettbewerbern. Entdecken Sie, wie wir Ihnen helfen können,
-        wertvolle Einblicke zu gewinnen und fundierte Entscheidungen zu treffen.
-    </p>    
-    <div *ngIf="!authService.isLoggedIn()"> 
-        <a routerLink="/register" class="btn btn-lg btn-light"> 
-            Jetzt als Proband registrieren
-        </a>
-        <p class="mt-2 mb-0"><small>Oder <a routerLink="/login" class="text-white text-decoration-underline">loggen Sie sich ein</a>.</small></p>
-    </div>     
-     <div *ngIf="authService.isLoggedIn()">
-        <p class="text-white-50">Entdecken Sie aktuelle Studien in Ihrem <a routerLink="/user" class="text-white text-decoration-underline">persönlichen Bereich</a>.</p>
-     </div>
+  <div *ngIf="successMessage" [ngClass]="{'fade-out': fadeOut}" class="alert alert-success text-center container mt-4">
+      {{ successMessage }}
   </div>
-</section>
-
-<div *ngIf="successMessage" [ngClass]="{'fade-out': fadeOut}" class="alert alert-success text-center container mt-4">
-    {{ successMessage }}
-</div>
-
-<div *ngIf="successMessage" [ngClass]="{'fade-out': fadeOut}" class="alert alert-success text-center">
-    {{ successMessage }}
-</div>
-
-
-<section class="container my-5">
-    <div class="row align-items-center">
-        <div class="col-md-6">
-            <img ngSrc="assets/Images/IngoKirschbaum-1000W.jpg" 
-            width="1000"  height="667" priority 
-            sizes="(max-width: 767px) 70vw, (max-width: 991px) 45vw, 35vw" 
-            class="img-fluid rounded shadow mx-auto d-block" alt="Ingo Kirschbaum"
-            style="max-width: 70%; height: auto;">
-        </div>
-        <div class="col-md-6">
-            <h2 class="">Über uns</h2>
-            <p>
-                Wir sind ein Marktforschungsunternehmen, das sich auf die 
-                Durchführung von Studien und Umfragen spezialisiert hat. 
-                Unser Ziel ist es, die Meinungen und Bedürfnisse der 
-                Verbraucher zu erfassen und an die Hersteller und 
-                Dienstleister weiterzugeben.
-            </p>
-        </div>
+  
+  <section class="container-fluid section-light my-0 py-5">
+    <div class="container"> 
+      <div class="row align-items-center">
+          <div class="col-md-6 text-center">
+              <img ngSrc="assets/Images/IngoKirschbaum.jpg"
+                   width="800" height="533" priority
+                   sizes="(max-width: 767px) 90vw, (max-width: 991px) 45vw, 40vw"  
+                   class="img-fluid rounded shadow" alt="Ingo Kirschbaum"
+                   style="max-width: 400px; height: auto;"> 
+          </div>
+          <div class="col-md-6">
+              <h2 class="">Über uns</h2>
+              <p>
+                  Wir sind ein Marktforschungsunternehmen, das sich auf die
+                  Durchführung von Studien und Umfragen spezialisiert hat.
+                  Unser Ziel ist es, die Meinungen und Bedürfnisse der
+                  Verbraucher zu erfassen und an die Hersteller und
+                  Dienstleister weiterzugeben.
+              </p>
+              </div>
+      </div>
     </div>
-</section>
-
-<section class="container my-5">
-    <h2 class="text-center">Unsere Dienstleistungen</h2>
-    <div class="row justify-content-center">
-        <div class="col-md-5">
-            <div class="card shadow-sm p-3 text-center">
-                <img src="assets/Images/Marktforschung1.jpg" class="card-img-top rounded">
-                <div class="card-body">
-                    <h3 class="card-title">Probanden-Rekrutierung</h3>
-                    <p>Wir rekrutieren Probanden und vermitteln sie an eine Vielzahl von Projekten.</p>
-                    <a routerLink="/info" class="btn btn-more">Mehr erfahren</a>
-                </div>
-            </div>
-        </div>
-
-        <div class="col-md-5">
-            <div class="card shadow-sm p-3 text-center">
-                <img src="assets/Images/Marktforschung2.jpg" class="card-img-top rounded">
-                <div class="card-body">
-                    <h3 class="card-title">Projektmanagement</h3>
-                    <p>Wir führen Marktforschungsprojekte für Ihr Unternehmen durch.</p>
-                    <a routerLink="/info" class="btn btn-more">Mehr erfahren</a>
-                </div>
-            </div>
-        </div>
+  </section>
+  
+  <section class="container-fluid section-dark my-0 py-5 services-section">
+    <div class="container">
+      <h2 class="text-center mb-5">Unsere Dienstleistungen</h2> 
+      <div class="row justify-content-center g-4">
+  
+          <div class="col-md-5">
+              <div class="card shadow-sm h-100">
+                  <img src="assets/Images/Marktforschung1.jpg" class="card-img-top" alt="Personen in einer Fokusgruppen-Diskussion">
+                  <div class="card-body text-center d-flex flex-column">
+                      <div>
+                          <i class="bi bi-people-fill text-secondary display-4 mb-3"></i>
+                      </div>
+                      <h3 class="card-title">Probanden-Rekrutierung</h3>
+                      <p class="card-text">Wir rekrutieren Probanden und vermitteln sie an eine Vielzahl von Projekten.</p>
+                      <div class="mt-auto">
+                          <a routerLink="/info" class="btn btn-lg btn-light text-dark">Mehr erfahren</a>
+                      </div>
+                  </div>
+              </div>
+          </div>
+  
+          <div class="col-md-5">
+              <div class="card shadow-sm h-100">
+                  <img src="assets/Images/Marktforschung2.jpg" class="card-img-top" alt="Diagramme und Berichte auf einem Schreibtisch">
+                  <div class="card-body text-center d-flex flex-column">
+                       <div>
+                          <i class="bi bi-briefcase-fill text-secondary display-4 mb-3"></i>
+                      </div>
+                      <h3 class="card-title">Projektmanagement</h3>
+                      <p class="card-text">Wir führen Marktforschungsprojekte für Ihr Unternehmen durch.</p>
+                       <div class="mt-auto">
+                           <a routerLink="/info" class="btn btn-lg btn-light text-dark">Mehr erfahren</a>
+                      </div>
+                  </div>
+              </div>
+          </div>
+      </div>
     </div>
-</section>
-
-<!-- News-Sektion in home.component.html -->
-<section class="container my-5">
-    <h2 class="text-center">Aktuelle News</h2>
-    <div class="row" *ngIf="newsList?.length; else noNews">
-      <div class="col-md-4" *ngFor="let news of newsList">
-        <div class="card mb-3">
-          <div class="card-body">
-            <h5 class="card-title">{{ news.title }}</h5>
-            <p class="card-text">{{ news.content }}</p>
-            <p class="card-text">
-              <small class="text-muted">{{ news.publishDate | date:'mediumDate' }}</small>
-            </p>
+  </section>
+  
+  <section class="container-fluid section-light my-0 py-5">
+   <div class="container">
+      <h2 class="text-center mb-5">Aktuelle News</h2> 
+      <div class="row" *ngIf="newsList?.length; else noNews">
+        <div class="col-md-6 col-lg-4 mb-4" *ngFor="let news of newsList"> 
+          <div class="card h-100">
+            <div class="card-body d-flex flex-column">
+              <h5 class="card-title">{{ news.title }}</h5>
+              <p class="card-text">{{ news.content }}</p>
+              <p class="card-text mt-auto">
+                <small class="text-muted">{{ news.publishDate | date:'mediumDate' }}</small>
+              </p>
+            </div>
           </div>
         </div>
       </div>
+      <ng-template #noNews>
+        <p class="text-center">Keine aktuellen News.</p>
+      </ng-template>
+      <div class="text-center mt-4"> 
+        <a routerLink="/news" class="btn btn-lg btn-light text-dark">Mehr News</a>
+      </div>
     </div>
-    <ng-template #noNews>
-      <p class="text-center">Keine aktuellen News.</p>
-    </ng-template>
-    <div class="text-center mt-3">
-      <a routerLink="/news" class="btn btn-more">Mehr News</a>
-    </div>
-</section>  
+  </section>

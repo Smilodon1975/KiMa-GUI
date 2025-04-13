@@ -1,29 +1,39 @@
 
 
-<footer class="  py-4">
+
+<footer class="text-bg-dark pt-4 pb-3"> 
     <div class="container">
-        <div class="row">
-            <!-- Impressum Link -->
-            <div class="col-md-4 text-center text-md-start mb-3">
-                <a href="#" class="btn btn-more" data-bs-toggle="modal" data-bs-target="#impressumModal">Impressum</a>
-            </div>
-
-            <!-- Newsletter Anmeldung -->
-            <div class="col-md-4 text-center mb-3">
-                <a href="https://tcd3b40f5.emailsys1a.net/166/3797/894a492721/subscribe/form.html?_g=1600358208" 
-                   class="btn btn-more">📩 Jetzt für den Newsletter anmelden</a>
-            </div>
-
-            <!-- Social Media Icons (Falls später gewünscht) -->
-            <div class="col-md-4 text-center text-md-end">
-                <p class="mb-0">&copy; 2024 KiMa Marktforschung</p>
-            </div>
+      <div class="row">
+          
+        <div class="col-md-6 text-center text-md-start mb-3 mb-md-0">
+            <ul class="list-inline mb-0">
+                <li class="list-inline-item">
+                    <a href="#" data-bs-toggle="modal" data-bs-target="#impressumModal" class="footer-link">Impressum</a>
+                </li>
+                <li class="list-inline-item ms-2"> 
+                    <a href="#" data-bs-toggle="modal" data-bs-target="#datenschutzModal" class="footer-link">Datenschutz</a>
+                </li>
+                 <li class="list-inline-item ms-2">                     
+                     <a href="mailto:info@kimafo.de" class="footer-link">Kontakt</a>
+                 </li>                
+                <li class="list-inline-item ms-2">
+                    <a href="#" data-bs-toggle="modal" data-bs-target="#agbModal" class="footer-link">AGB</a>
+                </li>                
+                 <li class="list-inline-item ms-2">
+                    <a href="https://tcd3b40f5.emailsys1a.net/166/3797/894a492721/subscribe/form.html?_g=1600358208" target="_blank" class="footer-link">Newsletter</a>
+                 </li>
+            </ul>
         </div>
+  
+         
+          <div class="col-md-6 text-center text-md-end">
+              <span class="text-white-50">&copy; {{ currentYear }} KiMa Marktforschung</span> 
+          </div>
+      </div>
     </div>
-</footer>
-
-<!-- Modal für Impressum -->
-<div class="modal fade" id="impressumModal" tabindex="-1" aria-labelledby="impressumModalLabel" aria-hidden="true">
+  </footer>
+  
+  <div class="modal fade" id="impressumModal" tabindex="-1" aria-labelledby="impressumModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
@@ -49,3 +59,109 @@
         </div>
     </div>
 </div>
+    
+  
+  
+  <div class="modal fade" id="datenschutzModal" tabindex="-1" aria-labelledby="datenschutzModalLabel" aria-hidden="true">
+     <div class="modal-dialog modal-lg"> 
+         <div class="modal-content">
+             <div class="modal-header">
+                 <h5 class="modal-title" id="datenschutzModalLabel">Datenschutzerklärung</h5>
+                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+             </div>
+             <div class="modal-body">
+                <p><strong>Verantwortlicher im Sinne der Datenschutzgesetze, insbesondere der EU-Datenschutzgrundverordnung (DSGVO), ist:</strong></p>
+                <p>
+                     Ingo Kirschbaum<br/>
+                     Markt und Meinungsforschung<br/>
+                     Feldmochinger Str. 53, 80993 München<br/>
+                     </p>
+                <hr>
+ 
+                <h5>Ihre Betroffenenrechte</h5>
+                <p>Unter den angegebenen Kontaktdaten unseres Datenschutzbeauftragten (falls vorhanden, sonst Verantwortlicher) können Sie jederzeit folgende Rechte ausüben: ... (Auskunft, Berichtigung, Löschung, Einschränkung, Widerspruch, Datenübertragbarkeit) ...</p>
+ 
+                <h5>Erfassung allgemeiner Informationen beim Besuch unserer Website</h5>
+                <p>Art und Zweck der Verarbeitung: Wenn Sie auf unsere Website zugreifen... (Server-Logfiles etc.) ...</p>
+ 
+                <h5>Registrierung auf unserer Webseite (falls zutreffend)</h5>
+                <p>Art und Zweck der Verarbeitung: Bei der Registrierung für die Nutzung unserer Leistungen werden einige personenbezogene Daten erhoben... (Name, Anschrift, Kontaktdaten etc.) ...</p>
+ 
+                <h5>Newsletter (falls zutreffend)</h5>
+                <p>Art und Zweck der Verarbeitung: Ihre Einwilligung zur Speicherung Ihrer Daten und deren Nutzung für den Newsletterversand können Sie jederzeit widerrufen...</p>
+ 
+                <h5>Kontaktformular (falls zutreffend)</h5>
+                <p>...</p>
+ 
+                <h5>Verwendung von Scriptbibliotheken (z.B. Google Fonts - falls zutreffend)</h5>
+                <p>...</p>
+ 
+                <h5>SSL-Verschlüsselung</h5>
+                <p>Um die Sicherheit Ihrer Daten bei der Übertragung zu schützen, verwenden wir dem aktuellen Stand der Technik entsprechende Verschlüsselungsverfahren (z. B. SSL) über HTTPS.</p>
+ 
+                <h5>Änderung unserer Datenschutzbestimmungen</h5>
+                <p>Wir behalten uns vor, diese Datenschutzerklärung anzupassen... Stand: [Aktuelles Datum]</p>
+ 
+                <p><br><em><strong>WICHTIG:</strong> Dies ist nur ein grobes Gerüst! Du benötigst eine vollständige, auf deine Datenverarbeitung zugeschnittene Datenschutzerklärung. Nutze hierfür Datenschutz-Generatoren (z.B. von eRecht24, activeMind, Anwälten) oder lasse dich rechtlich beraten.</em></p>
+            </div>
+             </div>
+             <div class="modal-footer">
+                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Schließen</button>
+             </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="agbModal" tabindex="-1" aria-labelledby="agbModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-scrollable">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="agbModalLabel">Allgemeine Geschäftsbedingungen (AGB)</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <p><strong>WICHTIGER HINWEIS: Der folgende Text ist nur ein Platzhalter und stellt keine gültigen AGB dar. Bitte ersetzen Sie diesen Text durch Ihre von einem Rechtsexperten geprüften AGB!</strong></p>
+                    <hr>
+     
+                    <h5>1. Geltungsbereich</h5>
+                    <p>[Platzhalter: Beschreiben, für wen und was diese AGB gelten – z.B. für registrierte Nutzer (Probanden) der Plattform KiMa Marktforschung von Ingo Kirschbaum.]</p>
+     
+                    <h5>2. Registrierung und Nutzerkonto</h5>
+                    <p>[Platzhalter: Bedingungen für die Registrierung, z.B. Mindestalter, Pflicht zur Angabe wahrheitsgemäßer Daten, Verantwortung für Zugangsdaten, Verbot von Mehrfachkonten.]</p>
+     
+                    <h5>3. Teilnahme an Studien / Umfragen</h5>
+                    <p>[Platzhalter: Beschreibung des Ablaufs, z.B. Einladungen per E-Mail, Freiwilligkeit der Teilnahme, Art der Befragung, ggf. technische Voraussetzungen.]</p>
+     
+                    <h5>4. Vergütung / Incentives</h5>
+                    <p>[Platzhalter: Regeln zur Vergütung oder anderen Anreizen für die Teilnahme, z.B. Art der Vergütung (Punkte, Gutscheine, Geld), Bedingungen für den Erhalt, Auszahlungsgrenzen, Verfall von Ansprüchen.]</p>
+     
+                    <h5>5. Pflichten des Nutzers</h5>
+                    <p>[Platzhalter: Erwartungen an den Nutzer, z.B. sorgfältige und wahrheitsgemäße Beantwortung von Fragen, Einhaltung von Vertraulichkeit bei bestimmten Studieninhalten.]</p>
+     
+                    <h5>6. Datennutzung und Datenschutz</h5>
+                    <p>[Platzhalter: Verweis auf die separate Datenschutzerklärung. Kurze Erklärung, wie die Daten im Rahmen der AGB genutzt werden, z.B. für Einladungen, Verwaltung des Kontos, anonymisierte Auswertung.]</p>
+     
+                    <h5>7. Vertraulichkeit</h5>
+                    <p>[Platzhalter: Verpflichtung zur Vertraulichkeit bezüglich der Studieninhalte durch den Probanden, falls zutreffend.]</p>
+     
+                    <h5>8. Haftung</h5>
+                    <p>[Platzhalter: Haftungsbeschränkungen des Betreibers, soweit gesetzlich zulässig.]</p>
+     
+                    <h5>9. Kündigung / Beendigung der Teilnahme / Kontolöschung</h5>
+                    <p>[Platzhalter: Regeln zur Kündigung durch beide Seiten, Folgen der Kündigung, Abwicklung offener Vergütungsansprüche.]</p>
+     
+                    <h5>10. Änderung der AGB</h5>
+                    <p>[Platzhalter: Hinweis, dass die AGB geändert werden können und wie Nutzer darüber informiert werden (z.B. per E-Mail, Zustimmungsmechanismus).]</p>
+     
+                    <h5>11. Schlussbestimmungen</h5>
+                    <p>[Platzhalter: Anwendbares Recht (z.B. Deutsches Recht), Gerichtsstand (falls zulässig), Salvatorische Klausel.]</p>
+     
+                    <p><br><em>Stand: [Datum]</em></p>
+                    <p><strong>WICHTIGER HINWEIS: Dies ist nur ein Platzhalter! Bitte unbedingt durch rechtlich geprüften Text ersetzen!</strong></p>
+                    </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Schließen</button>
+                </div>
+            </div>
+        </div>
+     </div>
+    

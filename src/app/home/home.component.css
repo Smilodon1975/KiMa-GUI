@@ -1,43 +1,78 @@
 .IngoKirschbaum {
-    max-width: 70%;  /* Bild darf nur 50% der Containerbreite einnehmen */
+    max-width: 70%;  
     height: auto;
-    display: block; /* Damit `margin: auto` funktioniert */
-    margin-left: auto; /* Bild rückt nach rechts */
-    margin-right: auto; /* Falls nötig, um es zu zentrieren */
+    display: block; 
+    margin-left: auto;
+    margin-right: auto; 
 }
 
-/* 🔹 Abschnitts-Trennung */
 section {
-    padding: 50px 0; /* Mehr Abstand oben und unten */
-    border-bottom: 2px solid #ddd; /* Dünne Linie zwischen den Abschnitten */
-    background-color: #f8f9fa; /* Leichter Hintergrund für Kontrast */
-}
-
-/* 🔹 Letzte Section ohne Trennlinie */
-section:last-of-type {
-    border-bottom: none;
-}
-
-.card-img-top {
-    max-height: 200px;  /* Begrenzte Höhe */
-    object-fit: cover;  /* Bild wird beschnitten, um nicht verzerrt zu sein */
-    width: 100%;  /* Volle Breite nutzen */
-}
-
-.card {
+    padding: 0; 
+  }
+  section:last-of-type {
+    border-bottom: none; 
+  }
+  
+  .section-light {
+    background-color: #ffffff; 
+    color: var(--secondary-text-color); 
+  }
+  
+  .section-dark {
+   
+    h1, h2, h3, h4, h5, h6 {
+       color: var(--headline-color) ; 
+    }
+     a { 
+         color: var(--link-color2) ; 
+     }
+     a:hover {
+         color: #ffffff ; 
+         border-bottom-color: #ffffff;
+     }
+  } 
+  
+  .about-us-image { 
+    max-width: 400px; 
+    height: auto;
+    display: block; 
+    margin-left: auto;
+    margin-right: auto;
+  }  
+  
+  .services-section .card {
+    transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+    overflow: hidden;
+  }
+  .services-section .card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15) !important;
+  }  
+  
+  .card-img-top {
+    max-height: 200px;
+    object-fit: cover;
+    width: 100%;
+  }  
+  
+  .card {
     display: flex;
     flex-direction: column;
-    height: 100%;  /* Alle Cards gleiche Höhe */
-}
-
-.card-body {
-    flex-grow: 1;  /* Inhalt dehnt sich gleichmäßig aus */
+  }
+  .card-body {
+    flex-grow: 1;
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
-}
-
-.fade-out {
+    justify-content: space-between; 
+    align-items: center; 
+    text-align: center; 
+  }
+  .card-body .mt-auto { 
+    margin-top: auto;
+  }
+  
+ 
+  .fade-out {
     transition: opacity 1s ease-out;
     opacity: 0;
-  }  
+  }

@@ -18,7 +18,6 @@
     box-sizing: border-box;   
 }
 
-/* 🔹 Stellt sicher, dass das gesamte Viewport-Höhe genutzt wird */
 html, body {
     height: 100%;
     margin: 0;
@@ -29,15 +28,15 @@ html, body {
 
 main {
     flex: 1;
-    background-color: var(--main-brand-color); /* Farbe für den Hauptinhalt */
+    background-color: var(--main-brand-color);
 }
 
-/* Überschriften explizit anpassen */
+
 h1, h2, h3, h4, h5, h6 {
-    color: var(--headline-color) !important; /* Setzt die Textfarbe für alle Überschriften */
+    color: var(--headline-color) ;
+    
 }
 
-/* 🔹 Der Hauptinhalt nimmt die volle Höhe ein */
 .content-wrapper {
     flex: 1;
     display: flex;
@@ -46,9 +45,8 @@ h1, h2, h3, h4, h5, h6 {
     min-height: 100vh ;
 }
 
-/* Allgemeine Link-Stile */
     a {
-    color: var(--link-color) !important;
+    color: var(--link-color) ;
     text-decoration: none;
     font-weight: 600;
     transition: color 0.3s ease, border-bottom 0.3s ease;
@@ -60,59 +58,8 @@ a:hover {
 }
 
 a.logo:hover {
-    border-bottom: none !important;
+    border-bottom: none ;
   }  
-
-  .btn-more{
-    background-color: var(--secondary-color) !important;
-    color: var(--text-color) !important;
-    border-radius: 5px !important;
-    padding: 10px 20px !important;
-    font-size: 16px !important;
-    
-    text-decoration: none !important;
-    transition: background-color 0.3s ease, transform 0.2s ease !important;
-  }
-
-  .btn-more:hover {
-    background-color: var(--light-secondary-color) !important;
-    transform: scale(1.05) !important;
-    text-decoration: none !important;
-  }
-
-
-
-/*Button zum Seitenanfang*/
-.btn_oben {
-    position: fixed;
-    bottom: 20px;
-    right: 20px;
-    background-color: var(--secondary-color) !important;
-    padding: 15px;
-    border-radius: 50%;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-    transition: background-color 0.3s ease, transform 0.2s ease;
-}
-
-.btn_oben:hover {
-    background-color:var(--light-secondary-color) !important;
-    transform: scale(1.1);    
-    text-decoration: none;
-}
-
-.btn_oben a {
-    color: var(--link-color2) !important;
-    text-decoration: none;
-    font-weight: 600;
-    transition: color 0.3s ease, border-bottom 0.3s ease;
-}
-
-.btn_oben a:hover {
-    color: var(--link-hover-color) !important;
-    text-decoration: none;
-    font-weight: 600;
-    transition: color 0.3s ease, border-bottom 0.3s ease;
-}
 
 .alert {
     opacity: 1;
