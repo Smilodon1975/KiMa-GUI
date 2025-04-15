@@ -36,12 +36,14 @@
           <div class="col-md-6">
               <h2 class="">Über uns</h2>
               <p>
-                  Wir sind ein Marktforschungsunternehmen, das sich auf die
-                  Durchführung von Studien und Umfragen spezialisiert hat.
-                  Unser Ziel ist es, die Meinungen und Bedürfnisse der
-                  Verbraucher zu erfassen und an die Hersteller und
-                  Dienstleister weiterzugeben.
-              </p>
+                Wir sind ein Marktforschungsunternehmen, das sich auf die
+                Durchführung von Studien und Umfragen spezialisiert hat.
+            </p>
+            <p>
+                Unser Ziel ist es, die Meinungen und Bedürfnisse der
+                Verbraucher zu erfassen und an die Hersteller und
+                Dienstleister weiterzugeben.
+            </p>
               </div>
       </div>
     </div>
@@ -59,7 +61,7 @@
                       <div>
                           <i class="bi bi-people-fill text-secondary display-4 mb-3"></i>
                       </div>
-                      <h3 class="card-title">Probanden-Rekrutierung</h3>
+                      <h3 class="card-title">Studien-Teilnehmer</h3>
                       <p class="card-text">Wir rekrutieren Probanden und vermitteln sie an eine Vielzahl von Projekten.</p>
                       <div class="mt-auto">
                           <a routerLink="/info" class="btn btn-lg btn-light text-dark">Mehr erfahren</a>
@@ -75,7 +77,7 @@
                        <div>
                           <i class="bi bi-briefcase-fill text-secondary display-4 mb-3"></i>
                       </div>
-                      <h3 class="card-title">Projektmanagement</h3>
+                      <h3 class="card-title">Studien-Anfragen</h3>
                       <p class="card-text">Wir führen Marktforschungsprojekte für Ihr Unternehmen durch.</p>
                        <div class="mt-auto">
                            <a routerLink="/info" class="btn btn-lg btn-light text-dark">Mehr erfahren</a>
@@ -89,7 +91,7 @@
   
   <section class="container-fluid section-light my-0 py-5">
    <div class="container">
-      <h2 class="text-center mb-5">Aktuelle News</h2> 
+      <h2 class="text-center mb-5">Aktuelles</h2> 
       <div class="row" *ngIf="newsList?.length; else noNews">
         <div class="col-md-6 col-lg-4 mb-4" *ngFor="let news of newsList"> 
           <div class="card h-100">
@@ -104,7 +106,7 @@
         </div>
       </div>
       <ng-template #noNews>
-        <p class="text-center">Keine aktuellen News.</p>
+        <p class="text-center">Nichts Aktuelles zur Zeit .</p>
       </ng-template>
       <div class="text-center mt-4"> 
         <a routerLink="/news" class="btn btn-lg btn-light text-dark">Mehr News</a>

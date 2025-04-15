@@ -1,31 +1,49 @@
-.Wewantyou {
-    max-width: 40%;  /* Bild darf nur 50% der Containerbreite einnehmen */
-    height: auto;
-    display: block; /* Damit `margin: auto` funktioniert */
-    margin-left: auto; /* Bild rückt nach rechts */
-    margin-right: auto; /* Falls nötig, um es zu zentrieren */
-}
 
-.probanden-text {
-    margin-left: -40px; /* Negativer Margin schiebt den Text näher ans Bild */
-}
 
-.Meeting {
-    max-width: 70%;  /* Bild darf nur 50% der Containerbreite einnehmen */
-    height: auto;
-    display: block; /* Damit `margin: auto` funktioniert */
-    margin-left: auto; /* Bild rückt nach rechts */
-    margin-right: auto; /* Falls nötig, um es zu zentrieren */
-}
-
-/* 🔹 Abstand zwischen den Abschnitten */
 section {
-    padding: 50px 0; /* Mehr Abstand oben und unten */
-    border-bottom: 2px solid #ddd; /* Dünne Linie zwischen den Abschnitten */
-    background-color: #f8f9fa; /* Leichter Hintergrund für Kontrast */
-}
+    padding: 0; 
+  }
+  section:last-of-type {
+    border-bottom: none; 
+  }
+  
+  .section-light {
+    background-color: #ffffff; 
+    color: var(--secondary-text-color); 
+  }
+  
+  .section-dark {
+   
+    h1, h2, h3, h4, h5, h6 {
+       color: var(--headline-color) ; 
+    }
+     a { 
+         color: var(--link-color2) ; 
+     }
+     a:hover {
+         color: #ffffff ; 
+         border-bottom-color: #ffffff;
+     }
+  } 
 
-/* 🔹 Letzte Section ohne Trennlinie */
-section:last-of-type {
-    border-bottom: none;
-}
+  .list-group-item .bi {
+    font-size: 1.2rem; /* Etwas größer als normaler Text */
+    min-width: 1.5em; /* Sorgt für gleiche Einrückung des Textes */
+    /* color: var(--secondary-color); */ /* Alternativ deine Akzentfarbe */
+  }
+
+  .we-want-you-image {
+    max-width: 350px; /* Beispiel: Begrenze die Breite auf 350px */
+    height: auto;     /* Höhe automatisch anpassen */
+    display: block;   /* Sicherstellen, dass margin auto funktioniert */
+    margin-left: auto; /* Zentriert das Bild horizontal, wenn text-center nicht reicht */
+    margin-right: auto;
+  }
+
+  .meeting-image {
+    max-width: 500px; /* Beispiel: Begrenze die Breite auf 350px */
+    height: auto;     /* Höhe automatisch anpassen */
+    display: block;   /* Sicherstellen, dass margin auto funktioniert */
+    margin-left: auto; /* Zentriert das Bild horizontal, wenn text-center nicht reicht */
+    margin-right: auto;
+  }
