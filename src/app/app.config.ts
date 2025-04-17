@@ -8,6 +8,8 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 
+// ✅ Konfiguration der Anwendung
+// Hier werden die Module und Routen für die Anwendung bereitgestellt
 
 export const appConfig: ApplicationConfig = {
   providers: [

@@ -15,7 +15,8 @@ import { ConfirmEmailComponent } from './confirm-email/confirm-email.component';
 import { AdminFaqComponent } from './admin-faq/admin-faq.component';
 import { AdminNewsComponent } from './admin-news/admin-news.component';
 import { NewsPageComponent } from './pages/news-page/news-page.component';
-
+import { MaintenanceComponent } from './pages/maintenance/maintenance.component';
+import { MaintenanceGuard } from './services/maintenance.guard';
 
 // ✅ AuthGuard für geschützte Routen
 const authGuard: CanActivateFn = () => {
@@ -30,20 +31,40 @@ const authGuard: CanActivateFn = () => {
   }
 };
 
+// ✅ Wartungs-Guard
+const maintenanceGuard: CanActivateFn = () => {
+  const router = inject(Router);
+  const token = new URLSearchParams(window.location.search).get('token');
+
+  if (token === 'geheim123') {
+    localStorage.setItem('accessGranted', 'true');
+    return true;
+  }
+
+  if (localStorage.getItem('accessGranted') === 'true') {
+    return true;
+  }
+
+  router.navigate(['/maintenance']);
+  return false;
+};
+
 // ✅ Definiert die Anwendungsrouten
 export const routes: Routes = [
-  { path: '', component: HomeComponent },
-  { path: 'home', component: HomeComponent },
-  { path: 'info', component: InfoComponent }, // 🔹 Info bleibt für alle zugänglich
-  { path: 'user', component: UserComponent, canActivate: [authGuard] }, // 🔹 Geschützt durch AuthGuard
-  { path: 'login', component: LoginComponent },
-  { path: 'admin', component: AdminComponent, canActivate: [AdminGuard], data: { role: 'Admin' } }, // 🔹 Geschützt durch AdminGuard
-  { path: 'register', component: RegisterComponent },  
-  { path: 'password-reset-request', component: PasswordResetRequestComponent },
-  { path: 'reset-password', component: PasswordResetComponent },
-  { path: 'welcome', component: WelcomeComponent },
-  { path: 'confirm-email', component: ConfirmEmailComponent },
-  { path: 'admin-faq', component: AdminFaqComponent },
-  { path: 'admin-news', component: AdminNewsComponent },
-  { path: 'news', component: NewsPageComponent },
+  { path: '', component: HomeComponent, canActivate: [maintenanceGuard] },
+  { path: 'home', component: HomeComponent, canActivate: [maintenanceGuard] },
+  { path: 'info', component: InfoComponent, canActivate: [maintenanceGuard] },
+  { path: 'user', component: UserComponent, canActivate: [authGuard, maintenanceGuard] },
+  { path: 'login', component: LoginComponent, canActivate: [maintenanceGuard] },
+  { path: 'admin', component: AdminComponent, canActivate: [AdminGuard, maintenanceGuard], data: { role: 'Admin' } },
+  { path: 'register', component: RegisterComponent, canActivate: [maintenanceGuard] },
+  { path: 'password-reset-request', component: PasswordResetRequestComponent, canActivate: [maintenanceGuard] },
+  { path: 'reset-password', component: PasswordResetComponent, canActivate: [maintenanceGuard] },
+  { path: 'welcome', component: WelcomeComponent, canActivate: [maintenanceGuard] },
+  { path: 'confirm-email', component: ConfirmEmailComponent, canActivate: [maintenanceGuard] },
+  { path: 'admin-faq', component: AdminFaqComponent, canActivate: [AdminGuard, maintenanceGuard] },
+  { path: 'admin-news', component: AdminNewsComponent, canActivate: [AdminGuard, maintenanceGuard] },
+  { path: 'news', component: NewsPageComponent, canActivate: [maintenanceGuard] },
+  { path: 'maintenance', component: MaintenanceComponent },
+  { path: '**', redirectTo: '' }
 ];
