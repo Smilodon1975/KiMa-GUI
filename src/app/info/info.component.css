@@ -6,11 +6,50 @@ section {
   section:last-of-type {
     border-bottom: none; 
   }
+
+  .kima-info-section {
+    background: url('/assets/Images/subtle-icons-bg.png') no-repeat center center;
+    background-size: cover;
+    background-color: #f8f9fa;
+  }
+  
+  .info-box {
+    background-color: rgba(255, 255, 255, 0.95);
+    max-width: 900px;
+  }
+  
+  .info-block h4 {
+    font-weight: 600;
+  }
+  
+  .info-block p,
+  .info-block li {
+    font-size: 1.05rem;
+    line-height: 1.6;
+  }
+  
   
   .section-light {
-    background-color: #ffffff; 
-    color: var(--secondary-text-color); 
+    background: linear-gradient(to bottom, #f8f9fa, #ffffff); /* Sanfter Verlauf */
+    color: #2c2c2c;
   }
+  
+  .list-group-item span {
+    line-height: 1.6;
+  }
+  
+  h2, h4 {
+    font-weight: 600;
+  }
+  
+  .bg-opacity-75 {
+    background-color: rgba(255, 255, 255, 0.85) !important;
+  }
+  
+  .shadow-sm {
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  }
+  
   
   .section-dark {
    
@@ -32,8 +71,27 @@ section {
     /* color: var(--secondary-color); */ /* Alternativ deine Akzentfarbe */
   }
 
+  .list-group-item {
+    background-color: #f9f9f9;
+    transition: background-color 0.3s ease;
+    border: none;
+    border-radius: 0.5rem;
+    margin-bottom: 0.5rem;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+  }
+  
+  .list-group-item:hover {
+    background-color: #eef2f7;
+  }
+  
+  .faq-answer {
+    padding-left: 1.5rem;
+    color: #444;
+  }
+  
+
   .we-want-you-image {
-    max-width: 350px; /* Beispiel: Begrenze die Breite auf 350px */
+    max-width: 250px; /* Beispiel: Begrenze die Breite auf 350px */
     height: auto;     /* Höhe automatisch anpassen */
     display: block;   /* Sicherstellen, dass margin auto funktioniert */
     margin-left: auto; /* Zentriert das Bild horizontal, wenn text-center nicht reicht */

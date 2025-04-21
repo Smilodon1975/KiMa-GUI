@@ -20,7 +20,12 @@
                   {{ successMessage }}
                 </div>
 
-
+                <div class="d-flex justify-content-center mb-4 gap-2">
+                  <button class="btn btn-outline-primary d-flex align-items-center gap-2" (click)="openModal()">
+                    <i class="bi bi-pencil-square"></i> Bearbeiten
+                  </button>                 
+                </div>
+                
 
 
 
@@ -149,10 +154,12 @@
                       </div>
                     
                     
-                      <div class="text-center mt-3">
-                        <button class="btn btn-more" (click)="openModal()">Bearbeiten</button>
-                        <button class="btn btn-danger ms-2" (click)="openDeleteModal()">Account löschen</button>
+                      <div class="d-flex justify-content-center mb-4 gap-2">
+                        <button class="btn btn-outline-primary d-flex align-items-center gap-2" (click)="openModal()">
+                          <i class="bi bi-pencil-square"></i> Bearbeiten
+                        </button>                       
                       </div>
+                      
                     
                     </div>
                     
@@ -318,13 +325,22 @@
 
 
                     <!-- ✅ Buttons -->
-                    <div class="text-center mt-4">
-                      <button type="submit" class="btn btn-more">Speichern</button>
-                      <button type="button" class="btn btn-secondary ms-2" data-bs-dismiss="modal">Abbrechen</button>
+                    <div class="d-flex justify-content-center mt-4 gap-2 flex-wrap">
+                      <button type="submit" class="btn btn-success d-flex align-items-center gap-2">
+                        <i class="bi bi-save"></i> Speichern
+                      </button>
+                      <button type="button" class="btn btn-outline-secondary d-flex align-items-center gap-2" data-bs-dismiss="modal">
+                        <i class="bi bi-x-circle"></i> Abbrechen
+                      </button>
                     </div>
-                      <button type="button" class="btn btn-secondary mt-3" (click)="showExtra = !showExtra">
-                      {{ showExtra ? 'Weniger anzeigen' : 'Erweiterte Angaben anzeigen' }}
-                    </button> 
+                    
+
+                    <div class="text-center mt-3">
+                      <button type="button" class="btn btn-outline-info d-inline-flex align-items-center gap-2" (click)="showExtra = !showExtra">
+                        <i class="bi" [ngClass]="showExtra ? 'bi-chevron-up' : 'bi-chevron-down'"></i>
+                        {{ showExtra ? 'Weniger anzeigen' : 'Erweiterte Angaben anzeigen' }}
+                      </button>
+                    </div>
 
 
                     <hr class="my-4">
@@ -450,19 +466,40 @@
                       </div>
 
                       <!-- ✅ Buttons -->
-                      <div class="text-center mt-4">
-                        <button type="submit" class="btn btn-more">Speichern</button>
-                        <button type="button" class="btn btn-secondary ms-2" data-bs-dismiss="modal">Abbrechen</button>
+                      <div class="d-flex justify-content-center mt-4 gap-2 flex-wrap">
+                        <button type="submit" class="btn btn-success d-flex align-items-center gap-2">
+                          <i class="bi bi-save"></i> Speichern
+                        </button>
+                        <button type="button" class="btn btn-outline-secondary d-flex align-items-center gap-2" data-bs-dismiss="modal">
+                          <i class="bi bi-x-circle"></i> Abbrechen
+                        </button>
                       </div>
+                      
 
-                        <button type="button" class="btn btn-secondary mt-3" (click)="showExtra = !showExtra">
-                        {{ showExtra ? 'Weniger anzeigen' : 'Erweiterte Angaben anzeigen' }}
-                      </button> 
+                      <div class="text-center mt-3">
+                        <button type="button" class="btn btn-outline-info d-inline-flex align-items-center gap-2" (click)="showExtra = !showExtra">
+                          <i class="bi" [ngClass]="showExtra ? 'bi-chevron-up' : 'bi-chevron-down'"></i>
+                          {{ showExtra ? 'Weniger anzeigen' : 'Erweiterte Angaben anzeigen' }}
+                        </button>
+                      </div>
+                       
 
                     </div>
 
                     <!-- Ausklappbarer Bereich für Zusatzinformationen Ende-------------------------------------------------------------------->
+                    <hr class="my-4">
 
+                    <div class="border-top pt-4 mt-5 text-center">
+                      <button type="button" class="btn btn-outline-danger d-inline-flex align-items-center gap-2" (click)="openDeleteModal()">
+                        <i class="bi bi-trash3"></i> Account löschen
+                      </button>
+                      <p class="text-muted small mt-2">
+                        <i class="bi bi-exclamation-triangle-fill text-danger me-1"></i>
+                        Diese Aktion kann nicht rückgängig gemacht werden!
+                      </p>
+                    </div>
+                    
+                    
                   </form>
                 </div>
               </div>
@@ -499,10 +536,15 @@
                     {{ deleteSuccessMessage }}
                   </p>
                 </div>
-                <div class="modal-footer">
-                  <button type="button" class="btn btn-more" data-bs-dismiss="modal">Abbrechen</button>
-                  <button type="button" class="btn btn-danger" (click)="deleteAccount()">Account löschen</button>
+                <div class="modal-footer justify-content-center gap-2">
+                  <button type="button" class="btn btn-outline-secondary d-flex align-items-center gap-2" data-bs-dismiss="modal">
+                    <i class="bi bi-x-circle"></i> Abbrechen
+                  </button>
+                  <button type="button" class="btn btn-danger d-flex align-items-center gap-2" (click)="deleteAccount()">
+                    <i class="bi bi-trash3-fill"></i> Account löschen
+                  </button>
                 </div>
+                
               </div>
             </div>
           </div>

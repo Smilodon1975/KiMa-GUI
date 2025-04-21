@@ -1,0 +1,30 @@
+.welcome-bg {
+    background: url('/assets/Images/welcome-bg.png') no-repeat center center;
+    background-size: cover;
+    background-attachment: fixed;
+    position: relative;
+    color: #fff;
+    background-color: rgba(255, 255, 255, 0.9);
+  }
+  
+  /* Optionales Overlay für bessere Lesbarkeit */
+  .welcome-section::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.5); /* Dunkler, aber transparenter Schleier */
+    z-index: 0;
+  }
+  
+  /* Inhalt über dem Overlay anzeigen */
+  .welcome-section .container {
+    position: relative;
+    z-index: 1;
+  }
+
+  .welcome-text {
+    color: #2c2c2c; /* Dunkles, aber weiches Grau */
+  }
+  
+  
+  

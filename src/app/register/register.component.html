@@ -3,8 +3,19 @@
 <div class="container d-flex justify-content-center align-items-center vh-100">
   <div class="card shadow p-4 w-50">
     <h2 class="text-center mb-4">Registrierung</h2>
-    <p class="text-center">Bitte füllen Sie das Formular aus, um sich zu registrieren.</p>
-
+    <div class="text-center mb-4">
+      <img src="https://cdn-icons-png.flaticon.com/512/552/552848.png" alt="Willkommen" class="mb-3" style="width: 80px; height: 80px;">
+      <h5 class="mb-2">Willkommen bei KiMa!</h5>
+      <p class="text-muted mb-0">
+        Schön, dass du da bist – wir freuen uns, wenn du Teil unseres Teams wirst!  
+        Die Registrierung ist freiwillig und unverbindlich.  
+        Du kannst deine Daten jederzeit bearbeiten oder löschen.  
+        Für deine Teilnahme an Studien erhältst du als Dankeschön eine kleine Aufwandsentschädigung (Incentive).
+      </p>
+    </div>
+    
+   
+    
     <p *ngIf="successMessage" class="text-success">{{ successMessage }}</p>
     <p *ngIf="errorMessage" class="text-danger">{{ errorMessage }}</p>
     
@@ -42,6 +53,12 @@
         <input type="username" class="form-control" id="username" [(ngModel)]="registerData.userName" name="username">
       </div>
       <button type="submit" class="btn btn-success w-100">Registrieren</button>
+      <div class="text-center mt-3">
+        <a routerLink="/home" class="btn btn-outline-secondary d-inline-flex align-items-center gap-2">
+          <i class="bi bi-arrow-left"></i> Zurück zur Startseite
+        </a>
+      </div>
+
     </form>
         
      <p *ngIf="passwordMismatch" class="text-danger">Die Passwörter stimmen nicht überein!</p>

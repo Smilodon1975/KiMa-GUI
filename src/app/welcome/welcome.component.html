@@ -1,21 +1,58 @@
-<div class="container text-center mt-5">
-    <!-- ✅ KiMa Logo -->
-    <img src="assets/Images/kima_logo_schwarz_rgb.png" alt="KiMa Logo" class="img-fluid mb-4" style="max-width: 200px;">
-  
-    <!-- ✅ Begrüßung -->
-    <h2>Herzlich Willkommen in der KiMa-Familie!</h2>
-    <p class="lead">Schön, dass du dabei bist! 🎉</p>
-  
-    <!-- ✅ Kurze Erklärung -->
-    <p>Du hast dich erfolgreich registriert. Was kannst du jetzt tun?</p>
-  
-    <div class="row justify-content-center mt-4">
-      <div class="col-md-4">
-        <a routerLink="/login" class="btn btn-primary btn-lg w-100">Jetzt einloggen</a>
-      </div>
-      <div class="col-md-4">
-        <a routerLink="/info" class="btn btn-outline-secondary btn-lg w-100">Mehr über KiMa erfahren</a>
+<div class="container-fluid welcome-bg py-5">
+  <div class="container d-flex flex-column align-items-center justify-content-center">
+    
+    <!-- ✅ Logo mit heller Box -->
+    <div class="bg-white bg-opacity-75 p-3 rounded-4 shadow-sm mb-4">
+      <img src="assets/Images/kima_logo_gruen_rot_rgb.png" alt="KiMa Logo"
+           class="img-fluid" style="max-width: 200px;">
+    </div>
+
+    <!-- ✅ Willkommens-Text + Buttons ebenfalls in heller Box -->
+    <div class="bg-white bg-opacity-75 p-4 rounded-4 shadow" style="max-width: 900px;">
+      <h2 class="mb-3 text-center">
+        <i class="bi bi-stars text-primary me-2"></i>
+        Herzlich Willkommen im KiMa-Team!
+      </h2>
+      <p class="lead text-center welcome-text">
+        <i class="bi bi-lightbulb me-2 text-warning"></i>
+        Schön, dass du dabei bist – gemeinsam gestalten wir die Produkte von morgen!
+      </p>
+      <p class="text-center welcome-text mb-4">
+        Du hast dich erfolgreich registriert – und bist damit Teil einer starken Community von Meinungsgeber*innen. 💬<br>
+        Deine Meinung ist uns wichtig – und sie macht einen Unterschied!
+      </p>
+      
+
+      <div class="row justify-content-center mb-4">
+        <div class="col-md-5 mb-3">
+          <a routerLink="/login" class="btn btn-primary btn-lg w-100 shadow">
+            <i class="bi bi-box-arrow-in-right me-2"></i>
+            Jetzt einloggen
+          </a>
+        </div>
+        <div class="col-md-5 mb-3">
+          <a routerLink="/info" class="btn btn-outline-secondary btn-lg w-100 shadow">
+            <i class="bi bi-info-circle me-2"></i>
+            Mehr über KiMa erfahren
+        </a>
       </div>
     </div>
+
+    <div class="alert alert-light bg-opacity-75 border text-start mx-auto" style="max-width: 700px;">
+      <p class="mb-2"><i class="bi bi-emoji-smile me-2 text-success"></i>
+        Bei KiMa zählt jede Meinung – egal ob jung oder alt, technikaffin oder praktisch veranlagt.
+      </p>
+      <p class="mb-2"><i class="bi bi-cash-stack me-2 text-warning"></i>
+        Für deine Teilnahme an Studien, Umfragen oder Produkttests erhältst du natürlich eine faire Aufwandsentschädigung.
+      </p>
+      <p class="mb-2"><i class="bi bi-shield-lock me-2 text-danger"></i>
+        Deine Daten sind bei uns sicher – wir behandeln sie vertraulich und geben sie nicht an Dritte weiter.
+      </p>
+      <p class="mb-2"><i class="bi bi-chat-left-text me-2 text-info"></i>
+        Du hast Fragen oder Anregungen? Kontaktiere uns jederzeit – wir sind für dich da!
+      </p>
+    </div>
+
   </div>
-  
+  </div>
+</div>

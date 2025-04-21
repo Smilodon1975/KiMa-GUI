@@ -4,6 +4,8 @@ import { AuthService } from '../services/auth.service';
 import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { NgOptimizedImage } from '@angular/common';
+import * as bootstrap from 'bootstrap';
+
 
 
 @Component({
@@ -34,4 +36,14 @@ import { NgOptimizedImage } from '@angular/common';
     this.authService.logout();
     this.router.navigate(['/home'], { queryParams: { logout: 'true' } }); 
   }
+
+  closeNavbar() {
+    const navbar = document.getElementById('navbarNav');
+    if (navbar && navbar.classList.contains('show')) {
+      const bsCollapse = new bootstrap.Collapse(navbar, { toggle: true });
+      bsCollapse.hide();
+    }
+  }
+  
+
 }
