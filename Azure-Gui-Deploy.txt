@@ -1,0 +1,5 @@
+az webapp deploy \
+  --resource-group KiMa-RG \
+  --name kima-gui \
+  --src-path /home/ingo/kima-gui.zip \
+  --type zip

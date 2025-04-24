@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { environment } from '../../environments/environment';
 
 export interface FAQ {
   id: number;
@@ -13,7 +14,7 @@ export interface FAQ {
   providedIn: 'root'
 })
 export class FAQService {
-  private faqUrl = 'https://localhost:7090/api/faq';
+  private faqUrl = `${environment.apiUrl}/faq`;
 
   constructor(private http: HttpClient) { }
 
@@ -26,6 +27,9 @@ export class FAQService {
   }
 
   updateFAQ(faq: FAQ): Observable<any> {
+    if (faq.id === undefined || faq.id === null) {
+      throw new Error('FAQ ID is required for update.');
+    }
     return this.http.put(`${this.faqUrl}/${faq.id}`, faq);
   }
 

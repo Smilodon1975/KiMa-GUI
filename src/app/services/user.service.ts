@@ -4,13 +4,14 @@ import { Observable, of, catchError, throwError } from 'rxjs';
 import { UserUpdateModel } from '../models/user-update.model';
 import { UserProfile } from '../models/user-profile.model';
 import { User } from '../models/user.model';
+import { environment } from '../../environments/environment'; // ✅ Importiere die Umgebungsvariablen
 
 @Injectable({
   providedIn: 'root'
 })
 export class UserService {
-  private userUrl = 'https://localhost:7090/api/user'; 
-  private profileUrl = 'https://localhost:7090/api/userprofile'; 
+  private userUrl: string = `${environment.apiUrl}/user`; 
+  private profileUrl: string = `${environment.apiUrl}/userprofile`; 
 
   constructor(private http: HttpClient) {}
 

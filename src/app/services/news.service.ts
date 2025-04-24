@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { environment } from '../../environments/environment';
 
 export interface INews {
   id: number;
@@ -14,7 +15,7 @@ export interface INews {
 })
 export class NewsService {
   
-  private newsUrl = 'https://localhost:7090/api/news';
+  private newsUrl = `${environment.apiUrl}/news`;
 
   constructor(private http: HttpClient) { }
 
@@ -27,6 +28,9 @@ export class NewsService {
   }
 
   updateNews(news: INews): Observable<any> {
+    if (!news.id) {
+      throw new Error('News ID is undefined');
+    }
     return this.http.put(`${this.newsUrl}/${news.id}`, news);
   }
 

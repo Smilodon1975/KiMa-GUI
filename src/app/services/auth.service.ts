@@ -2,13 +2,15 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, of, catchError, map, tap, throwError, BehaviorSubject } from 'rxjs';
 import { jwtDecode } from 'jwt-decode';
+import { environment } from '../../environments/environment';
+
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
-  private authUrl = 'https://localhost:7090/api/auth'; 
-  private userUrl = 'https://localhost:7090/api/user';
+  private authUrl = `${environment.apiUrl}/auth`;
+    private userUrl = `${environment.apiUrl}/user`;
 
   private authStatus = new BehaviorSubject<boolean>(this.isTokenValid()); // ✅ Speichert den Auth-Status
   private userRole = new BehaviorSubject<string | null>(null); // ✅ Speichert die Benutzerrolle  

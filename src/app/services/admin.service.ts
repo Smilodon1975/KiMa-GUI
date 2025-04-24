@@ -2,12 +2,20 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { UserUpdateModel } from '../models/user-update.model';
+import { environment } from '../../environments/environment';
+
+@Injectable()
+export class AuthService {
+  private authUrl = `${environment.apiUrl}/auth`;
+  private userUrl = `${environment.apiUrl}/user`;
+}
+
 
 @Injectable({
   providedIn: 'root'
 })
 export class AdminService {
-  private adminUrl = 'https://localhost:7090/api/admin';
+  private adminUrl = `${environment.apiUrl}/admin`;
 
   constructor(private http: HttpClient) {}
 
@@ -26,3 +34,4 @@ export class AdminService {
     return this.http.delete(`${this.adminUrl}/delete/${userId}`);
   }
 }
+

@@ -4,6 +4,7 @@ import { HeaderComponent } from './header/header.component';
 import { FooterComponent } from './footer/footer.component';
 
 
+
 @Component({
   selector: 'app-root',
   standalone: true,
@@ -15,6 +16,8 @@ export class AppComponent {
   title = 'KiMa_Gui';
   scrollToTop(): void {
     window.scrollTo({ top: 0, behavior: 'smooth' }); 
-  }
+  }  
 }
+
+
 

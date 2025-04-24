@@ -10,7 +10,7 @@ export class MaintenanceGuard implements CanActivate {
   canActivate(): boolean {
     const token = new URLSearchParams(window.location.search).get('token');
 
-    if (token === 'geheim123') {
+    if (token === 'Test2.0') {
       localStorage.setItem('accessGranted', 'true');
       return true;
     }
