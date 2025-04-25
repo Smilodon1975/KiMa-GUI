@@ -1,3 +1,9 @@
+in Gui Terminal: .\build-and-zip.ps1
+
+in Azure PowerShell:
+Zip Datai uploaden 
+
+dann in PowerShell ausführen:
 az webapp deploy \
   --resource-group KiMa-RG \
   --name kima-gui \

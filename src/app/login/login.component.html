@@ -1,31 +1,58 @@
-
-
-<div class="container d-flex justify-content-center align-items-center vh-100">
-  <div class="card shadow p-4 w-50">
-    <h2 class="text-center mb-4">Login</h2>
-
-    <div *ngIf="loginMessage" class="alert text-center" [ngClass]="{'alert-success': isSuccess, 'alert-danger': !isSuccess}">
-      {{ loginMessage }}
-    </div>
-    
-
-    <form (ngSubmit)="onSubmit()">
-      <div class="mb-3">
-        <label for="email" class="form-label">E-Mail</label>
-        <input type="email" class="form-control" id="email" [(ngModel)]="loginData.email" name="email" required>
+<div class="login-page">
+  <div class="container d-flex justify-content-center align-items-center mt-5 mb-5">
+    <div class="card shadow p-4 login-card">
+      <!-- Kleines zentriertes Logo oben -->
+      <div class="text-center mb-4">
+        <img
+          src="/assets/Images/kima_logo_schwarz_rgb.png"
+          alt="KiMa Logo"
+          class="login-logo"
+        />
       </div>
-      <div class="mb-3">
-        <label for="password" class="form-label">Passwort</label>
-        <input type="password" class="form-control" id="password" [(ngModel)]="loginData.password" name="password" required>
+
+      <h2 class="text-center mb-4">Login</h2>
+
+      <div
+        *ngIf="loginMessage"
+        class="alert text-center"
+        [ngClass]="{'alert-success': isSuccess, 'alert-danger': !isSuccess}"
+      >
+        {{ loginMessage }}
       </div>
-      <button type="submit" class="btn btn-success w-100">Einloggen</button>
-      <p class="text-center mt-3"><a href="/register">Noch keinen Account? Registrieren</a></p>
-    </form>
-    <div class="mt-3">
-      <button class="btn btn-link" (click)="router.navigate(['/password-reset-request'])">Passwort vergessen?</button>
+
+      <form (ngSubmit)="onSubmit()" autocomplete="off">
+        <div class="mb-3">
+          <label for="email" class="form-label">E-Mail</label>
+          <input
+            type="email"
+            class="form-control"
+            id="email"
+            [(ngModel)]="loginData.email"
+            name="email"
+            required
+          />
+        </div>
+        <div class="mb-3">
+          <label for="password" class="form-label">Passwort</label>
+          <input
+            type="password"
+            class="form-control"
+            id="password"
+            [(ngModel)]="loginData.password"
+            name="password"
+            required
+          />
+        </div>
+        <button type="submit" class="btn btn-success w-100">Einloggen</button>
+        <p class="text-center mt-3">
+          <a routerLink="/register">Noch keinen Account? Registrieren</a>
+        </p>
+      </form>
+      <div class="mt-3 text-center">
+        <button class="btn btn-link" (click)="router.navigate(['/password-reset-request'])">
+          Passwort vergessen?
+        </button>
+      </div>
     </div>
-    
-    
   </div>
 </div>
-  

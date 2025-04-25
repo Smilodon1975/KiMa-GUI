@@ -1,69 +1,116 @@
-
-
-<div class="container d-flex justify-content-center align-items-center vh-100">
-  <div class="card shadow p-4 w-50">
-    <h2 class="text-center mb-4">Registrierung</h2>
-    <div class="text-center mb-4">
-      <img src="https://cdn-icons-png.flaticon.com/512/552/552848.png" alt="Willkommen" class="mb-3" style="width: 80px; height: 80px;">
-      <h5 class="mb-2">Willkommen bei KiMa!</h5>
-      <p class="text-muted mb-0">
-        Schön, dass du da bist – wir freuen uns, wenn du Teil unseres Teams wirst!  
-        Die Registrierung ist freiwillig und unverbindlich.  
-        Du kannst deine Daten jederzeit bearbeiten oder löschen.  
-        Für deine Teilnahme an Studien erhältst du als Dankeschön eine kleine Aufwandsentschädigung (Incentive).
-      </p>
-    </div>
-    
-   
-    
-    <p *ngIf="successMessage" class="text-success">{{ successMessage }}</p>
-    <p *ngIf="errorMessage" class="text-danger">{{ errorMessage }}</p>
-    
-
-    <form (ngSubmit)="onRegister()">     
-      <div class="mb-3">
-        <label for="email" class="form-label">* E-Mail</label>
-        <input type="email" class="form-control" id="email" [(ngModel)]="registerData.email" name="email" required>
-      </div>
-
-
-
-      <div class="mb-3">
-        <label for="password" class="form-label">* Passwort</label>
-        <input type="password" class="form-control" id="password" [(ngModel)]="registerData.password" name="password" required>
-        <small class="text-muted">Passwörter sollten sicher sein: Großbuchstaben, Zahlen & Sonderzeichen empfohlen.</small>
-        <p *ngIf="registerData.password && registerData.password.length > 0" class="mt-1" [ngClass]="{
-          'text-danger': getPasswordStrength(registerData.password) === '❌ Ungültig (mind. 8 Zeichen)',
-          'text-warning': getPasswordStrength(registerData.password) === '⚠️ Schwach',
-          'text-primary': getPasswordStrength(registerData.password) === '🟡 Mittel',
-          'text-success': getPasswordStrength(registerData.password) === '🟢 Stark' || 
-                          getPasswordStrength(registerData.password) === '🟢💪 Sehr stark!'
-        }">
-          {{ getPasswordStrength(registerData.password) }}
+<div class="register-page">
+  <div class="container d-flex justify-content-center align-items-center mt-5 mb-5">
+    <div class="card shadow p-4 mx-auto register-card">
+      <h2 class="text-center mb-4">Registrierung</h2>
+      <div class="text-center mb-4">
+        <img src="https://cdn-icons-png.flaticon.com/512/552/552848.png" alt="Willkommen" class="mb-3" style="width: 80px; height: 80px;">
+        <h5 class="mb-2">Willkommen bei KiMa!</h5>
+        <p class="text-muted mb-0">
+          Schön, dass du da bist – wir freuen uns, wenn du Teil unserer Community wirst!
+          Die Registrierung ist freiwillig und unverbindlich.
+          Du kannst deine Daten jederzeit bearbeiten oder löschen.
+          Als Dankeschön für deine Teilnahme erhältst du eine kleine Aufwandsentschädigung.
         </p>
-      </div>  
-    
-    <div class="mb-3">
-        <label for="confirmPassword" class="form-label">* Passwort wiederholen</label>
-        <input type="password" class="form-control" id="confirmPassword" [(ngModel)]="confirmPassword" name="confirmPassword" required>
-    </div>   
-    
-      <div class="mb-3">
-        <label for="username" class="form-label">Username</label>
-        <input type="username" class="form-control" id="username" [(ngModel)]="registerData.userName" name="username">
-      </div>
-      <button type="submit" class="btn btn-success w-100">Registrieren</button>
-      <div class="text-center mt-3">
-        <a routerLink="/home" class="btn btn-outline-secondary d-inline-flex align-items-center gap-2">
-          <i class="bi bi-arrow-left"></i> Zurück zur Startseite
-        </a>
       </div>
 
-    </form>
-        
-     <p *ngIf="passwordMismatch" class="text-danger">Die Passwörter stimmen nicht überein!</p>
+      <p *ngIf="successMessage" class="text-success">{{ successMessage }}</p>
+      <p *ngIf="errorMessage" class="text-danger">{{ errorMessage }}</p>
 
+      <form (ngSubmit)="onRegister()" autocomplete="off">
+        <!-- Geburtsdatum (Mindestalter 16 Jahre) -->
+        <div class="mb-3">
+          <label for="birthDate" class="form-label">* Geburtsdatum</label>
+          <input
+            type="date"
+            class="form-control"
+            id="birthDate"
+            name="birthDate"
+            [(ngModel)]="registerData.birthDate"
+            [max]="maxDate"
+            required
+          />
+          <small class="text-muted">Du musst mindestens 16 Jahre alt sein.</small>
+        </div>
+
+        <!-- E-Mail -->
+        <div class="mb-3">
+          <label for="email" class="form-label">* E-Mail</label>
+          <input
+            type="email"
+            class="form-control"
+            id="email"
+            name="email"
+            [(ngModel)]="registerData.email"
+            required
+          />
+        </div>
+
+        <!-- Passwort -->
+        <div class="mb-3">
+          <label for="password" class="form-label">* Passwort</label>
+          <input
+            type="password"
+            class="form-control"
+            id="password"
+            name="password"
+            [(ngModel)]="registerData.password"
+            required
+          />
+          <small class="text-muted">
+            Passwörter sollten Großbuchstaben, Zahlen & Sonderzeichen enthalten.
+          </small>
+          <p *ngIf="registerData.password" class="mt-1"
+             [ngClass]="{
+               'text-danger': getPasswordStrength(registerData.password) === '❌ Ungültig (mind. 8 Zeichen)',
+               'text-warning': getPasswordStrength(registerData.password) === '⚠️ Schwach',
+               'text-primary': getPasswordStrength(registerData.password) === '🟡 Mittel',
+               'text-success': getPasswordStrength(registerData.password).startsWith('🟢')
+             }">
+            {{ getPasswordStrength(registerData.password) }}
+          </p>
+        </div>
+
+        <!-- Passwort bestätigen -->
+        <div class="mb-3">
+          <label for="confirmPassword" class="form-label">* Passwort wiederholen</label>
+          <input
+            type="password"
+            class="form-control"
+            id="confirmPassword"
+            name="confirmPassword"
+            [(ngModel)]="confirmPassword"
+            required
+          />
+        </div>
+
+        <!-- Username -->
+        <div class="mb-3">
+          <label for="username" class="form-label">Username</label>
+          <input
+            type="text"
+            class="form-control"
+            id="username"
+            name="username"
+            [(ngModel)]="registerData.userName"
+          />
+        </div>
+
+        <button
+          type="submit"
+          class="btn btn-success w-100"
+          [disabled]="!isAgeValid() || registerData.password !== confirmPassword"
+        >
+          Registrieren
+        </button>
+
+        <div class="text-center mt-3">
+          <a routerLink="/home" class="btn btn-outline-secondary d-inline-flex align-items-center gap-2">
+            <i class="bi bi-arrow-left"></i> Zurück zur Startseite
+          </a>
+        </div>
+      </form>
+
+      <p *ngIf="!isAgeValid()" class="text-danger mt-2">Du musst mindestens 16 Jahre alt sein!</p>
+      <p *ngIf="passwordMismatch" class="text-danger">Die Passwörter stimmen nicht überein!</p>
+    </div>
   </div>
-</div>
-
-

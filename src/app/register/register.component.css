@@ -1,0 +1,31 @@
+/* Hintergrund hinter der Karte */
+.register-page {
+    background: url('/assets/Images/registration-bg.png') no-repeat center center;
+    background-size: cover;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem 0;
+    background-color: rgba(255,255,255,0.9);
+   
+  }
+  
+  /* Karte wie gehabt */
+  .register-card {
+    width: 100%;
+    max-width: 400px;
+  }
+  
+  /* Responsive Breite */
+  @media (min-width: 768px) {
+    .register-card {
+      max-width: 600px;
+    }
+  }
+  @media (min-width: 1200px) {
+    .register-card {
+      max-width: 800px;
+    }
+  }
+  
