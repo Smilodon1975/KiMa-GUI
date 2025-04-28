@@ -17,56 +17,26 @@
       <p *ngIf="errorMessage" class="text-danger">{{ errorMessage }}</p>
 
       <form (ngSubmit)="onRegister()" autocomplete="off">
-        <!-- Geburtsdatum (Mindestalter 16 Jahre) -->
-        <div class="mb-3">
-          <label for="birthDate" class="form-label">* Geburtsdatum</label>
-          <input
-            type="date"
-            class="form-control"
-            id="birthDate"
-            name="birthDate"
-            [(ngModel)]="registerData.birthDate"
-            [max]="maxDate"
-            required
-          />
-          <small class="text-muted">Du musst mindestens 16 Jahre alt sein.</small>
-        </div>
+        
 
         <!-- E-Mail -->
         <div class="mb-3">
           <label for="email" class="form-label">* E-Mail</label>
-          <input
-            type="email"
-            class="form-control"
-            id="email"
-            name="email"
-            [(ngModel)]="registerData.email"
-            required
-          />
+          <input type="email" class="form-control" id="email" name="email" [(ngModel)]="registerData.email" required/>
         </div>
 
         <!-- Passwort -->
         <div class="mb-3">
           <label for="password" class="form-label">* Passwort</label>
-          <input
-            type="password"
-            class="form-control"
-            id="password"
-            name="password"
-            [(ngModel)]="registerData.password"
-            required
-          />
-          <small class="text-muted">
-            Passwörter sollten Großbuchstaben, Zahlen & Sonderzeichen enthalten.
-          </small>
+          <input type="password" class="form-control" id="password" name="password" [(ngModel)]="registerData.password" required/>
+          <small class="text-muted"> Passwörter sollten Großbuchstaben, Zahlen & Sonderzeichen enthalten.</small>
           <p *ngIf="registerData.password" class="mt-1"
              [ngClass]="{
                'text-danger': getPasswordStrength(registerData.password) === '❌ Ungültig (mind. 8 Zeichen)',
                'text-warning': getPasswordStrength(registerData.password) === '⚠️ Schwach',
                'text-primary': getPasswordStrength(registerData.password) === '🟡 Mittel',
-               'text-success': getPasswordStrength(registerData.password).startsWith('🟢')
-             }">
-            {{ getPasswordStrength(registerData.password) }}
+               'text-success': getPasswordStrength(registerData.password).startsWith('🟢')}">
+               {{ getPasswordStrength(registerData.password) }}
           </p>
         </div>
 
@@ -74,33 +44,19 @@
         <div class="mb-3">
           <label for="confirmPassword" class="form-label">* Passwort wiederholen</label>
           <input
-            type="password"
-            class="form-control"
-            id="confirmPassword"
-            name="confirmPassword"
-            [(ngModel)]="confirmPassword"
-            required
-          />
+            type="password" class="form-control" id="confirmPassword" name="confirmPassword" [(ngModel)]="confirmPassword" required/>
         </div>
 
         <!-- Username -->
         <div class="mb-3">
           <label for="username" class="form-label">Username</label>
-          <input
-            type="text"
-            class="form-control"
-            id="username"
-            name="username"
-            [(ngModel)]="registerData.userName"
-          />
+          <input type="text" class="form-control" id="username" name="username" [(ngModel)]="registerData.userName"/>
         </div>
 
         <button
           type="submit"
           class="btn btn-success w-100"
-          [disabled]="!isAgeValid() || registerData.password !== confirmPassword"
-        >
-          Registrieren
+          [disabled]="registerData.password !== confirmPassword">Registrieren
         </button>
 
         <div class="text-center mt-3">
@@ -110,7 +66,6 @@
         </div>
       </form>
 
-      <p *ngIf="!isAgeValid()" class="text-danger mt-2">Du musst mindestens 16 Jahre alt sein!</p>
       <p *ngIf="passwordMismatch" class="text-danger">Die Passwörter stimmen nicht überein!</p>
     </div>
   </div>

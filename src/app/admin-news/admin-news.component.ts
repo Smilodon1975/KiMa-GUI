@@ -4,13 +4,15 @@ import { FormsModule } from '@angular/forms';
 import * as bootstrap from 'bootstrap';
 import { NewsService } from '../services/news.service';
 import { INews } from '../services/news.service';
+import { Router } from '@angular/router';
+import { RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-admin-news',
   templateUrl: './admin-news.component.html',
   styleUrls: ['./admin-news.component.css'],
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, RouterModule],
 })
 export class AdminNewsComponent implements OnInit {
   newsList: INews[] = [];
@@ -18,7 +20,7 @@ export class AdminNewsComponent implements OnInit {
   // Standardwerte: Passe Felder an dein Modell an (z. B. PublishDate als Date)
   newsData: INews = { id: 0, title: '', content: '', publishDate: new Date() };
 
-  constructor(private newsService: NewsService) {}
+  constructor(private newsService: NewsService, private router: Router) {}
 
 
   ngOnInit(): void {

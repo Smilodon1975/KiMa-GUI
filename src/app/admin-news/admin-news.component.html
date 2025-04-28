@@ -15,17 +15,32 @@
             Veröffentlicht am: {{ news.publishDate | date: 'shortDate' }}
           </small>
         </div>
-        <div>
-          <button class="btn btn-primary btn-sm me-2" (click)="editNews(news)">
+        <div class="d-flex align-items-center gap-2">
+          <button
+            type="button"
+            class="btn btn-primary btn-sm"
+            (click)="editNews(news)"
+          >
             Bearbeiten
           </button>
-          <button class="btn btn-danger btn-sm" (click)="deleteNews(news.id)">
+          <button
+            type="button"
+            class="btn btn-danger btn-sm"
+            (click)="deleteNews(news.id)"
+          >
             Löschen
           </button>
         </div>
+        
       </li>
     </ul>
   </section>
+
+  <nav class="nav">
+    <a class="nav-link" routerLink="/admin">Admin Dashboard</a>
+    <a class="nav-link" routerLink="/admin-faq">FAQ verwalten</a>  
+    <a class="nav-link" routerLink="/admin-news">News verwalten</a>
+  </nav>
   
   <!-- Modal für News Bearbeitung/Hinzufügen -->
   <div

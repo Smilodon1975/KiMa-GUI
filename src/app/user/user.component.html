@@ -1,10 +1,14 @@
 
+<div class="user-page">
+ 
 
+  <!-- ✅ Container für die Benutzeroberfläche -->
 <div class="container mt-5">
   <div class="row justify-content-center">
     <div class="col-lg-8 col-md-10">
 
         <div class="card shadow p-4">
+          <h1 class="text-center mb-4">Mein Profil</h1>
               <h2 class="text-center">Hallo {{ userData?.userName }}, willkommen!</h2>
               <p class="text-center">Hier kannst du deine Daten verwalten.</p>
 
@@ -106,18 +110,18 @@
                         </div>
                       </div>
                     
-                      <div class="card shadow-sm mb-4" *ngIf="userData.userProfile"> <!-- *ngIf hier! -->
+                      <!-- <div class="card shadow-sm mb-4" *ngIf="userData.userProfile">
                         <div class="card-header">
                           Marktforschungs-Profil
                         </div>
                         <div class="card-body">
                           <dl class="row">
-                            <dt class="col-sm-4">Fahrzeugtyp:</dt>
+                            <dt class="col-sm-4">Fahrzeugtyp:</dt> -->
                             <!-- Kein ?. mehr nötig bei profile, da die ganze Karte nur bei vorhandenem Profil gezeigt wird -->
-                            <dd class="col-sm-8">{{ (userData.userProfile.vehicleCategory | titlecase) || 'Nicht angegeben' }}</dd>
+                            <!-- <dd class="col-sm-8">{{ (userData.userProfile.vehicleCategory | titlecase) || 'Nicht angegeben' }}</dd> -->
                     
                             <!-- Fahrzeugdetails nur anzeigen, wenn sie Sinn machen -->
-                            <ng-container *ngIf="userData.userProfile.vehicleCategory && userData.userProfile.vehicleCategory !== 'None'">
+                            <!-- <ng-container *ngIf="userData.userProfile.vehicleCategory && userData.userProfile.vehicleCategory !== 'None'">
                                 <dt class="col-sm-4">Fahrzeugdetails:</dt>
                                 <dd class="col-sm-8">{{ userData.userProfile.vehicleDetails || 'Nicht angegeben' }}</dd>
                             </ng-container>
@@ -133,10 +137,10 @@
                     
                             <dt class="col-sm-4">Einkommensniveau:</dt>
                             <dd class="col-sm-8">{{ userData.userProfile.incomeLevel || 'Nicht angegeben' }}</dd>
-                          </dl>
+                          </dl> -->
                     
                           <!-- Interessen könnten hier auch rein oder als eigene Karte -->
-                          <h5>Interessen</h5>
+                          <!-- <h5>Interessen</h5>
                           <p>
                             <span *ngIf="userData.userProfile.isInterestedInTechnology" class="badge bg-info me-1">Technologie</span>
                             <span *ngIf="userData.userProfile.isInterestedInSports" class="badge bg-info me-1">Sport</span>
@@ -147,11 +151,11 @@
                               </span>
                           </p>
                         </div>
-                      </div>
+                      </div> -->
                     
-                      <div class="alert alert-light" *ngIf="!userData.userProfile">
+                      <!-- <div class="alert alert-light" *ngIf="!userData.userProfile">
                           Es wurden noch keine zusätzlichen Profildaten für die Marktforschung hinterlegt.
-                      </div>
+                      </div> -->
                     
                     
                       <div class="d-flex justify-content-center mb-4 gap-2">
@@ -341,10 +345,10 @@
                       <button type="button" class="btn btn-outline-danger d-inline-flex align-items-center gap-2" (click)="openDeleteModal()">
                         <i class="bi bi-trash3"></i> Account löschen
                       </button>
-                      <p class="text-muted small mt-2">
+                      <!-- <p class="text-muted small mt-2">
                         <i class="bi bi-exclamation-triangle-fill text-danger me-1"></i>
                         Diese Aktion kann nicht rückgängig gemacht werden!
-                      </p>
+                      </p> -->
                     </div>
                     
 
@@ -500,9 +504,9 @@
                     </div>
 
                     <!-- Ausklappbarer Bereich für Zusatzinformationen Ende-------------------------------------------------------------------->
-                    <hr class="my-4">
+                    <!-- <hr class="my-4"> -->
 
-                    <div class="border-top pt-4 mt-5 text-center">
+                    <!-- <div class="border-top pt-4 mt-5 text-center">
                       <button type="button" class="btn btn-outline-danger d-inline-flex align-items-center gap-2" (click)="openDeleteModal()">
                         <i class="bi bi-trash3"></i> Account löschen
                       </button>
@@ -510,7 +514,7 @@
                         <i class="bi bi-exclamation-triangle-fill text-danger me-1"></i>
                         Diese Aktion kann nicht rückgängig gemacht werden!
                       </p>
-                    </div>
+                    </div> -->
                     
                     
                   </form>
@@ -567,4 +571,5 @@
       </div>
     </div>
   </div>
+</div>
 </div>

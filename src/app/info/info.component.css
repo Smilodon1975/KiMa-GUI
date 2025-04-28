@@ -94,14 +94,14 @@ section {
     max-width: 250px; /* Beispiel: Begrenze die Breite auf 350px */
     height: auto;     /* Höhe automatisch anpassen */
     display: block;   /* Sicherstellen, dass margin auto funktioniert */
-    margin-left: auto; /* Zentriert das Bild horizontal, wenn text-center nicht reicht */
-    margin-right: auto;
+    margin: 0 auto; /* Zentriert das Bild horizontal, wenn text-center nicht reicht */
+    
   }
 
   .meeting-image {
-    max-width: 500px; /* Beispiel: Begrenze die Breite auf 350px */
+    max-width: 400px; /* Beispiel: Begrenze die Breite auf 350px */
     height: auto;     /* Höhe automatisch anpassen */
     display: block;   /* Sicherstellen, dass margin auto funktioniert */
-    margin-left: auto; /* Zentriert das Bild horizontal, wenn text-center nicht reicht */
-    margin-right: auto;
+    margin: 0 auto; /* Zentriert das Bild horizontal, wenn text-center nicht reicht */
+   
   }

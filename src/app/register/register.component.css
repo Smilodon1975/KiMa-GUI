@@ -1,14 +1,27 @@
 /* Hintergrund hinter der Karte */
 .register-page {
-    background: url('/assets/Images/registration-bg.png') no-repeat center center;
-    background-size: cover;
     min-height: 100vh;
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 2rem 0;
+  
+    /* zwei Logos als Hintergrundbilder: */
+    background-image:
+      url('/assets/Images/kima_logo_gruen_rot_rgb.png'),
+      url('/assets/Images/kima_logo_gruen_rot_rgb.png');
+    background-position:
+      left center,
+      right center;
+    background-repeat:
+      no-repeat,
+      no-repeat;
+    background-size:
+      380px auto,    /* linkes Logo */
+      380px auto;    /* rechtes Logo */
+    
+    /* leichter Überzug, damit’s nicht zu hart wirkt */
     background-color: rgba(255,255,255,0.9);
-   
+    background-blend-mode: lighten;
   }
   
   /* Karte wie gehabt */

@@ -8,8 +8,8 @@ Write-Host "Starte Angular Production-Build..." -ForegroundColor Yellow
 ng build --configuration production
 
 # Schritt 2: Pfade definieren
-$buildPath = "dist\ki-ma-gui\browser"
-$zipPath = "dist\ki-ma-gui\kima-gui.zip"
+$distRoot  = "dist\ki-ma-gui\browser"
+$zipPath   = Join-Path $distRoot "kima-gui.zip"
 
 # Schritt 3: Vorherige ZIP löschen (falls vorhanden)
 if (Test-Path $zipPath) {
@@ -17,15 +17,19 @@ if (Test-Path $zipPath) {
     Remove-Item $zipPath
 }
 
-# Schritt 4: ZIP erstellen
-Write-Host "Erstelle neues ZIP: kima-gui.zip" -ForegroundColor Yellow
-Compress-Archive -Path "$buildPath\*" -DestinationPath $zipPath
+# Schritt 4: ZIP erstellen (alles aus dem dist-Ordner reinpacken)
+Write-Host "Erstelle neues ZIP: kima-gui.zip (inkl. web.config & Assets)" -ForegroundColor Yellow
+
+Compress-Archive `
+    -Path (Join-Path $distRoot "*") `
+    -DestinationPath $zipPath
 
 # Erfolgsmeldung
 Write-Host ""
 Write-Host "Build & ZIP erfolgreich! Datei liegt unter:" -ForegroundColor Green
-Write-Host "$zipPath" -ForegroundColor Green
+Write-Host $zipPath -ForegroundColor Green
 
 # Hinweis zur Azure-Bereitstellung
 Write-Host ""
-Write-Host "Jetzt kannst du die Datei nach Azure hochladen: /home/ingo/kima-gui.zip" -ForegroundColor Cyan
+Write-Host "Jetzt kannst du die Datei nach Azure (z.B. via FTP oder ZIP-Deploy) hochladen." -ForegroundColor Cyan
+

@@ -4,13 +4,14 @@ import { Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { jwtDecode } from 'jwt-decode';
 import { CommonModule } from '@angular/common';
+import { RouterModule } from '@angular/router'; 
 
 @Component({
   selector: 'app-login',
   standalone: true,
   templateUrl: './login.component.html',
   styleUrl: './login.component.css',
-  imports: [FormsModule, CommonModule]
+  imports: [FormsModule, CommonModule, RouterModule]
 })
 export class LoginComponent {
   loginData = { email: '', password: '' };
@@ -49,6 +50,4 @@ export class LoginComponent {
   testClick() {
     console.log("Passwort vergessen wurde geklickt!");
   }
-  
-
 }

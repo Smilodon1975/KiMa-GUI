@@ -43,24 +43,21 @@ export class RegisterComponent implements OnInit {
   }
 
 /** Prüft, ob das eingegebene Datum mindestens 16 Jahre zurückliegt */
-isAgeValid(): boolean {
-  if (!this.registerData.birthDate) return false;
-  const birth = new Date(this.registerData.birthDate);
-  const today = new Date();
-  let age = today.getFullYear() - birth.getFullYear();
-  const m = today.getMonth() - birth.getMonth();
-  if (m < 0 || (m === 0 && today.getDate() < birth.getDate())) {
-    age--;
-  }
-  return age >= 16;
-}
+// isAgeValid(): boolean {
+//   if (!this.registerData.birthDate) return false;
+//   const birth = new Date(this.registerData.birthDate);
+//   const today = new Date();
+//   let age = today.getFullYear() - birth.getFullYear();
+//   const m = today.getMonth() - birth.getMonth();
+//   if (m < 0 || (m === 0 && today.getDate() < birth.getDate())) {
+//     age--;
+//   }
+//   return age >= 16;
+// }
 
   // ✅ Registriert einen neuen Benutzer und leitet nach Erfolg zum Login weiter
   onRegister() {
-    if (!this.isAgeValid()) {
-      this.errorMessage = 'Du musst mindestens 16 Jahre alt sein!';
-      return;
-    }
+   
     if (this.registerData.password !== this.confirmPassword) {
       this.errorMessage = "Die Passwörter stimmen nicht überein!";
       return;

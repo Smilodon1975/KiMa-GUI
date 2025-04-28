@@ -13,35 +13,18 @@
       <h2 class="text-center mb-4">Login</h2>
 
       <div
-        *ngIf="loginMessage"
-        class="alert text-center"
-        [ngClass]="{'alert-success': isSuccess, 'alert-danger': !isSuccess}"
-      >
+        *ngIf="loginMessage" class="alert text-center" [ngClass]="{'alert-success': isSuccess, 'alert-danger': !isSuccess}">
         {{ loginMessage }}
       </div>
 
       <form (ngSubmit)="onSubmit()" autocomplete="off">
         <div class="mb-3">
           <label for="email" class="form-label">E-Mail</label>
-          <input
-            type="email"
-            class="form-control"
-            id="email"
-            [(ngModel)]="loginData.email"
-            name="email"
-            required
-          />
+          <input type="email" class="form-control" id="email" [(ngModel)]="loginData.email" name="email" required/>
         </div>
         <div class="mb-3">
           <label for="password" class="form-label">Passwort</label>
-          <input
-            type="password"
-            class="form-control"
-            id="password"
-            [(ngModel)]="loginData.password"
-            name="password"
-            required
-          />
+          <input type="password" class="form-control" id="password" [(ngModel)]="loginData.password" name="password" required/>
         </div>
         <button type="submit" class="btn btn-success w-100">Einloggen</button>
         <p class="text-center mt-3">

@@ -5,20 +5,22 @@ import * as bootstrap from 'bootstrap';
 import { FormsModule } from '@angular/forms';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { Router } from '@angular/router';
+import { RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-admin-faq',
   templateUrl: './admin-faq.component.html',
   styleUrls: ['./admin-faq.component.css'],
   standalone: true,
-  imports: [CommonModule,FormsModule],
+  imports: [CommonModule,FormsModule, RouterModule],
 })
 export class AdminFaqComponent implements OnInit {
   faqs: FAQ[] = [];
   selectedFAQ: FAQ | null = null;
   faqData: FAQ = { id: 0, question: '', answer: '', order: 0 };
 
-  constructor(private faqService: FAQService) {}
+  constructor(private faqService: FAQService, private router: Router) {}
 
   ngOnInit(): void {
     this.loadFAQs();
