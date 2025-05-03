@@ -109,6 +109,10 @@
                           </dl>
                         </div>
                       </div>
+
+                        <dt class="col-sm-4">Newsletter erhalten:</dt>
+                        <dd class="col-sm-8">{{ userData.dataConsent ? 'Ja' : 'Nein' }}</dd>
+
                     
                       <!-- <div class="card shadow-sm mb-4" *ngIf="userData.userProfile">
                         <div class="card-header">
@@ -323,9 +327,15 @@
                       'text-success': getPasswordStrength(updatedUserData.password) === '🟢 Stark' || 
                                       getPasswordStrength(updatedUserData.password) === '🟢💪 Sehr stark!'}">
                                   {{ getPasswordStrength(updatedUserData.password) }}
-                    </p>
-                    
-                    <p *ngIf="passwordMismatch" class="text-danger">Die Passwörter stimmen nicht überein!</p>    
+                    </p>                    
+                    <p *ngIf="passwordMismatch" class="text-danger">Die Passwörter stimmen nicht überein!</p>  
+
+                  
+                        <div class="form-check consent-container mt-4 mb-4"> <input class="form-check-input" type="checkbox" id="dataConsentToggle" [(ngModel)]="updatedUserData.dataConsent" name="dataConsent"/>
+                          <label class="form-check-label" for="dataConsentToggle">
+                            Ich möchte E-Mail-Kommunikation (Newsletter, Infos) erhalten.
+                          </label>
+                        </div>
 
 
                     <!-- ✅ Buttons -->

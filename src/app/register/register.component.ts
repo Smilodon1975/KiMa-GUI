@@ -5,6 +5,8 @@ import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { OnInit } from '@angular/core';
+import { RegisterModel } from '../models/register.model';
+
 
 
 
@@ -16,18 +18,19 @@ import { OnInit } from '@angular/core';
   imports: [FormsModule, CommonModule, RouterModule]
 })
 export class RegisterComponent implements OnInit {
-  registerData: { email: string; password: string; userName?: string; birthDate?: string } = {
+  registerData: RegisterModel & { dataConsent: boolean } = {
     email: '',
     password: '',
     userName: '',
-    birthDate: ''
-  }; 
+    dataConsent: false
+  };
 
   confirmPassword: string = '';
   passwordMismatch: boolean = false;
   successMessage: string | null = null;
   errorMessage: string | null = null;
   maxDate: string = '';
+  
 
   constructor(private authService: AuthService, private router: Router) {
     const today = new Date();
@@ -42,22 +45,14 @@ export class RegisterComponent implements OnInit {
     this.errorMessage = null;
   }
 
-/** Prüft, ob das eingegebene Datum mindestens 16 Jahre zurückliegt */
-// isAgeValid(): boolean {
-//   if (!this.registerData.birthDate) return false;
-//   const birth = new Date(this.registerData.birthDate);
-//   const today = new Date();
-//   let age = today.getFullYear() - birth.getFullYear();
-//   const m = today.getMonth() - birth.getMonth();
-//   if (m < 0 || (m === 0 && today.getDate() < birth.getDate())) {
-//     age--;
-//   }
-//   return age >= 16;
-// }
 
   // ✅ Registriert einen neuen Benutzer und leitet nach Erfolg zum Login weiter
   onRegister() {
    
+    if (!this.registerData.dataConsent) {
+      this.errorMessage = 'Du musst der Daten­verarbeitung zustimmen.';
+      return;
+    }
     if (this.registerData.password !== this.confirmPassword) {
       this.errorMessage = "Die Passwörter stimmen nicht überein!";
       return;
@@ -72,8 +67,7 @@ export class RegisterComponent implements OnInit {
         this.errorMessage = error;
       }
     });
-  }
-  
+  }  
 
   validatePassword(): boolean {
     const password = this.registerData.password;
@@ -105,5 +99,17 @@ export class RegisterComponent implements OnInit {
     }
   }
   
+  /** Prüft, ob das eingegebene Datum mindestens 16 Jahre zurückliegt */
+// isAgeValid(): boolean {
+//   if (!this.registerData.birthDate) return false;
+//   const birth = new Date(this.registerData.birthDate);
+//   const today = new Date();
+//   let age = today.getFullYear() - birth.getFullYear();
+//   const m = today.getMonth() - birth.getMonth();
+//   if (m < 0 || (m === 0 && today.getDate() < birth.getDate())) {
+//     age--;
+//   }
+//   return age >= 16;
+// }
 
 }  

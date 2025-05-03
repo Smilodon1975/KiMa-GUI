@@ -6,6 +6,12 @@
   <div *ngIf="errorMessage" class="alert alert-danger text-center">{{ errorMessage }}</div>
   <div *ngIf="loginMessage" class="alert alert-success text-center">{{ loginMessage }}</div>
 
+  <nav class="nav">
+    <a class="nav-link" routerLink="/admin">Admin Dashboard</a>
+    <a class="nav-link" routerLink="/admin-faq">FAQ verwalten</a>  
+    <a class="nav-link" routerLink="/admin-news">News verwalten</a>
+  </nav>
+
   <!-- ✅ Suchfeld zur Filterung der Probanden -->
   <div class="input-group mb-3">
     <input [(ngModel)]="searchText" (input)="filterUsers()" type="text" class="form-control" placeholder="Probanden suchen...">

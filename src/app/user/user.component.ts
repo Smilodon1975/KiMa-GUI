@@ -88,10 +88,9 @@ export class UserComponent implements OnInit {
                 zip: data.zip,
                 city: data.city,
                 country: data.country,
-                // Initialisiere das Profil-Objekt - WICHTIG!
-                // Entweder aus data.profile (falls API es mitschickt) oder als leeres Objekt/Default
+                dataConsent: data.dataConsent,
                 userProfile: data.userProfile ? { ...data.userProfile } : this.getDefaultProfile()
-                // Kein Passwort hier initialisieren
+               
             };
             console.log("Geladene Daten für Bearbeitung:", this.updatedUserData);
           },
@@ -185,6 +184,7 @@ export class UserComponent implements OnInit {
             zip: this.updatedUserData.zip,
             city: this.updatedUserData.city,
             country: this.updatedUserData.country,
+            dataConsent: this.updatedUserData.dataConsent,
             // Passwort nur mitsenden, wenn es gesetzt wurde
             ...(this.updatedUserData.password && { password: this.updatedUserData.password })
         };

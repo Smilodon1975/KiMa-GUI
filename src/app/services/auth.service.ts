@@ -87,9 +87,7 @@ export class AuthService {
         return throwError(() => error);
       })
     );
-  }
- 
-  
+  }  
 
   // ✅ Führt Logout durch
   logout(): void {

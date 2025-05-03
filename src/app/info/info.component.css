@@ -105,3 +105,28 @@ section {
     margin: 0 auto; /* Zentriert das Bild horizontal, wenn text-center nicht reicht */
    
   }
+
+  /* Neuer Text-Akzent passend zu deinem Türkis */
+.text-accent {
+  color: var(--secondary-color) !important;
+}
+
+/* Neuer Button-Style mit demselben Akzent */
+.btn-accent {
+  background-color: var(--secondary-color);
+  border-color: var(--secondary-color);
+  color: #fff;
+}
+.btn-accent:hover,
+.btn-accent:focus {
+  background-color: var(--light-secondary-color);
+  border-color: var(--light-secondary-color);
+  color: #333;
+}
+
+/* Daumen-hoch-Icon im Hintergrund */
+.thumb-icon {
+  font-size: 4rem;               /* Größe anpassen nach Geschmack */
+  color: var(--secondary-color); /* Dieselbe Akzentfarbe */
+}
+

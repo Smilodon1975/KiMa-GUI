@@ -1,0 +1,22 @@
+Änderungen für den Commit hinzufügen
+git add .
+✅ Das fügt alle neuen/geänderten Dateien zum Commit hinzu.
+Falls du nur bestimmte Dateien committen willst:
+git add DateiName.cs
+________________________________________
+Commit erstellen
+git commit -m "Beschreibung"
+✅ Jetzt sind die Änderungen lokal gespeichert.
+________________________________________
+Änderungen zu GitHub pushen
+Falls dein Branch main oder master heißt:
+git push origin main
+Falls du in einem anderen Branch arbeitest (z. B. dev):
+git push origin dev
+✅ Jetzt sind die Änderungen in GitHub gespeichert.
+________________________________________
+🚀 Extra-Tipps
+Falls du einen neuen Branch erstellen willst:
+git checkout -b feature-debugging
+git push origin feature-debugging
+Falls Git dich nach deinen GitHub-Zugangsdaten fragt, kannst du stattdessen SSH oder einen Token verwenden.

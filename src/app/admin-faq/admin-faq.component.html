@@ -1,6 +1,13 @@
 <!-- admin-faq.component.html -->
 <section class="container my-5">
     <h2 class="text-center">FAQ Verwaltung</h2>
+
+    <nav class="nav">
+      <a class="nav-link" routerLink="/admin">Admin Dashboard</a>
+      <a class="nav-link" routerLink="/admin-faq">FAQ verwalten</a>  
+      <a class="nav-link" routerLink="/admin-news">News verwalten</a>
+    </nav>
+
     <button class="btn btn-success mb-3" (click)="openEditModal()">Neues FAQ hinzufügen</button>
   
     <ul class="list-group">

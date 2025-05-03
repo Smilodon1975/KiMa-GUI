@@ -20,5 +20,7 @@ export interface User {
   zip?: string;
   city?: string;
   country?: string;  
+  dataConsent: boolean; // Zustimmung zur Datenverarbeitung
   userProfile?: UserProfile; // Optional im Basis‑Objekt
+  
 }

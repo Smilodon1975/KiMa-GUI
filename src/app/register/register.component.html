@@ -6,7 +6,7 @@
         <img src="https://cdn-icons-png.flaticon.com/512/552/552848.png" alt="Willkommen" class="mb-3" style="width: 80px; height: 80px;">
         <h5 class="mb-2">Willkommen bei KiMa!</h5>
         <p class="text-muted mb-0">
-          Schön, dass du da bist – wir freuen uns, wenn du Teil unserer Community wirst!
+          Schön, dass du da bist – wir freuen uns, wenn du Teil unseres Teams wirst!
           Die Registrierung ist freiwillig und unverbindlich.
           Du kannst deine Daten jederzeit bearbeiten oder löschen.
           Als Dankeschön für deine Teilnahme erhältst du eine kleine Aufwandsentschädigung.
@@ -16,8 +16,7 @@
       <p *ngIf="successMessage" class="text-success">{{ successMessage }}</p>
       <p *ngIf="errorMessage" class="text-danger">{{ errorMessage }}</p>
 
-      <form (ngSubmit)="onRegister()" autocomplete="off">
-        
+      <form (ngSubmit)="onRegister()" autocomplete="off">        
 
         <!-- E-Mail -->
         <div class="mb-3">
@@ -53,10 +52,19 @@
           <input type="text" class="form-control" id="username" name="username" [(ngModel)]="registerData.userName"/>
         </div>
 
+        <!-- Datenschutz Zustimmung -->
+        <div class="form-check consent-container mt-4 mb-4">
+          <input class="form-check-input" type="checkbox" id="dataConsent" [(ngModel)]="registerData.dataConsent"name="dataConsent" required/>
+
+          <label class="form-check-label" for="dataConsent">
+            Ich bin damit einverstanden, dass meine personenbezogenen Daten für die digitale Kommunikation verarbeitet werden (Ansprache per E-Mail). Ich verstehe, dass ich meine Zustimmung jederzeit aktualisieren bzw. widerrufen kann, indem ich meine Zustimmung rückgängig mache.
+          </label>
+        </div>
+
         <button
           type="submit"
           class="btn btn-success w-100"
-          [disabled]="registerData.password !== confirmPassword">Registrieren
+          [disabled]="registerData.password !== confirmPassword || !registerData.dataConsent">Registrieren
         </button>
 
         <div class="text-center mt-3">
