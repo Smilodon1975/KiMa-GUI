@@ -17,6 +17,7 @@ import { AdminNewsComponent } from './admin-news/admin-news.component';
 import { NewsPageComponent } from './pages/news-page/news-page.component';
 import { MaintenanceComponent } from './pages/maintenance/maintenance.component';
 import { FeedbackComponent } from './feedback/feedback.component';
+import { AdminFeedbackComponent } from './admin-feedback/admin-feedback.component'; 
 
 // ✅ AuthGuard für geschützte Routen
 const authGuard: CanActivateFn = () => {
@@ -66,6 +67,7 @@ export const routes: Routes = [
   { path: 'admin-news', component: AdminNewsComponent, canActivate: [AdminGuard, maintenanceGuard] },
   { path: 'news', component: NewsPageComponent, canActivate: [maintenanceGuard] },
   { path: 'feedback', component: FeedbackComponent, canActivate: [authGuard, maintenanceGuard] },
+  { path: 'admin-feedback', component: AdminFeedbackComponent, canActivate: [AdminGuard, maintenanceGuard] },
   { path: 'maintenance', component: MaintenanceComponent },
   { path: '**', redirectTo: '' }
 ];
