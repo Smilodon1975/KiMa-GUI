@@ -36,9 +36,9 @@
                 <li class="nav-item" *ngIf="userRole === 'Proband'">
                         <a class="nav-link" routerLink="/user" (click)="closeNavbar()" routerLinkActive="active-nav-link">Mein Bereich</a>
                 </li>
-                <li class="nav-item">
+                <!-- <li class="nav-item">
                     <a class="nav-link" (click)="closeNavbar()" href="https://tcd3b40f5.emailsys1a.net/166/3797/894a492721/subscribe/form.html?_g=1600358208" target="_blank">Newsletter</a>
-                </li>
+                </li> -->
                 <li class="nav-item" *ngIf="isLoggedIn">
                     <a class="nav-link" (click)="logout()" (click)="closeNavbar()" style="cursor: pointer;">Logout</a>
                 </li>
