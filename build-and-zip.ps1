@@ -9,8 +9,8 @@ ng build --configuration production
 
 # Schritt 2: Pfade definieren
 # -> nur noch dist\ki-ma-gui, nicht dist\ki-ma-gui\browser
-$distRoot = "dist\ki-ma-gui"
-$zipPath  = Join-Path $distRoot "kima-gui.zip"
+$buildPath = "dist\ki-ma-gui\browser"
+$zipPath  = Join-Path "dist\ki-ma-gui" "kima-gui.zip"
 
 # Schritt 3: Vorherige ZIP löschen (falls vorhanden)
 if (Test-Path $zipPath) {
@@ -21,7 +21,7 @@ if (Test-Path $zipPath) {
 # Schritt 4: ZIP erstellen (alles aus dem dist-Ordner reinpacken)
 Write-Host "Erstelle neues ZIP: kima-gui.zip (inkl. web.config & Assets)" -ForegroundColor Yellow
 Compress-Archive `
-    -Path (Join-Path $distRoot "*") `
+    -Path (Join-Path $buildPath "*") `
     -DestinationPath $zipPath
 
 # Erfolgsmeldung

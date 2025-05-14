@@ -1,0 +1,29 @@
+
+
+<div class="container mt-4">
+    <h2>Projekt versenden</h2>
+    <form (ngSubmit)="onSend()" #fm="ngForm">
+      <div class="mb-3">
+        <label>Projekt-Name</label>
+        <input type="text" class="form-control" [(ngModel)]="campaignName" name="campaignName" required>
+      </div>
+      <div class="mb-3">
+        <label>Datei hochladen</label>
+        <input type="file" class="form-control" (change)="onFile($event)" required>
+      </div>
+      <div class="mb-3">
+        <label>Empfänger wählen</label>
+        <ng-select 
+          [items]="users" 
+          bindLabel="email" 
+          bindValue="email" 
+          [(ngModel)]="recipients" 
+          name="recipients" 
+          [multiple]="true">
+        </ng-select>
+      </div>
+      <button class="btn btn-primary" [disabled]="!fm.form.valid || !file">Senden</button>
+    </form>
+    <div *ngIf="message" class="alert alert-info mt-3">{{ message }}</div>
+  </div>
+  

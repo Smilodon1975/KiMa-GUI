@@ -46,8 +46,6 @@ export class UserService {
           return throwError(() => error);
         })
       );
-  }
-  
-  
+  } 
 
 }
