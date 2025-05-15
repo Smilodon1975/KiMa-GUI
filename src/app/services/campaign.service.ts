@@ -3,6 +3,8 @@
 import { environment } from '../../environments/environment';
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { CampaignUser } from '../models/user.model';
+import { PaginatedResult } from '../models/user.model';
 
 @Injectable({ providedIn: 'root' })
 export class CampaignService {
@@ -10,11 +12,15 @@ export class CampaignService {
 
   constructor(private http: HttpClient) {}
   
-  sendCampaign(
-    campaignName: string,
-    file: File,
-    recipients: string[]
-  ) {
+
+  getCampaignUsers(page: number, pageSize: number) {
+  return this.http.get<PaginatedResult<CampaignUser>>(
+   `${this.apiUrl}/campaignUsers?page=${page}&pageSize=${pageSize}`
+  );
+}
+
+  
+  sendCampaign(campaignName: string, file: File, recipients: string[]  ) {
     const form = new FormData();
     form.append('campaignName', campaignName);
     form.append('attachment', file, file.name);

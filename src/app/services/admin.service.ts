@@ -1,6 +1,8 @@
-import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { Injectable } from '@angular/core';
+import { User } from '../models/user.model';  
+import { HttpClient } from '@angular/common/http';
+import { PaginatedResult } from '../models/user.model';
 import { UserUpdateModel } from '../models/user-update.model';
 import { environment } from '../../environments/environment';
 
@@ -32,6 +34,12 @@ export class AdminService {
   // ✅ Löscht einen Benutzer anhand seiner ID
   deleteUser(userId: number): Observable<any> {
     return this.http.delete(`${this.adminUrl}/delete/${userId}`);
+  }
+
+  getUsers(page: number, pageSize: number) {
+    return this.http.get<PaginatedResult<User>>( 
+      `/api/users?page=${page}&pageSize=${pageSize}`
+    );
   }
 }
 

@@ -54,17 +54,17 @@
 
         <!-- Datenschutz Zustimmung -->
         <div class="form-check consent-container mt-4 mb-4">
-          <input class="form-check-input" type="checkbox" id="dataConsent" [(ngModel)]="registerData.dataConsent"name="dataConsent" required/>
+          <input class="form-check-input" type="checkbox" id="newsletterSub" [(ngModel)]="registerData.newsletterSub"name="newsletterSub" required/>
 
-          <label class="form-check-label" for="dataConsent">
-            Ich bin damit einverstanden, dass meine personenbezogenen Daten für die digitale Kommunikation verarbeitet werden (Ansprache per E-Mail). Ich verstehe, dass ich meine Zustimmung jederzeit aktualisieren bzw. widerrufen kann, indem ich meine Zustimmung rückgängig mache.
+          <label class="form-check-label" for="newsletterSub">
+            Ich bin damit einverstanden, dass meine personenbezogenen Daten für die digitale Kommunikation verarbeitet werden. Ich verstehe, dass ich meine Zustimmung jederzeit aktualisieren bzw. widerrufen kann, indem ich meine Zustimmung rückgängig mache.
           </label>
         </div>
 
         <button
           type="submit"
           class="btn btn-success w-100"
-          [disabled]="registerData.password !== confirmPassword || !registerData.dataConsent">Registrieren
+          [disabled]="registerData.password !== confirmPassword || !registerData.newsletterSub">Registrieren
         </button>
 
         <div class="text-center mt-3">

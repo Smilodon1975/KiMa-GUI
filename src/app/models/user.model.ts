@@ -20,7 +20,20 @@ export interface User {
   zip?: string;
   city?: string;
   country?: string;  
-  dataConsent: boolean; // Zustimmung zur Datenverarbeitung
-  userProfile?: UserProfile; // Optional im Basis‑Objekt
-  
+  userProfile?: UserProfile;
+  newsletterSub: boolean;
+}
+
+export interface PaginatedResult<T> {
+  items: T[];
+  totalCount: number;
+}
+
+export interface CampaignUser {
+  id: number;
+  email: string;
+  userName?: string;
+  firstName?: string;
+  lastName?: string;
+  newsletterSub: boolean;
 }

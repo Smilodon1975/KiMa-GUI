@@ -6,9 +6,7 @@ import { UserProfile } from '../models/user-profile.model';
 import { User } from '../models/user.model';
 import { environment } from '../../environments/environment'; // ✅ Importiere die Umgebungsvariablen
 
-@Injectable({
-  providedIn: 'root'
-})
+@Injectable({providedIn: 'root'})
 export class UserService {
   private userUrl: string = `${environment.apiUrl}/user`; 
   private profileUrl: string = `${environment.apiUrl}/userprofile`; 

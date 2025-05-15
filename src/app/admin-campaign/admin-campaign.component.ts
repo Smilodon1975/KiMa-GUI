@@ -1,11 +1,11 @@
 // admin-rapidmail.component.ts
 import { Component, OnInit } from '@angular/core';
 import { CampaignService } from '../services/campaign.service';
-import { UserService } from '../services/user.service';
-import { AdminService } from '../services/admin.service';
-import { NgModule } from '@angular/core';
+import { PaginatedResult } from '../models/user.model';
+import { User } from '../models/user.model';
+import { CampaignUser } from '../models/user.model';
 import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, NgForm } from '@angular/forms';
 import { NgSelectModule } from '@ng-select/ng-select';
 
 @Component({
@@ -17,34 +17,76 @@ import { NgSelectModule } from '@ng-select/ng-select';
 
 })
 export class AdminCampaignComponent implements OnInit {
-  users: Array<{ email: string }> = [];
+  users: CampaignUser[] = []; 
   recipients: string[] = [];
   campaignName = '';
   file?: File;
   message?: string;
+  user: User[] = [];
+  selected = new Set<string>();
+  allSelected = false;
+  page = 1;
+  pageSize = 10;
+  totalCount = 0;
 
-  constructor(
-    private campaign: CampaignService, private userSvc: UserService, private adminSvc: AdminService) {}
+  constructor(private campaignSvc: CampaignService) {}
 
-  ngOnInit() {
-    // Alle User-Emails laden
-    this.adminSvc.getAllUsers().subscribe(list => {
-      this.users = list.map(u => ({ email: u.email }));
-    });
+   ngOnInit(): void {
+    this.loadPage();
   }
 
-  onFile(evt: any) {
-     const input = evt.target as HTMLInputElement;
-    if (input.files?.length)
-    this.file = evt.target.files[0];
-  }
-
-  onSend() {
-    if (!this.file) return;
-    this.campaign.sendCampaign(this.campaignName, this.file, this.recipients)
-      .subscribe({
-        next: () => this.message = 'Kampagne erfolgreich versendet!',
-        error: err => this.message = 'Fehler: ' + err.message
+  loadPage(): void {
+    this.campaignSvc.getCampaignUsers(this.page, this.pageSize)
+      .subscribe((res: PaginatedResult<CampaignUser>) => {
+        this.users = res.items;
+        this.totalCount = res.totalCount;
+        this.selected.clear();
+        this.allSelected = false;
       });
+  }
+
+  toggleAll(): void {
+    if (this.allSelected) {
+      this.users.forEach(u => this.selected.add(u.email));
+    } else {
+      this.selected.clear();
+    }
+  }
+
+  toggleOne(email: string): void {
+    if (this.selected.has(email)) {
+      this.selected.delete(email);
+    } else {
+      this.selected.add(email);
+    }
+    this.allSelected = this.users.every(u => this.selected.has(u.email));
+  }
+
+  onPageChange(newPage: number): void {
+    this.page = newPage;
+    this.loadPage();
+  }
+
+  onFile(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    this.file = input.files ? input.files[0] : undefined;
+  }
+
+  onSend(fm: NgForm): void {
+    if (!fm.valid || !this.file || this.selected.size === 0) 
+      return;
+    
+    this.campaignSvc.sendCampaign(
+      this.campaignName,      
+      this.file!,
+      Array.from(this.selected)
+    ).subscribe(() => {
+      this.message = `Newsletter an ${this.selected.size} Empfänger verschickt.`;
+      fm.resetForm();
+      this.file = undefined;
+      this.loadPage();
+    }, err => {
+      this.message = 'Fehler beim Versand.';
+    });
   }
 }

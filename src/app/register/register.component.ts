@@ -18,11 +18,11 @@ import { RegisterModel } from '../models/register.model';
   imports: [FormsModule, CommonModule, RouterModule]
 })
 export class RegisterComponent implements OnInit {
-  registerData: RegisterModel & { dataConsent: boolean } = {
+  registerData: RegisterModel & { newsletterSub: boolean } = {
     email: '',
     password: '',
     userName: '',
-    dataConsent: false
+    newsletterSub: false
   };
 
   confirmPassword: string = '';
@@ -49,7 +49,7 @@ export class RegisterComponent implements OnInit {
   // ✅ Registriert einen neuen Benutzer und leitet nach Erfolg zum Login weiter
   onRegister() {
    
-    if (!this.registerData.dataConsent) {
+    if (!this.registerData.newsletterSub) {
       this.errorMessage = 'Du musst der Daten­verarbeitung zustimmen.';
       return;
     }

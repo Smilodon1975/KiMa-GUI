@@ -110,8 +110,8 @@
                         </div>
                       </div>
 
-                        <dt class="col-sm-4">Newsletter erhalten:</dt>
-                        <dd class="col-sm-8">{{ userData.dataConsent ? 'Ja' : 'Nein' }}</dd>
+                        <dt class="col-sm-4">angemeldet für Newsletter:</dt>
+                        <dd class="col-sm-8">{{ userData.newsletterSub ? 'Ja' : 'Nein' }}</dd>
 
                     
                       <!-- <div class="card shadow-sm mb-4" *ngIf="userData.userProfile">
@@ -331,9 +331,9 @@
                     <p *ngIf="passwordMismatch" class="text-danger">Die Passwörter stimmen nicht überein!</p>  
 
                   
-                        <div class="form-check consent-container mt-4 mb-4"> <input class="form-check-input" type="checkbox" id="dataConsentToggle" [(ngModel)]="updatedUserData.dataConsent" name="dataConsent"/>
+                        <div class="form-check consent-container mt-4 mb-4"> <input class="form-check-input" type="checkbox" id="newsletterSubToggle" [(ngModel)]="updatedUserData.newsletterSub" name="newsletterSub"/>
                           <label class="form-check-label" for="dataConsentToggle">
-                            Ich möchte E-Mail-Kommunikation (Newsletter, Infos) erhalten.
+                            Ja, Ich möchte mich für den Newsletter anmelden.
                           </label>
                         </div>
 

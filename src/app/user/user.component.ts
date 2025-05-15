@@ -88,7 +88,7 @@ export class UserComponent implements OnInit {
                 zip: data.zip,
                 city: data.city,
                 country: data.country,
-                dataConsent: data.dataConsent,
+                newsletterSub: data.newsletterSub,
                 userProfile: data.userProfile ? { ...data.userProfile } : this.getDefaultProfile()
                
             };
@@ -184,7 +184,7 @@ export class UserComponent implements OnInit {
             zip: this.updatedUserData.zip,
             city: this.updatedUserData.city,
             country: this.updatedUserData.country,
-            dataConsent: this.updatedUserData.dataConsent,
+            newsletterSub: this.updatedUserData.newsletterSub,
             // Passwort nur mitsenden, wenn es gesetzt wurde
             ...(this.updatedUserData.password && { password: this.updatedUserData.password })
         };
