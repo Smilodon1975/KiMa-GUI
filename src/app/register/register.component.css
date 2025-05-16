@@ -44,11 +44,11 @@
 
   /* In deiner register.component.css oder globalen Styles */
 .consent-container {
-  padding: 0.75rem;
-  border: 2px solid var(--secondary-color);
-  border-radius: 0.5rem;
-  background-color: rgba(26, 188, 156, 0.1); /* sanfter Türkis-Hauch */
-  margin-bottom: 1rem;
+  border: none;
+  background: transparent;
+  padding: 0;
+  color: #555;
+  font-size: 0.95rem;
 }
 
 .consent-container .form-check-input {

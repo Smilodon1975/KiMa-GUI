@@ -9,7 +9,7 @@
           Schön, dass du da bist – wir freuen uns, wenn du Teil unseres Teams wirst!
           Die Registrierung ist freiwillig und unverbindlich.
           Du kannst deine Daten jederzeit bearbeiten oder löschen.
-          Als Dankeschön für deine Teilnahme erhältst du eine kleine Aufwandsentschädigung.
+          Als Dankeschön für deine Teilnahme an Projekten erhältst du eine kleine Aufwandsentschädigung.
         </p>
       </div>
 
@@ -53,13 +53,14 @@
         </div>
 
         <!-- Datenschutz Zustimmung -->
-        <div class="form-check consent-container mt-4 mb-4">
-          <input class="form-check-input" type="checkbox" id="newsletterSub" [(ngModel)]="registerData.newsletterSub"name="newsletterSub" required/>
-
+        <div class="consent-container d-flex align-items-start my-4">
+          <input class="form-check-input me-2 mt-1" type="checkbox" id="newsletterSub" [(ngModel)]="registerData.newsletterSub"
+            name="newsletterSub" />
           <label class="form-check-label" for="newsletterSub">
-            Ich bin damit einverstanden, dass meine personenbezogenen Daten für die digitale Kommunikation verarbeitet werden. Ich verstehe, dass ich meine Zustimmung jederzeit aktualisieren bzw. widerrufen kann, indem ich meine Zustimmung rückgängig mache.
+            Ich bin damit einverstanden, dass meine personenbezogenen Daten für die digitale Kommunikation verarbeitet werden. Ich kann meine Einwilligung jederzeit ändern oder widerrufen.
           </label>
         </div>
+
 
         <button
           type="submit"
