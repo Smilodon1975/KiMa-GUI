@@ -101,8 +101,24 @@
                             <dt class="col-sm-4">Straße:</dt>
                             <dd class="col-sm-8">{{ userData.street || 'Nicht angegeben' }}</dd>
                     
+                            <!-- <dt class="col-sm-4">PLZ / Ort:</dt>
+                            <dd class="col-sm-8">{{ userData.zip || 'n.a.' }} {{ userData.city || 'n.a.' }}</dd> -->
+
                             <dt class="col-sm-4">PLZ / Ort:</dt>
-                            <dd class="col-sm-8">{{ userData.zip || 'n.a.' }} {{ userData.city || 'n.a.' }}</dd>
+                            <dd class="col-sm-8">
+                              <!-- Wenn zip oder city vorhanden ist … -->
+                              <ng-container *ngIf="userData.zip || userData.city; else na">
+                                <!-- zeige erst die PLZ (falls vorhanden) … -->
+                                <span *ngIf="userData.zip">{{ userData.zip }}</span>
+                                <!-- … und einen Leerraum nur, wenn beides da ist … -->
+                                <span *ngIf="userData.zip && userData.city">&nbsp;</span>
+                                <!-- … dann den Ort (falls vorhanden) -->
+                                <span *ngIf="userData.city">{{ userData.city }}</span>
+                              </ng-container>
+                              <!-- … sonst nur einmal n.a. -->
+                              <ng-template #na>n.a.</ng-template>
+                            </dd>
+
                     
                             <dt class="col-sm-4">Land:</dt>
                             <dd class="col-sm-8">{{ userData.country || 'Nicht angegeben' }}</dd>
@@ -330,13 +346,18 @@
                     </p>                    
                     <p *ngIf="passwordMismatch" class="text-danger">Die Passwörter stimmen nicht überein!</p>  
 
-                  
-                        <div class="form-check consent-container mt-4 mb-4"> <input class="form-check-input" type="checkbox" id="newsletterSubToggle" [(ngModel)]="updatedUserData.newsletterSub" name="newsletterSub"/>
-                          <label class="form-check-label" for="dataConsentToggle">
-                            Ja, Ich möchte mich für den Newsletter anmelden.
-                          </label>
-                        </div>
+                    <hr class="my-4">
 
+                  <h5>Newsletter Zustimmung</h5>
+                  <!--Newsltter Zustimmung-->
+                        <div class="consent-container d-flex align-items-start my-3">
+                          <input class="form-check-input me-2 mt-1" type="checkbox" id="newsletterSubToggle" [(ngModel)]="updatedUserData.newsletterSub" name="newsletterSub" />
+                    <label class="form-check-label" for="newsletterSubToggle">
+                      Ja, ich möchte mich für den Newsletter anmelden.
+                    </label>
+                  </div>
+
+                    <hr class="my-4">
 
                     <!-- ✅ Buttons -->
                     <div class="d-flex justify-content-center mt-4 gap-2 flex-wrap">
@@ -347,9 +368,6 @@
                         <i class="bi bi-x-circle"></i> Abbrechen
                       </button>
                     </div>
-
-
-                    <hr class="my-4">
 
                     <div class="border-top pt-4 mt-5 text-center">
                       <button type="button" class="btn btn-outline-danger d-inline-flex align-items-center gap-2" (click)="openDeleteModal()">
@@ -370,7 +388,7 @@
                     </div> -->
 
 
-                    <hr class="my-4">
+                    <!-- <hr class="my-4"> -->
                     <!-- Ausklappbarer Bereich für Zusatzinformationen ------------------------------------------------------------------------>
                    
                     <div *ngIf="showExtra" class="mt-3">

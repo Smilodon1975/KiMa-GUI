@@ -38,33 +38,34 @@
     400px auto,    /* linkes Logo */
     400px auto;    /* rechtes Logo */
   
-  /* leichter Überzug, damit’s nicht zu hart wirkt */
+ 
   background-color: rgba(255,255,255,0.9);
   background-blend-mode: lighten;
 }
 
-/* In deiner register.component.css oder globalen Styles */
-.consent-container {
-  padding: 0.75rem;
-  border: 2px solid var(--secondary-color);
-  border-radius: 0.5rem;
-  background-color: rgba(26, 188, 156, 0.1); /* sanfter Türkis-Hauch */
-  margin-bottom: 1rem;
-}
+  .consent-container {
+    border: none;
+    background: transparent;
+    padding: 0;
+    color: #555;
+    font-size: 0.95rem;
+  }
 
-.consent-container .form-check-input {
-  width: 1.5em;
-  height: 1.5em;
-  margin-top: 0.25em;
-  border: 2px solid var(--secondary-color);
-}
+  .consent-container .form-check-input {
+    width: 1.5em;
+    height: 1.5em;
+    margin-top: 0.25em;
+    border: 2px solid var(--secondary-color);
+  }
 
-.consent-container .form-check-input:checked {
-  background-color: var(--secondary-color);
-  border-color: var(--secondary-color);
-}
+  .consent-container .form-check-input:checked {
+    background-color: var(--secondary-color);
+    border-color: var(--secondary-color);
+  }
 
-.consent-container .form-check-label {
-  font-weight: 500;
-  color: var(--secondary-text-color);
+  .consent-container .form-check-label {
+    font-weight: 500;
+    color: var(--secondary-text-color);
+  }.form-check-label {
+  margin: 0;  /* entfernt unerwünschte Abstände */
 }
