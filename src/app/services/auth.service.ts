@@ -1,53 +1,104 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject  } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, of, catchError, map, tap, throwError, BehaviorSubject } from 'rxjs';
 import { jwtDecode } from 'jwt-decode';
 import { environment } from '../../environments/environment';
+import { Router } from '@angular/router';
 
+interface JwtPayload {exp: number; [key: string]: any;}
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
+  private http = inject(HttpClient);
+  private router = inject(Router);
   private authUrl = `${environment.apiUrl}/auth`;
-    private userUrl = `${environment.apiUrl}/user`;
+  private userUrl = `${environment.apiUrl}/user`;
+  private readonly tokenKey = 'token';
+  private authStatus = new BehaviorSubject<boolean>(this.hasValidToken());
+  
+  private userRole = new BehaviorSubject<string | null>(null);
 
-  private authStatus = new BehaviorSubject<boolean>(this.isTokenValid()); // ✅ Speichert den Auth-Status
-  private userRole = new BehaviorSubject<string | null>(null); // ✅ Speichert die Benutzerrolle  
+  authStatusChanged = this.authStatus.asObservable();
+  userRoleChanged = this.userRole.asObservable();
 
-  authStatusChanged = this.authStatus.asObservable(); // ✅ Beobachtbarer Login-Status
-  userRoleChanged = this.userRole.asObservable(); // ✅ Beobachtbare Benutzerrolle
-
-  constructor(private http: HttpClient) {
-    this.initUserRole(); // ✅ Versucht Benutzerrolle aus Token zu setzen
+  constructor() {
+    this.authStatus.next(this.hasValidToken());
+    this.initUserRole();
+  }
+  private hasValidToken(): boolean {
+    const token = localStorage.getItem(this.tokenKey);
+    if (!token) return false;
+    try {
+      const { exp } = jwtDecode<JwtPayload>(token);
+      // exp ist Unix-Zeit in Sekunden
+      return Math.floor(Date.now() / 1000) < exp;
+    } catch {
+      return false;
+    }
   }
 
-  // ✅ Prüft, ob ein Token existiert
-  private hasToken(): boolean {
-    return !!localStorage.getItem('token');
+ checkToken(): void {
+    if (!this.hasValidToken()) {
+      this.logout();
+    }
+  }
+  
+  login(data: { email: string; password:string }) {
+    return this.http.post<{token:string}>(`${environment.apiUrl}/auth/login`, data)
+      .pipe(
+        tap(res => {
+          localStorage.setItem(this.tokenKey, res.token);
+          this.authStatus.next(true);
+          this.initUserRole();
+        }),
+        catchError(err => {
+          this.authStatus.next(false);
+          return throwError(() => err);
+        })
+      );
+    }
+
+ isLoggedIn(): boolean {
+    return this.hasValidToken();
   }
 
-  // ✅ Führt Login durch und speichert Token
-  login(loginData: any): Observable<any> {
-    return this.http.post<{ token: string }>(`${this.authUrl}/login`, loginData).pipe(
-      tap(response => {
-        if (response.token) {
-          localStorage.setItem('token', response.token);
-          this.authStatus.next(true); // ✅ Login-Status aktualisieren
-          this.initUserRole(); // ✅ Benutzerrolle setzen
-        }
-      })
-    );
+  logout(): void {
+    localStorage.removeItem(this.tokenKey);
+    this.authStatus.next(false);
+    this.userRole.next(null);
+  }
+
+  getUserRole(): Observable<string | null> {
+    return this.userRoleChanged;
+  }
+
+  getUserRoleSync(): string | null {
+    return this.userRole.value;
+  }
+
+  private initUserRole(): void {
+    const token = localStorage.getItem(this.tokenKey);
+    if (!token) {
+      this.userRole.next(null);
+      return;
+    }
+    try {
+      const decoded = jwtDecode<any>(token);
+      const role = decoded["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"] ?? null;
+      this.userRole.next(role);
+    } catch {
+      this.userRole.next(null);
+    }
   }
 
   // ✅ Führt Registrierung durch
   register(registerData: any): Observable<any> {
     return this.http.post<any>(`${this.authUrl}/register`, registerData).pipe(
       catchError(error => {
-        console.error("Registrierung fehlgeschlagen:", error);
-  
-        let errorMessage = "Registrierung fehlgeschlagen. Bitte überprüfe deine Eingaben.";
-  
+        console.error("Registrierung fehlgeschlagen:", error);  
+        let errorMessage = "Registrierung fehlgeschlagen. Bitte überprüfe deine Eingaben.";  
         if (error.error) {
           // Wenn das Fehlerobjekt eine "errors"-Eigenschaft hat
           if (error.error.errors) {
@@ -60,83 +111,17 @@ export class AuthService {
                 if (Array.isArray(messages)) {
                   errorMessages.push(...messages);
                 } else {
-                  errorMessages.push(messages.toString());
-                }
-              }
-            }
+                  errorMessages.push(messages.toString());}}}
             errorMessage = errorMessages.join(" ");
           } else if (typeof error.error === "string") {
             // Falls error.error direkt ein String ist
             errorMessage = error.error;
-          } else {
-            // Falls es ein Objekt ist, versuche es zu stringifizieren
-            errorMessage = JSON.stringify(error.error);
-          }
-        }
-        return throwError(() => errorMessage);
-      })
-    );
-  }  
+          } else {errorMessage = JSON.stringify(error.error);}}
+        return throwError(() => errorMessage);}));
+      }  
 
 
-  confirmEmail(email: string, token: string): Observable<any> {
-    const url = `${this.authUrl}/confirm-email?email=${encodeURIComponent(email)}&token=${encodeURIComponent(token)}`;
-    return this.http.get(url, { responseType: 'text' }).pipe(
-      catchError(error => {
-        console.error("E-Mail-Bestätigung fehlgeschlagen:", error);
-        return throwError(() => error);
-      })
-    );
-  }  
-
-  // ✅ Führt Logout durch
-  logout(): void {
-    localStorage.removeItem('token');
-    this.authStatus.next(false); // ✅ Auth-Status zurücksetzen
-    this.userRole.next(null); // ✅ Benutzerrolle zurücksetzen
-  }
-
-  // ✅ Prüft, ob der Benutzer eingeloggt ist
-  isLoggedIn(): boolean {
-    return this.authStatus.value;
-  }
-
-  // ✅ Gibt die Benutzerrolle als Observable zurück
-  getUserRole(): Observable<string | null> {
-    return this.userRoleChanged;
-  }
-
-  // ✅ Gibt die Benutzerrolle synchron zurück
-  getUserRoleSync(): string | null {
-    return this.userRole.value;
-  }
-
-  // ✅ Setzt die Benutzerrolle anhand des Tokens
-  private initUserRole(): void {
-    const token = localStorage.getItem('token');
-    if (token) {
-      try {
-        const decodedToken: any = jwtDecode(token);
-        console.log("Decoded Token Inhalt:", decodedToken);
-        
-        // ✅ Extrahiere die Rolle aus dem Token
-        const roleClaimKey = "http://schemas.microsoft.com/ws/2008/06/identity/claims/role";
-        const userRole = decodedToken[roleClaimKey] || null;
-        
-        console.log("Ermittelte Rolle aus Token:", userRole);
-        this.userRole.next(userRole);
-      } catch (error) {
-        console.error("Fehler beim Decodieren des Tokens:", error);
-        this.userRole.next(null);
-      }
-    } else {
-      console.warn("Kein Token gefunden beim Setzen der Benutzerrolle!");
-      this.userRole.next(null);
-    }
-  }
-
-  // ✅ Benutzer-ID aus Token abrufen
-  getUserId(): number | null {
+   getUserId(): number | null {
     const token = localStorage.getItem('token');
     if (!token) return null;
 
@@ -169,16 +154,17 @@ export class AuthService {
   }
   
 
-  // ✅ Prüft, ob das gespeicherte Token gültig ist
-  private isTokenValid(): boolean {
-    const token = localStorage.getItem('token');
-    if (!token) return false;
+ 
 
-    try {
-      const decodedToken: any = jwtDecode(token);
-      return !!decodedToken;
-    } catch (error) {
-      return false;
-    }
-  }
+  confirmEmail(email: string, token: string): Observable<any> {
+    const url = `${this.authUrl}/confirm-email?email=${encodeURIComponent(email)}&token=${encodeURIComponent(token)}`;
+    return this.http.get(url, { responseType: 'text' }).pipe(
+      catchError(error => {
+        console.error("E-Mail-Bestätigung fehlgeschlagen:", error);
+        return throwError(() => error);
+      })
+    );
+  } 
+
+
 }
