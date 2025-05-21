@@ -1,6 +1,6 @@
 
 
-
+<!-- Footer links Section -->
 <footer class="text-bg-dark pt-4 pb-3"> 
     <div class="container">
       <div class="row">
@@ -16,15 +16,12 @@
                  <li class="list-inline-item ms-2">                     
                      <a href="mailto:info@kimafo.de" class="footer-link">Kontakt</a>
                  </li>                
-                <!-- <li class="list-inline-item ms-2">
-                    <a href="#" data-bs-toggle="modal" data-bs-target="#agbModal" class="footer-link">AGB</a>
-                </li>                 -->
-                 <!-- <li class="list-inline-item ms-2">
-                    <a href="https://tcd3b40f5.emailsys1a.net/166/3797/894a492721/subscribe/form.html?_g=1600358208" target="_blank" class="footer-link">Newsletter</a>
-                 </li> -->
-                 <div class="list-inline-item ms-2 text-white-50">
+                <li class="list-inline-item ms-2">
+                    <a href="#" data-bs-toggle="modal" data-bs-target="#aboutModal" class="footer-link">About</a>
+                </li>  
+                 <!-- <div class="list-inline-item ms-2 text-white-50">
                     KiMa GUI v. {{ version.number }}
-                  </div>
+                  </div> -->
             </ul>
         </div>
   
@@ -35,10 +32,15 @@
       </div>
     </div>
   </footer>
+
+
+  <!-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------->
+  
+  <!-- Modal for Impressum -->
   
   <div class="modal fade" id="impressumModal" tabindex="-1" aria-labelledby="impressumModalLabel" aria-hidden="true">
     <div class="modal-dialog">
-        <div class="modal-content">
+        <div class="modal-content" style= "background-color: lightgrey;">
             <div class="modal-header">
                 <h5 class="modal-title" id="impressumModalLabel">Impressum</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
@@ -63,6 +65,9 @@
     </div>
 </div>
     
+<!-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------->
+
+<!-- Modal for Datenschutz -->
   
   
   <div class="modal fade" id="datenschutzModal" tabindex="-1" aria-labelledby="datenschutzModalLabel" aria-hidden="true">
@@ -114,57 +119,54 @@
         </div>
     </div>
 
-    <div class="modal fade" id="agbModal" tabindex="-1" aria-labelledby="agbModalLabel" aria-hidden="true">
+    <!-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------->
+
+    <!-- Modal About -->
+
+    <div class="modal fade" id="aboutModal" tabindex="-1" aria-labelledby="aboutModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-lg modal-dialog-scrollable">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="agbModalLabel">Allgemeine Geschäftsbedingungen (AGB)</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            <div class="modal-content bg-dark text-white">
+            <div class="modal-header">
+                <h5 class="modal-title text-bg-secondary p-3" id="aboutModalLabel">Über die Technologie hinter KiMa</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Schließen"></button>
+            </div>
+            <div class="modal-body">
+                <p>Diese Webanwendung wurde entwickelt von <strong>Andreas Kirschbaum</strong>, Fachinformatiker Anwendungsentwicklung.</p>
+
+                <h6 class="text-bg-secondary p-3">🛠 Verwendete Technologien</h6>
+                <ul>
+                <li>Frontend: Angular 16, TypeScript, NodeJS, Bootstrap 5, Visual Studio Code</li>
+                <li>Backend: C#, ASP.NET Core 9 Web API, Entity Framework Core, MySQL / SQLite, Visual Studio</li>
+                <li>Authentifizierung: ASP.NET Identity mit JWT-Bearer Tokens</li>
+                <li>E-Mail Versand: Azure Communication Services (Email)</li>
+                <li>Hosting & Infrastruktur: Azure App Service (Westeuropa)</li>
+                </ul>                
+
+                <h6 class="text-bg-secondary p-3">✉️ Kontakt</h6>
+                <p>Bei Fragen, Feedback oder einer Zusammenarbeit erreichst du mich unter:  
+                <a href="mailto:andreaskirschbaum@gmx.de" class="text-info">
+                    andreaskirschbaum&#64;gmx.de
+                </a>
+                </p>
+
+                <hr class="border-secondary"/>
+
+                <!-- hier der deutlich sichtbare Dankes-Satz -->
+                <p class="small text-white">
+                ⭐ Vielen Dank für dein Interesse an KiMa!  
+                Wir freuen uns auf dein Feedback und deine Teilnahme.
+                </p>           
+
+            </div>
+            <div class="modal-footer d-flex justify-content-between align-items-center">
+                <div class="text-white-50">
+                    KiMa GUI v. {{ version.number }}
                 </div>
-                <div class="modal-body">
-                    <p><strong>WICHTIGER HINWEIS: Der folgende Text ist nur ein Platzhalter und stellt keine gültigen AGB dar. Bitte ersetzen Sie diesen Text durch Ihre von einem Rechtsexperten geprüften AGB!</strong></p>
-                    <hr>
-     
-                    <h5>1. Geltungsbereich</h5>
-                    <p>[Platzhalter: Beschreiben, für wen und was diese AGB gelten – z.B. für registrierte Nutzer (Probanden) der Plattform KiMa Marktforschung von Ingo Kirschbaum.]</p>
-     
-                    <h5>2. Registrierung und Nutzerkonto</h5>
-                    <p>[Platzhalter: Bedingungen für die Registrierung, z.B. Mindestalter, Pflicht zur Angabe wahrheitsgemäßer Daten, Verantwortung für Zugangsdaten, Verbot von Mehrfachkonten.]</p>
-     
-                    <h5>3. Teilnahme an Studien / Umfragen</h5>
-                    <p>[Platzhalter: Beschreibung des Ablaufs, z.B. Einladungen per E-Mail, Freiwilligkeit der Teilnahme, Art der Befragung, ggf. technische Voraussetzungen.]</p>
-     
-                    <h5>4. Vergütung / Incentives</h5>
-                    <p>[Platzhalter: Regeln zur Vergütung oder anderen Anreizen für die Teilnahme, z.B. Art der Vergütung (Punkte, Gutscheine, Geld), Bedingungen für den Erhalt, Auszahlungsgrenzen, Verfall von Ansprüchen.]</p>
-     
-                    <h5>5. Pflichten des Nutzers</h5>
-                    <p>[Platzhalter: Erwartungen an den Nutzer, z.B. sorgfältige und wahrheitsgemäße Beantwortung von Fragen, Einhaltung von Vertraulichkeit bei bestimmten Studieninhalten.]</p>
-     
-                    <h5>6. Datennutzung und Datenschutz</h5>
-                    <p>[Platzhalter: Verweis auf die separate Datenschutzerklärung. Kurze Erklärung, wie die Daten im Rahmen der AGB genutzt werden, z.B. für Einladungen, Verwaltung des Kontos, anonymisierte Auswertung.]</p>
-     
-                    <h5>7. Vertraulichkeit</h5>
-                    <p>[Platzhalter: Verpflichtung zur Vertraulichkeit bezüglich der Studieninhalte durch den Probanden, falls zutreffend.]</p>
-     
-                    <h5>8. Haftung</h5>
-                    <p>[Platzhalter: Haftungsbeschränkungen des Betreibers, soweit gesetzlich zulässig.]</p>
-     
-                    <h5>9. Kündigung / Beendigung der Teilnahme / Kontolöschung</h5>
-                    <p>[Platzhalter: Regeln zur Kündigung durch beide Seiten, Folgen der Kündigung, Abwicklung offener Vergütungsansprüche.]</p>
-     
-                    <h5>10. Änderung der AGB</h5>
-                    <p>[Platzhalter: Hinweis, dass die AGB geändert werden können und wie Nutzer darüber informiert werden (z.B. per E-Mail, Zustimmungsmechanismus).]</p>
-     
-                    <h5>11. Schlussbestimmungen</h5>
-                    <p>[Platzhalter: Anwendbares Recht (z.B. Deutsches Recht), Gerichtsstand (falls zulässig), Salvatorische Klausel.]</p>
-     
-                    <p><br><em>Stand: [Datum]</em></p>
-                    <p><strong>WICHTIGER HINWEIS: Dies ist nur ein Platzhalter! Bitte unbedingt durch rechtlich geprüften Text ersetzen!</strong></p>
-                    </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Schließen</button>
-                </div>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                    Schließen
+                </button>
             </div>
         </div>
-     </div>
+</div>
+
     

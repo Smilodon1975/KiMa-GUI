@@ -1,8 +1,8 @@
 
 
 footer {
-    margin-top: auto; /* Stellt sicher, dass er unten klebt */
-    width: 100%; /* Kann auch weg, wenn text-bg-* volle Breite macht */
+    margin-top: auto;
+    width: 100%; 
 }
 
 
