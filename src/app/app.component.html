@@ -9,10 +9,11 @@
 <app-footer></app-footer>
 
 
-<button type="button"
+<button *ngIf="isScrolled"
+        type="button"
         id="btn_oben"
         class="btn btn-secondary btn-lg position-fixed bottom-0 end-0 m-3 rounded-circle shadow-sm"
-        (click)="scrollToTop()" 
-        aria-label="Nach oben scrollen"> 
-    <i class="bi bi-arrow-up"></i> 
+        (click)="scrollToTop()"
+        aria-label="Nach oben scrollen">
+  <i class="bi bi-arrow-up"></i>
 </button>
