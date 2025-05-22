@@ -1,12 +1,13 @@
-<!-- admin-faq.component.html -->
-<section class="container my-5">
-    <h2 class="text-center">FAQ Verwaltung</h2>
+<div class="container">
+<section class="container">
+    <h2 class="text-center my-4">FAQ Verwaltung</h2>
 
     <nav class="nav">
       <a class="nav-link" routerLink="/admin">Admin Dashboard</a>
       <a class="nav-link" routerLink="/admin-faq">FAQ verwalten</a>  
       <a class="nav-link" routerLink="/admin-news">News verwalten</a>
       <a class="nav-link" routerLink="/admin-feedback">Feedback verwalten</a> 
+      <a class="nav-link" routerLink="/admin-campaign">Projekte</a>
     </nav>
 
     <button class="btn btn-success mb-3" (click)="openEditModal()">Neues FAQ hinzufügen</button>
@@ -25,12 +26,13 @@
     </ul>
   </section>
 
-  <nav class="nav">
-    <a class="nav-link" routerLink="/admin">Admin Dashboard</a>
-    <a class="nav-link" routerLink="/admin-faq">FAQ verwalten</a>  
-    <a class="nav-link" routerLink="/admin-news">News verwalten</a>
-    <a class="nav-link" routerLink="/admin-feedback">Feedback verwalten</a> 
-  </nav>
+    <nav class="nav">
+      <a class="nav-link" routerLink="/admin">Admin Dashboard</a>
+      <a class="nav-link" routerLink="/admin-faq">FAQ verwalten</a>  
+      <a class="nav-link" routerLink="/admin-news">News verwalten</a>
+      <a class="nav-link" routerLink="/admin-feedback">Feedback verwalten</a> 
+      <a class="nav-link" routerLink="/admin-campaign">Projekte</a>
+    </nav>
   
   <!-- Modal für FAQ Bearbeitung/Hinzufügen -->
   <div class="modal fade" id="faqModal" tabindex="-1" aria-labelledby="faqModalLabel" aria-hidden="true">
@@ -63,4 +65,5 @@
       </div>
     </div>
   </div>
+</div>
   

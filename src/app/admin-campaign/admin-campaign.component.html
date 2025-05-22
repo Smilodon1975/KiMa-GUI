@@ -1,7 +1,16 @@
 
+<div class="container">
+    <h2 class="text-center my-4">Projekt versenden</h2>
 
-<div class="container mt-4">
-    <h2>Projekt versenden</h2>
+      <nav class="nav">
+        <a class="nav-link" routerLink="/admin">Admin Dashboard</a>
+        <a class="nav-link" routerLink="/admin-faq">FAQ verwalten</a>  
+        <a class="nav-link" routerLink="/admin-news">News verwalten</a>
+        <a class="nav-link" routerLink="/admin-feedback">Feedback verwalten</a> 
+        <a class="nav-link" routerLink="/admin-campaign">Projekte</a>
+      </nav>
+
+
     <form (ngSubmit)="onSend(fm)" #fm="ngForm">
       <div class="mb-3">
         <label>Projekt-Name</label>
@@ -43,5 +52,16 @@
       <button class="btn btn-primary" [disabled]="!fm.form.valid || !file">Senden</button>
     </form>
     <div *ngIf="message" class="alert alert-info mt-3">{{ message }}</div>
+
+    <nav class="nav">
+    <a class="nav-link" routerLink="/admin">Admin Dashboard</a>
+    <a class="nav-link" routerLink="/admin-faq">FAQ verwalten</a>  
+    <a class="nav-link" routerLink="/admin-news">News verwalten</a>
+    <a class="nav-link" routerLink="/admin-feedback">Feedback verwalten</a> 
+    <a class="nav-link" routerLink="/admin-campaign">Projekte</a>
+    </nav>
+
+
   </div>
+
   

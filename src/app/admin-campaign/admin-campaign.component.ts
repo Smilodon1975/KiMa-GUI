@@ -7,13 +7,15 @@ import { CampaignUser } from '../models/user.model';
 import { CommonModule } from '@angular/common';
 import { FormsModule, NgForm } from '@angular/forms';
 import { NgSelectModule } from '@ng-select/ng-select';
+import { Router } from '@angular/router';
+import { RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-admin-campaign',
   templateUrl: './admin-campaign.component.html',
   styleUrls: ['./admin-campaign.component.css'],
   standalone: true,
-  imports: [CommonModule, FormsModule, NgSelectModule]
+  imports: [CommonModule, FormsModule, NgSelectModule, RouterModule]
 
 })
 export class AdminCampaignComponent implements OnInit {
@@ -29,7 +31,7 @@ export class AdminCampaignComponent implements OnInit {
   pageSize = 10;
   totalCount = 0;
 
-  constructor(private campaignSvc: CampaignService) {}
+  constructor(private campaignSvc: CampaignService, private router: Router) {}
 
    ngOnInit(): void {
     this.loadPage();

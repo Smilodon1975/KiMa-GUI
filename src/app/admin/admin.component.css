@@ -1,0 +1,26 @@
+.consent-container {
+    border: none;
+    background: transparent;
+    padding: 0;
+    color: #555;
+    font-size: 0.95rem;
+  }
+
+  .consent-container .form-check-input {
+    width: 1.5em;
+    height: 1.5em;
+    margin-top: 0.25em;
+    border: 2px solid var(--secondary-color);
+  }
+
+  .consent-container .form-check-input:checked {
+    background-color: var(--secondary-color);
+    border-color: var(--secondary-color);
+  }
+
+  .consent-container .form-check-label {
+    font-weight: 500;
+    color: var(--secondary-text-color);
+  }.form-check-label {
+  margin: 0;  /* entfernt unerwünschte Abstände */
+}
