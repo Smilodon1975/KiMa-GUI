@@ -11,39 +11,62 @@
       </nav>
 
 
+      <!--Projekt-Name-->
     <form (ngSubmit)="onSend(fm)" #fm="ngForm">
       <div class="mb-3">
         <label>Projekt-Name</label>
         <input type="text" class="form-control" [(ngModel)]="campaignName" name="campaignName" required>
       </div>
+
+      <!--Datei hochladen-->
       <div class="mb-3">
         <label>Datei hochladen</label>
         <input type="file" class="form-control" (change)="onFile($event)" required>
       </div>
+
+      <!--Filter-->
+      <!-- Filter -->
+    <div class="row mb-3">
+      <div class="col-md-4">
+        <label for="filterSelect" class="form-label">Filter Empfänger</label>
+        <select
+          id="filterSelect"
+          class="form-select"
+          [(ngModel)]="filterOption"
+          name="filterOption"
+        >
+          <option value="all">Alle</option>
+          <option value="subscribed">Nur Abonnenten</option>
+          <option value="unsubscribed">Nur Nicht-Abonnenten</option>
+        </select>
+      </div>
+    </div>
+
+
+
+      <!--Empfänger-Tabelle-->
       <div class="mb-3">
       <label>Empfänger wählen</label>
       <table class="table">
         <thead>
           <tr>
             <th>
-              <input type="checkbox"
-                    [(ngModel)]="allSelected"
-                    (change)="toggleAll()"
-                    name="allSelected">
-            </th>
-            <th>E-Mail</th>
-            <th>Benutzername</th>
+              <input type="checkbox" [(ngModel)]="allSelected" (change)="toggleAll()" name="allSelected"></th>
+            <th>E-Mail</th><th>Benutzername</th><th>Newsletter?</th>
           </tr>
         </thead>
         <tbody>
-          <tr *ngFor="let u of users">
-            <td>
-              <input type="checkbox"
-                    [checked]="selected.has(u.email)"
-                    (change)="toggleOne(u.email)">
+        <tr *ngFor="let u of filteredUsers">            
+          <td>
+              <input type="checkbox" [checked]="selected.has(u.email)" (change)="toggleOne(u.email)">
             </td>
             <td>{{ u.email }}</td>
             <td>{{ u.userName }}</td>
+            <td>
+              <span class="badge" [ngClass]="u.newsletterSub ? 'bg-success' : 'bg-secondary'">
+                {{ u.newsletterSub ? 'Ja' : 'Nein' }}
+              </span>
+            </td>
           </tr>
         </tbody>
       </table>

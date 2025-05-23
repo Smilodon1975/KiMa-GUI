@@ -30,6 +30,8 @@ export class AdminCampaignComponent implements OnInit {
   page = 1;
   pageSize = 10;
   totalCount = 0;
+  filterOption: 'all' | 'subscribed' | 'unsubscribed' = 'all';
+
 
   constructor(private campaignSvc: CampaignService, private router: Router) {}
 
@@ -47,9 +49,18 @@ export class AdminCampaignComponent implements OnInit {
       });
   }
 
+  get filteredUsers(): CampaignUser[] {
+    return this.users.filter(u => {
+      if (this.filterOption === 'subscribed')   return u.newsletterSub;
+      if (this.filterOption === 'unsubscribed') return !u.newsletterSub;
+      return true;
+    });
+  }
+
   toggleAll(): void {
     if (this.allSelected) {
-      this.users.forEach(u => this.selected.add(u.email));
+      // nur die aktuell sichtbaren (gefilterten) auswählen
+      this.filteredUsers.forEach(u => this.selected.add(u.email));
     } else {
       this.selected.clear();
     }
