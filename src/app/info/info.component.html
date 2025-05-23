@@ -166,30 +166,42 @@
   </section>
   
 
+<!-- 🔹 FAQ-Abschnitt -->
+
   <section class="container-fluid section-dark my-0 py-5">
-    <div class="container">
-  <div class="info-block">
-    <h2 class="text-center">Häufig gestellte Fragen</h2>    <ul class="list-group">
-      <li *ngFor="let faq of faqs; let i = index" class="list-group-item" (click)="toggleFAQ(i)" style="cursor: pointer;">
-        
-        <strong><i class="bi me-2"[ngClass]="openedIndex === i ? 'bi-chevron-down' : 'bi-chevron-right'"></i>
-          {{ faq.question }}
-        </strong>
-        <div
-          [@slideToggle]="openedIndex === i ? 'open' : 'closed'"
-          class="faq-answer">
-          <p class="mb-0">{{ faq.answer }}</p>
-        </div>
-      </li>
-    </ul>
+  <div class="container">
+    <div class="info-block">
+      <h2 class="text-center">Häufig gestellte Fragen</h2>
+      <ul class="list-group">
+        <li
+          *ngFor="let faq of faqs; let i = index"
+          class="list-group-item"
+          (click)="toggleFAQ(i)"
+          style="cursor: pointer;"
+        >
+          <strong>
+            <i
+              class="bi me-2"
+              [ngClass]="openedIndex === i ? 'bi-chevron-down' : 'bi-chevron-right'"
+            ></i>
+            {{ faq.question }}
+          </strong>
+
+          <!-- ausklappbarer Antwort-Container -->
+          <div [@slideToggle]="openedIndex === i ? 'open' : 'closed'" class="faq-answer">
+            <!-- hier unser neuer Wrapper -->
+            <div class="faq-text">
+              <p class="mb-0">{{ faq.answer }}</p>
+            </div>
+          </div>
+        </li>
+      </ul>
+    </div>
   </div>
-</div>
 </section>
 
 
-
-
-
+<!-- 🔹 Bewertung-Abschnitt -->
 
 <section class="container-fluid section-light my-0 py-5">
   <div class="row justify-content-center">

@@ -130,3 +130,8 @@ section {
   color: var(--secondary-color); /* Dieselbe Akzentfarbe */
 }
 
+.faq-text { 
+  overflow-wrap: break-word;
+  word-break: break-word;
+  white-space: normal;
+}

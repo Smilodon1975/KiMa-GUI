@@ -1,0 +1,11 @@
+/* admin-faq.component.css */
+.faq-text {
+  /* erlaubt Umbruch innerhalb von langen Wörtern und Zeilen */
+  overflow-wrap: break-word;
+  word-break: break-word;
+  /* im Notfall ganz schmale Wörter umbrechen */
+  word-break: break-all;
+
+  /* Standard-White-Space: Umbrüche an Leerzeichen möglich */
+  white-space: normal;
+}

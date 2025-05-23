@@ -14,12 +14,12 @@
   
     <ul class="list-group">
       <li class="list-group-item d-flex justify-content-between align-items-center" *ngFor="let faq of faqs">
-        <div>
+        <div class="faq-text flex-fill me-3">
           <strong>{{ faq.question }}</strong>
           <p>{{ faq.answer }}</p>
         </div>
-        <div>
-          <button class="btn btn-primary btn-sm me-2" (click)="editFAQ(faq)">Bearbeiten</button>
+        <div class="d-flex flex-column gap-2">
+          <button class="btn btn-primary btn-sm" (click)="editFAQ(faq)">Bearbeiten</button>
           <button class="btn btn-danger btn-sm" (click)="deleteFAQ(faq.id)">Löschen</button>
         </div>
       </li>
