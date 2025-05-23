@@ -25,21 +25,9 @@
             Veröffentlicht am: {{ news.publishDate | date: 'shortDate' }}
           </small>
         </div>
-        <div class="d-flex align-items-center gap-2">
-          <button
-            type="button"
-            class="btn btn-primary btn-sm"
-            (click)="editNews(news)"
-          >
-            Bearbeiten
-          </button>
-          <button
-            type="button"
-            class="btn btn-danger btn-sm"
-            (click)="deleteNews(news.id)"
-          >
-            Löschen
-          </button>
+        <div class="d-flex flex-column gap-2">
+          <button type="button" class="btn btn-primary btn-sm" (click)="editNews(news)">Bearbeiten</button>
+          <button type="button" class="btn btn-danger btn-sm" (click)="deleteNews(news.id)">Löschen</button>
         </div>
         
       </li>
