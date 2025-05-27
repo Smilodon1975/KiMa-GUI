@@ -34,6 +34,31 @@ export class AdminComponent implements OnInit {
   passwordMismatch: boolean = false;
   popularCountries: string[] = [];
   allCountries: string[] = [];
+  readonly maxPageButtons = 7;
+
+    get paginationRange(): number[] {
+    const total = this.totalPages.length;
+    // wenn insgesamt weniger Seiten als maxPageButtons, zeige alle
+    if (total <= this.maxPageButtons) {
+      return this.totalPages;
+    }
+    const half = Math.floor(this.maxPageButtons / 2);
+    let start = this.currentPage - half;
+    let end   = this.currentPage + half;
+
+    // fange unter- und oberhalb ab
+    if (start < 1) {
+      start = 1;
+      end = this.maxPageButtons;
+    }
+    if (end > total) {
+      end = total;
+      start = total - this.maxPageButtons + 1;
+    }
+    return Array(end - start + 1)
+      .fill(0)
+      .map((_, i) => start + i);
+  }
 
   constructor(private adminService: AdminService, private countryService: CountryService, private router: Router) {}
 
@@ -61,7 +86,7 @@ export class AdminComponent implements OnInit {
               userProfile: user.userProfile ?? {} // Ensure userProfile is always an object
             })) as UserUpdateModel[];
             this.filteredUsers = [...this.users];
-            this.updatePagination();
+            this.calculatePagination();
           },
           error: (err) => {
             console.error("Fehler beim Laden der Benutzer:", err);
@@ -79,6 +104,12 @@ export class AdminComponent implements OnInit {
         this.totalPages = Array(Math.ceil(this.users.length / this.itemsPerPage)).fill(0).map((_, i) => i + 1);
       }
 
+      // ✅ Wechselt die angezeigte Seite in der Paginierung
+      changePage(page: number): void {
+        this.currentPage = page;
+      }
+
+
       // ✅ Filtert die Benutzer basierend auf dem Suchtext
       filterUsers(): void {
         this.filteredUsers = this.users.filter(user =>
@@ -87,13 +118,11 @@ export class AdminComponent implements OnInit {
           user.firstName?.toLowerCase().includes(this.searchText.toLowerCase()) ||
           user.lastName?.toLowerCase().includes(this.searchText.toLowerCase())
         );
+        this.currentPage = 1; 
         this.calculatePagination();
       }
 
-      // ✅ Wechselt die angezeigte Seite in der Paginierung
-      changePage(page: number): void {
-        this.currentPage = page;
-      }
+      
 
       // ✅ Öffnet das Modal zur Bearbeitung eines Benutzers
       openModal(user: UserUpdateModel): void {
@@ -193,16 +222,16 @@ export class AdminComponent implements OnInit {
       return `${age} Jahre`;
     }
 
-    getGenderTranslation(gender: string | null | undefined): string {
-      if (!gender) return "Nicht angegeben";
-      
-      const genderMap: Record<string, string> = {
-        "male": "Männlich",
-        "female": "Weiblich",
-        "other": "Divers"
-      };
-      return genderMap[gender] || "Unbekannt";
-    }
+      getGenderTranslation(gender: string | null | undefined): string {
+        if (!gender) return "Nicht angegeben";
+        
+        const genderMap: Record<string, string> = {
+          "male": "Männlich",
+          "female": "Weiblich",
+          "other": "Divers"
+        };
+        return genderMap[gender] || "Unbekannt";
+      }
 
         makeAdmin(user: User) {
         if (!confirm(`“${user.email}” wirklich zum Admin machen?`)) return;
@@ -233,5 +262,12 @@ export class AdminComponent implements OnInit {
         setTimeout(() => this.errorMessage = '', 3000);
       }
     
+
+      get displayedUsers(): UserUpdateModel[] {
+        const start = (this.currentPage - 1) * this.itemsPerPage;
+        return this.filteredUsers.slice(start, start + this.itemsPerPage);
+      }
+
+
 
 }

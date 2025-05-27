@@ -24,3 +24,32 @@
   }.form-check-label {
   margin: 0;  /* entfernt unerwünschte Abstände */
 }
+
+/* Basis-Übergang für alle Page-Links */
+.pagination .page-item .page-link {
+  transition: transform 0.15s ease, box-shadow 0.15s ease, background-color 0.15s ease, color 0.15s ease;
+}
+
+/* Hover-Zustand: leicht vergrößern, Farbe anpassen, Schatten einblenden */
+.pagination .page-item:hover .page-link {
+  transform: scale(1.1);
+  background-color: #0d6efd;    /* Bootstrap Primary */
+  color: #fff;
+  box-shadow: 0 4px 8px rgba(13, 110, 253, 0.4);
+}
+
+/* Aktive Seite etwas stärker hervorheben */
+.pagination .page-item.active .page-link {
+  background-color: #0b5ed7;    /* etwas dunkler */
+  border-color: #0a58ca;
+  color: #fff;
+}
+
+/* Disabled-Zustand unverändert, aber der Hover-Effekt wird unterdrückt */
+.pagination .page-item.disabled .page-link,
+.pagination .page-item.disabled:hover .page-link {
+  transform: none;
+  box-shadow: none;
+  background-color: #fff;
+  color: #6c757d;
+}

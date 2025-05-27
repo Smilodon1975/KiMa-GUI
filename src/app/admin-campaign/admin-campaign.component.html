@@ -1,69 +1,113 @@
-
 <div class="container">
-    <h2 class="text-center my-4">Projekt versenden</h2>
+  <h2 class="text-center my-4">Projekt versenden</h2>
 
-      <nav class="nav">
-        <a class="nav-link" routerLink="/admin">Admin Dashboard</a>
-        <a class="nav-link" routerLink="/admin-faq">FAQ verwalten</a>  
-        <a class="nav-link" routerLink="/admin-news">News verwalten</a>
-        <a class="nav-link" routerLink="/admin-feedback">Feedback verwalten</a> 
-        <a class="nav-link" routerLink="/admin-campaign">Projekte</a>
-      </nav>
+  <nav class="nav mb-4">
+    <a class="nav-link" routerLink="/admin">Admin Dashboard</a>
+    <a class="nav-link" routerLink="/admin-faq">FAQ verwalten</a>  
+    <a class="nav-link" routerLink="/admin-news">News verwalten</a>
+    <a class="nav-link" routerLink="/admin-feedback">Feedback verwalten</a> 
+    <a class="nav-link active" routerLink="/admin-campaign">Projekte</a>
+  </nav>
 
+  <form (ngSubmit)="onSend(fm)" #fm="ngForm">
+    <!-- Projekt-Name -->
+    <div class="mb-3">
+      <label>Projekt-Name</label>
+      <input
+        type="text"
+        class="form-control"
+        [(ngModel)]="campaignName"
+        name="campaignName"
+        required
+      />
+    </div>
 
-      <!--Projekt-Name-->
-    <form (ngSubmit)="onSend(fm)" #fm="ngForm">
-      <div class="mb-3">
-        <label>Projekt-Name</label>
-        <input type="text" class="form-control" [(ngModel)]="campaignName" name="campaignName" required>
-      </div>
+    <!-- Datei hochladen -->
+    <div class="mb-3">
+      <label>Datei hochladen</label>
+      <input
+        type="file"
+        class="form-control"
+        (change)="onFile($event)"
+        required
+      />
+    </div>
 
-      <!--Datei hochladen-->
-      <div class="mb-3">
-        <label>Datei hochladen</label>
-        <input type="file" class="form-control" (change)="onFile($event)" required>
-      </div>
-
-      <!--Filter-->
-      <!-- Filter -->
-    <div class="row mb-3">
-      <div class="col-md-4">
-        <label for="filterSelect" class="form-label">Filter Empfänger</label>
+    <!-- Filter + Zähler + Senden -->
+    <label>Filter</label>
+    <div class="d-flex justify-content-between align-items-end mb-4">
+      <!-- linke Seite: Suche + Dropdown -->
+      <div class="d-flex align-items-center">
+        <div class="input-group me-3" style="min-width: 300px;">
+          <input type="text" class="form-control"  placeholder="Empfänger filtern…" [(ngModel)]="searchText" name="searchText" (input)="filterRecipients()"/>
+          <span class="input-group-text"><i class="bi bi-search"></i>
+          </span>
+        </div>
+        <label class="form-label me-2">Newsletter abonniert:</label>
         <select
-          id="filterSelect"
           class="form-select"
+          style="width: auto;"
           [(ngModel)]="filterOption"
           name="filterOption"
+          (change)="filterRecipients()"
         >
           <option value="all">Alle</option>
           <option value="subscribed">Nur Abonnenten</option>
           <option value="unsubscribed">Nur Nicht-Abonnenten</option>
         </select>
       </div>
+
+      <!-- rechte Seite: Zähler + Senden -->
+      <div class="d-flex align-items-center">
+        <span class="me-3">
+          {{ filteredUsers.length }} Empfänger
+        </span>
+        <button
+          class="btn btn-primary"
+          type="submit"
+          [disabled]="!fm.form.valid || !file"
+        >
+          <i class="bi bi-envelope-fill me-1"></i>
+          Senden
+        </button>
+      </div>
     </div>
 
-
-
-      <!--Empfänger-Tabelle-->
-      <div class="mb-3">
-      <label>Empfänger wählen</label>
-      <table class="table">
+    <!-- Empfänger-Tabelle -->
+    <div class="mb-3">
+      <label class="form-label">Empfänger wählen</label>
+      <table class="table table-striped">
         <thead>
           <tr>
             <th>
-              <input type="checkbox" [(ngModel)]="allSelected" (change)="toggleAll()" name="allSelected"></th>
-            <th>E-Mail</th><th>Benutzername</th><th>Newsletter?</th>
+              <input
+                type="checkbox"
+                [(ngModel)]="allSelected"
+                (change)="toggleAll()"
+                name="allSelected"
+              />
+            </th>
+            <th>E-Mail</th>
+            <th>Benutzername</th>
+            <th>Newsletter?</th>
           </tr>
         </thead>
         <tbody>
-        <tr *ngFor="let u of filteredUsers">            
-          <td>
-              <input type="checkbox" [checked]="selected.has(u.email)" (change)="toggleOne(u.email)">
+          <tr *ngFor="let u of filteredUsers">
+            <td>
+              <input
+                type="checkbox"
+                [checked]="selected.has(u.email)"
+                (change)="toggleOne(u.email)"
+              />
             </td>
             <td>{{ u.email }}</td>
             <td>{{ u.userName }}</td>
             <td>
-              <span class="badge" [ngClass]="u.newsletterSub ? 'bg-success' : 'bg-secondary'">
+              <span
+                class="badge"
+                [ngClass]="u.newsletterSub ? 'bg-success' : 'bg-secondary'"
+              >
                 {{ u.newsletterSub ? 'Ja' : 'Nein' }}
               </span>
             </td>
@@ -72,19 +116,14 @@
       </table>
     </div>
 
-      <button class="btn btn-primary" [disabled]="!fm.form.valid || !file">Senden</button>
-    </form>
-    <div *ngIf="message" class="alert alert-info mt-3">{{ message }}</div>
+    <div *ngIf="message" class="alert alert-info">{{ message }}</div>
+  </form>
 
-    <nav class="nav">
+  <nav class="nav mt-4">
     <a class="nav-link" routerLink="/admin">Admin Dashboard</a>
     <a class="nav-link" routerLink="/admin-faq">FAQ verwalten</a>  
     <a class="nav-link" routerLink="/admin-news">News verwalten</a>
     <a class="nav-link" routerLink="/admin-feedback">Feedback verwalten</a> 
-    <a class="nav-link" routerLink="/admin-campaign">Projekte</a>
-    </nav>
-
-
-  </div>
-
-  
+    <a class="nav-link active" routerLink="/admin-campaign">Projekte</a>
+  </nav>
+</div>

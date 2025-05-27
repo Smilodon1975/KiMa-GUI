@@ -1,63 +1,109 @@
-<div class="container">
-  <h2 class="text-center my-4">Adminbereich - Probandenverwaltung</h2>
 
-  <!-- ✅ Erfolg- und Fehlermeldungen -->
+
+<div class="container">
+  <h2 class="text-center my-4">Adminbereich – Probandenverwaltung</h2>
+
+  <!-- Erfolg/Fehler/Info -->
   <div *ngIf="successMessage" class="alert alert-success text-center">{{ successMessage }}</div>
   <div *ngIf="errorMessage" class="alert alert-danger text-center">{{ errorMessage }}</div>
-  <div *ngIf="loginMessage" class="alert alert-success text-center">{{ loginMessage }}</div>
+  <div *ngIf="loginMessage"   class="alert alert-success text-center">{{ loginMessage }}</div>
 
-  <nav class="nav">
+  <!-- Navigation -->
+  <nav class="nav mb-3">
     <a class="nav-link" routerLink="/admin">Admin Dashboard</a>
-    <a class="nav-link" routerLink="/admin-faq">FAQ verwalten</a>  
+    <a class="nav-link" routerLink="/admin-faq">FAQ verwalten</a>
     <a class="nav-link" routerLink="/admin-news">News verwalten</a>
-    <a class="nav-link" routerLink="/admin-feedback">Feedback verwalten</a> 
+    <a class="nav-link" routerLink="/admin-feedback">Feedback verwalten</a>
     <a class="nav-link" routerLink="/admin-campaign">Projekte</a>
   </nav>
 
-  <!-- ✅ Suchfeld zur Filterung der Probanden -->
+  <!-- Suche -->
   <div class="input-group mb-3">
-    <input [(ngModel)]="searchText" (input)="filterUsers()" type="text" class="form-control" placeholder="Probanden suchen...">
+    <input
+      type="text"
+      class="form-control"
+      placeholder="Probanden suchen…"
+      [(ngModel)]="searchText"
+      (input)="filterUsers()"
+    />
   </div>
 
-  <!-- ✅ Tabelle zur Anzeige der Probanden -->
+  <!-- Tabelle -->
   <div class="table-responsive mb-3">
-  <table class="table table-striped">
-    <thead>
-      <tr>
-        <th>#</th>
-        <th>Email</th>
-        <th>Benutzername</th>
-        <th>Vorname</th>
-        <th>Nachname</th>
-        <th>Status</th>
-        <th>Rolle</th>
-        <th>Nesletter</th>
-        <th>Aktionen</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr *ngFor="let user of filteredUsers; let i = index">
-        <td>{{ (currentPage - 1) * itemsPerPage + i + 1 }}</td>
-        <td>{{ user.email }}</td>
-        <td>{{ user.userName }}</td>
-        <td>{{ user.firstName }}</td>
-        <td>{{ user.lastName }}</td>
-        <td>{{ user.status }}</td>
-        <td>{{ user.role }}</td>
-        <td>{{ user.newsletterSub ? 'Ja' : 'Nein' }}</td>
-        <td>
-          <button class="btn btn-info btn-sm" (click)="openModal(user)">Details</button>
-        </td>
-      </tr>
-    </tbody>
-  </table>
-</div>
+    <table class="table table-striped">
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>Email</th>
+          <th>Benutzername</th>
+          <th>Vorname</th>
+          <th>Nachname</th>
+          <th>Status</th>
+          <th>Rolle</th>
+          <th>Newsletter</th>
+          <th>Aktionen</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let user of displayedUsers; let i = index">
+          <td>{{ (currentPage - 1) * itemsPerPage + i + 1 }}</td>
+          <td>{{ user.email }}</td>
+          <td>{{ user.userName }}</td>
+          <td>{{ user.firstName }}</td>
+          <td>{{ user.lastName }}</td>
+          <td>{{ user.status }}</td>
+          <td>{{ user.role }}</td>
+          <td>{{ user.newsletterSub ? 'Ja' : 'Nein' }}</td>
+          <td>
+            <button class="btn btn-info btn-sm" (click)="openModal(user)">
+              Details
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
 
-  <!-- ✅ Paginierung -->
-  <nav>
+  <!-- Paginierung -->
+  <nav aria-label="Page navigation">
     <ul class="pagination justify-content-center">
-      <li class="page-item" *ngFor="let page of totalPages; let p = index">
-        <a class="page-link" (click)="changePage(p + 1)">{{ p + 1 }}</a>
+      <li
+        class="page-item"
+        [class.disabled]="currentPage === 1"
+        (click)="changePage(1)"
+      >
+        <a class="page-link">&laquo;&laquo;</a>
+      </li>
+      <li
+        class="page-item"
+        [class.disabled]="currentPage === 1"
+        (click)="changePage(currentPage - 1)"
+      >
+        <a class="page-link">&laquo;</a>
+      </li>
+
+      <li
+        class="page-item"
+        *ngFor="let page of paginationRange"
+        [class.active]="page === currentPage"
+        (click)="changePage(page)"
+      >
+        <a class="page-link">{{ page }}</a>
+      </li>
+
+      <li
+        class="page-item"
+        [class.disabled]="currentPage === totalPages.length"
+        (click)="changePage(currentPage + 1)"
+      >
+        <a class="page-link">&raquo;</a>
+      </li>
+      <li
+        class="page-item"
+        [class.disabled]="currentPage === totalPages.length"
+        (click)="changePage(totalPages.length)"
+      >
+        <a class="page-link">&raquo;&raquo;</a>
       </li>
     </ul>
   </nav>
