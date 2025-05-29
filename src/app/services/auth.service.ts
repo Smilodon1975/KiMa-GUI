@@ -135,12 +135,25 @@ export class AuthService {
   }
 
   // ✅ Holt Benutzerdaten anhand der Benutzer-ID
-  getUserData(): Observable<any> {
-    const userId = this.getUserId();
-    if (!userId) return of(null);
+  // getUserData(): Observable<any> {
+  //   const userId = this.getUserId();
+  //   if (!userId) return of(null);
   
-    return this.http.get<any>(`${this.userUrl}/user-role/${userId}`); 
-  }
+  //   return this.http.get<any>(`${this.userUrl}/user-role/${userId}`); 
+  // }
+  getUserData(): Observable<{ email: string; userName: string; /* ... */ } | null> {
+  const userId = this.getUserId();
+  if (!userId) return of(null);
+  return this.http
+    .get<any>(`${this.userUrl}/${userId}`)   // ← richtige URL: /api/user/{id}
+    .pipe(
+      catchError(err => {
+        // statt Error ins Console: einfach null zurückliefern
+        console.warn('getUserData fehlgeschlagen, ignoriere:', err.status);
+        return of(null);
+      })
+    );
+}
 
   // ✅ Passwort-Reset anfordern
   requestPasswordReset(email: string) {

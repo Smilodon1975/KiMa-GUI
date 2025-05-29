@@ -26,5 +26,7 @@ export class AdminFeedbackComponent implements OnInit {
     if (!confirm('Wirklich löschen?')) return;
     this.fb.delete(id).subscribe(() => this.load());
   }
+
+    
 }
 
