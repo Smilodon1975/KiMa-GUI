@@ -4,7 +4,7 @@ import { AuthService } from '../services/auth.service';
 import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { NgOptimizedImage } from '@angular/common';
-import * as bootstrap from 'bootstrap';
+import { Collapse } from 'bootstrap';
 
 
 
@@ -40,9 +40,16 @@ import * as bootstrap from 'bootstrap';
   closeNavbar() {
     const navbar = document.getElementById('navbarNav');
     if (navbar && navbar.classList.contains('show')) {
-      const bsCollapse = new bootstrap.Collapse(navbar, { toggle: true });
-      bsCollapse.hide();
+    const bsCollapse = Collapse.getOrCreateInstance(navbar);
+    bsCollapse.hide();
     }
+  }
+
+   toggleNavbar(): void {
+    const nav = document.getElementById('navbarNav');
+    if (!nav) return;
+    const bs = Collapse.getOrCreateInstance(nav);
+    bs.toggle();
   }
   
 
