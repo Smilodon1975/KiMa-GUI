@@ -29,11 +29,14 @@
                 "output": "/"
               }              
             ],
-            "styles": [       
+            "styles": [                 
+              "node_modules/bootstrap/dist/css/bootstrap.min.css",
               "node_modules/@ng-select/ng-select/themes/default.theme.css",              
               "src/styles.css"
             ],
-            "scripts": []
+            "scripts": [             
+              "node_modules/bootstrap/dist/js/bootstrap.bundle.min.js"
+            ]
           },
           "configurations": {
             "production": {
@@ -94,10 +97,14 @@
                 "input": "public"
               }
             ],
-            "styles": [        
+            "styles": [              
+              "node_modules/bootstrap/dist/css/bootstrap.min.css",
               "src/styles.css"
             ],
-            "scripts": []
+            "scripts": [
+              "node_modules/bootstrap/dist/js/bootstrap.min.js"
+
+            ]
           }
         }
       }
