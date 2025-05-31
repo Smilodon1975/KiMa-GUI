@@ -6,6 +6,7 @@ import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { OnInit } from '@angular/core';
 import { RegisterModel } from '../models/register.model';
+import { finalize } from 'rxjs/operators';
 
 
 
@@ -22,7 +23,7 @@ export class RegisterComponent implements OnInit {
     email: '',
     password: '',
     userName: '',
-    newsletterSub: false
+    newsletterSub: false    
   };
 
   confirmPassword: string = '';
@@ -30,6 +31,7 @@ export class RegisterComponent implements OnInit {
   successMessage: string | null = null;
   errorMessage: string | null = null;
   maxDate: string = '';
+  isLoading: boolean = false;
   
 
   constructor(private authService: AuthService, private router: Router) {
@@ -48,26 +50,41 @@ export class RegisterComponent implements OnInit {
 
   // ✅ Registriert einen neuen Benutzer und leitet nach Erfolg zum Login weiter
   onRegister() {
-   
-    if (!this.registerData.newsletterSub) {
-      this.errorMessage = 'Du musst der Daten­verarbeitung zustimmen.';
-      return;
-    }
-    if (this.registerData.password !== this.confirmPassword) {
-      this.errorMessage = "Die Passwörter stimmen nicht überein!";
-      return;
-    }
-  
-    this.authService.register(this.registerData).subscribe({
+  // Vorab-Checks
+  if (!this.registerData.newsletterSub) {
+    this.errorMessage = 'Du musst der Daten­verarbeitung zustimmen.';
+    return;
+  }
+  if (this.registerData.password !== this.confirmPassword) {
+    this.errorMessage = 'Die Passwörter stimmen nicht überein!';
+    return;
+  }
+
+  // Lade-Indikator einschalten
+  this.isLoading = true;
+  this.errorMessage = null;
+  this.successMessage = null;
+
+  // HTTP-Request mit finalize, damit isLoading immer zurückgesetzt wird
+  this.authService
+    .register(this.registerData)
+    .pipe(
+      finalize(() => {
+        this.isLoading = false; // Spinner ausblenden, egal ob Erfolg oder Fehler
+      })
+    )
+    .subscribe({
       next: () => {
-        this.successMessage = "Registrierung erfolgreich 💚! Du wirst nun weitergeleitet";
+        this.successMessage =
+          'Registrierung erfolgreich 💚! Du wirst nun weitergeleitet';
         setTimeout(() => this.router.navigate(['/welcome']), 3000);
       },
       error: (error) => {
-        this.errorMessage = error;
-      }
+        // Hier kannst du je nach Fehler-Objekt anpassen, was genau angezeigt wird
+        this.errorMessage = error?.message || 'Registrierung fehlgeschlagen!';
+      },
     });
-  }  
+}
 
   validatePassword(): boolean {
     const password = this.registerData.password;

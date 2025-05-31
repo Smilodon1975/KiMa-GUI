@@ -10,7 +10,7 @@ import * as bootstrap from 'bootstrap';
 import { CountryService } from '../services/country.service';
 import { Router } from '@angular/router';
 import { switchMap, catchError, tap, finalize } from 'rxjs/operators'; // RxJS Operatoren importieren
-import { of, throwError } from 'rxjs'; // of und throwError importieren
+import { of, throwError} from 'rxjs'; // of und throwError importieren
 
 @Component({
   selector: 'app-user',
@@ -37,6 +37,7 @@ export class UserComponent implements OnInit {
   deleteFadeOut: boolean = false;
   showExtra: boolean = false;
   isLoading: boolean = false;
+  
 
   constructor(private userService: UserService, private countryService: CountryService, private router: Router) {}
 
