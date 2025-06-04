@@ -19,6 +19,9 @@ import { MaintenanceComponent } from './pages/maintenance/maintenance.component'
 import { FeedbackComponent } from './feedback/feedback.component';
 import { AdminFeedbackComponent } from './admin-feedback/admin-feedback.component'; 
 import { AdminCampaignComponent } from './admin-campaign/admin-campaign.component';
+import { AdminProjectsComponent } from './admin-projects/admin-projects.component';
+import { ProjectResponseComponent } from './pages/project-response/project-response.component';
+
 
 // ✅ AuthGuard für geschützte Routen
 const authGuard: CanActivateFn = () => {
@@ -70,6 +73,9 @@ export const routes: Routes = [
   { path: 'feedback', component: FeedbackComponent, canActivate: [authGuard, maintenanceGuard] },
   { path: 'admin-feedback', component: AdminFeedbackComponent, canActivate: [AdminGuard, maintenanceGuard] },
   { path: 'admin-campaign', component: AdminCampaignComponent, canActivate: [AdminGuard, maintenanceGuard] },
+  { path: 'admin-projects', component: AdminProjectsComponent, canActivate: [AdminGuard, maintenanceGuard] },
+  { path: 'projects/:id', component: ProjectResponseComponent },
+
   { path: 'maintenance', component: MaintenanceComponent },
   { path: '**', redirectTo: '' }
 ];
