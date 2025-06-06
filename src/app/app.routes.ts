@@ -1,26 +1,27 @@
 import { inject } from '@angular/core';
 import { Routes, CanActivateFn, Router } from '@angular/router';
 import { AuthService } from './services/auth.service';
-import { HomeComponent } from './home/home.component';
-import { InfoComponent } from './info/info.component';
-import { LoginComponent } from './login/login.component';
-import { AdminComponent } from './admin/admin.component';
+import { HomeComponent } from './main/home/home.component';
+import { InfoComponent } from './pages/info/info.component';
+import { LoginComponent } from './pages/login/login.component';
+import { AdminComponent } from './admin/admin-dashboard/admin-dashboard.component';
 import { AdminGuard } from './services/admin.guard';
-import { UserComponent } from './user/user.component';
-import { RegisterComponent } from './register/register.component';
-import { PasswordResetRequestComponent } from './password-reset-request/password-reset-request.component';
-import { PasswordResetComponent } from './password-reset/password-reset.component';
-import { WelcomeComponent } from './welcome/welcome.component';
-import { ConfirmEmailComponent } from './confirm-email/confirm-email.component';
-import { AdminFaqComponent } from './admin-faq/admin-faq.component';
-import { AdminNewsComponent } from './admin-news/admin-news.component';
+import { UserComponent } from './pages/user/user.component';
+import { RegisterComponent } from './pages/register/register.component';
+import { PasswordResetRequestComponent } from './pages/password-reset-request/password-reset-request.component';
+import { PasswordResetComponent } from './pages/password-reset/password-reset.component';
+import { WelcomeComponent } from './pages/welcome/welcome.component';
+import { ConfirmEmailComponent } from './pages/confirm-email/confirm-email.component';
+import { AdminFaqComponent } from './admin/admin-faq/admin-faq.component';
+import { AdminNewsComponent } from './admin/admin-news/admin-news.component';
 import { NewsPageComponent } from './pages/news-page/news-page.component';
 import { MaintenanceComponent } from './pages/maintenance/maintenance.component';
-import { FeedbackComponent } from './feedback/feedback.component';
-import { AdminFeedbackComponent } from './admin-feedback/admin-feedback.component'; 
-import { AdminCampaignComponent } from './admin-campaign/admin-campaign.component';
-import { AdminProjectsComponent } from './admin-projects/admin-projects.component';
+import { FeedbackComponent } from './pages/feedback/feedback.component';
+import { AdminFeedbackComponent } from './admin/admin-feedback/admin-feedback.component'; 
+import { AdminCampaignComponent } from './admin/admin-campaign/admin-campaign.component';
+import { AdminProjectsComponent } from './admin/admin-projects/admin-projects.component';
 import { ProjectResponseComponent } from './pages/project-response/project-response.component';
+import { ProjectViewComponent } from './pages/project-view/project-view.component';
 
 
 // ✅ AuthGuard für geschützte Routen
@@ -74,8 +75,8 @@ export const routes: Routes = [
   { path: 'admin-feedback', component: AdminFeedbackComponent, canActivate: [AdminGuard, maintenanceGuard] },
   { path: 'admin-campaign', component: AdminCampaignComponent, canActivate: [AdminGuard, maintenanceGuard] },
   { path: 'admin-projects', component: AdminProjectsComponent, canActivate: [AdminGuard, maintenanceGuard] },
+  { path: 'projects', component: ProjectViewComponent, canActivate: [maintenanceGuard] },
   { path: 'projects/:id', component: ProjectResponseComponent },
-
   { path: 'maintenance', component: MaintenanceComponent },
   { path: '**', redirectTo: '' }
 ];

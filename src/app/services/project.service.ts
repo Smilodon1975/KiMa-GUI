@@ -11,6 +11,7 @@ import { environment } from '../../environments/environment';
 })
 export class ProjectService {
   private readonly apiUrl = `${environment.apiUrl}/projects`;
+  private readonly apiUrlResponses = `${environment.apiUrl}/ProjectResponses`;
 
   constructor(private http: HttpClient) {}
 
@@ -35,15 +36,13 @@ export class ProjectService {
   }
 
   submitResponse(resp: ProjectResponse): Observable<ProjectResponse> {
-    // API-Pfad: POST /api/projects/{projectId}/responses
     return this.http.post<ProjectResponse>(
-      `${this.apiUrl}/${resp.projectId}/responses`,
+      `${this.apiUrlResponses}/${resp.projectId}/responses`,
       resp
     );
   }
 
-  // Optional: alle Antworten für ein Projekt holen (Admin-Usecase)
   getResponses(projectId: number): Observable<ProjectResponse[]> {
-    return this.http.get<ProjectResponse[]>(`${this.apiUrl}/${projectId}/responses`);
+    return this.http.get<ProjectResponse[]>(`${this.apiUrlResponses}/${projectId}/responses`);
   }
 }

@@ -1,78 +1,197 @@
+<!-- project-response.component.html -->
+<section class="project-response-section py-5">
+  <div class="container">
 
-
-<div class="container mt-4" *ngIf="project; else loadingOrError">
-  <h2>{{ project.name }}</h2>
-  <p>{{ project.description }}</p>
-  <hr />
-
-  <form [formGroup]="responseForm" (ngSubmit)="onSubmit()">
-    <div
-      *ngFor="let q of questions; let i = index"
-      class="mb-4 border rounded p-3"
-    >
-      <label class="form-label"><strong>{{ q.text }}</strong></label>
-
-      <!-- Freitext / Textfeld -->
-      <div *ngIf="q.type === 'text'">
-        <input type="text" class="form-control" [formControl]="getAnswerControl(i)"/>
-      </div>
-      <!-- Textarea -->
-      <div *ngIf="q.type === 'textarea'">
-        <textarea class="form-control" rows="5" [formControl]="getAnswerControl(i)"></textarea>
-      </div>
-
-      <!-- Datum -->
-      <div *ngIf="q.type === 'date'">
-        <input type="date" class="form-control" [formControl]="getAnswerControl(i)"/>
-      </div>
-
-      <!-- Radio-Buttons -->
-      <div *ngIf="q.type === 'radio'">
-        <div *ngFor="let opt of q.options; let pi = index" class="form-check">
-          <input class="form-check-input" type="radio" [value]="opt.value" [formControl]="getAnswerControl(i)"
-            [id]="'radio_' + q.id + '_' + pi"/>
-          <label class="form-check-label" [for]="'radio_' + q.id + '_' + pi">
-            {{ opt.label }}
-          </label>
-        </div>
-      </div>
-
-      <!-- Checkboxen -->
-      <div *ngIf="q.type === 'checkbox'">
-        <div *ngFor="let opt of q.options; let pi = index" class="form-check">
-          <input class="form-check-input" type="checkbox" 
-          [formControl]="getCheckboxControl(i, pi)" [id]="'cb_' + q.id + '_' + pi"/>
-          <label class="form-check-label" [for]="'cb_' + q.id + '_' + pi">{{ opt.label }}
-          </label>
-        </div>
-      </div>
-
-      <!-- Select / Dropdown -->
-      <div *ngIf="q.type === 'select'">
-        <select class="form-select" [formControl]="getAnswerControl(i)">
-          <option value="">– Bitte wählen –</option>
-          <option *ngFor="let opt of q.options" [value]="opt.value">
-            {{ opt.label }}
-          </option>
-        </select>
-      </div>
-
-      <!-- Fallback für nicht definierte Typen -->
-      <div
-        *ngIf="!['text', 'textarea', 'date', 'radio', 'checkbox', 'select'].includes(q.type)">
-        <input type="text" class="form-control" [formControl]="getAnswerControl(i)"/>
-      </div>
+    <!-- 1) HEADER mit Logo-Hintergrund -->
+    <div class="response-header rounded-lg mb-5">
+      <h2 class="mb-1">{{ project?.name }}</h2>
+      <p class="text-secondary">{{ project?.description }}</p>
     </div>
 
-    <button type="submit" class="btn btn-primary" [disabled]="responseForm.invalid">Antworten abschicken</button>
-  </form>
-</div>
+    <!-- 2) Lade-Spinner -->
+    <div *ngIf="loading" class="text-center py-10">
+      <div class="spinner-border text-accent" role="status">
+        <span class="visually-hidden">Lädt...</span>
+      </div>
+      <p class="mt-2 text-muted">Lade Projekt–Daten…</p>
+    </div>
 
-<ng-template #loadingOrError>
-  <div class="text-center mt-5">
-    <p *ngIf="!project">Lade Projekt …</p>
-    <p *ngIf="project === null">
-      Projekt nicht gefunden oder Fehler aufgetreten.
-    </p>
+    <!-- 3) Fehlermeldung, wenn kein Projekt da ist -->
+    <div *ngIf="!loading && !project" class="alert alert-danger text-center">
+      Projekt konnte nicht geladen werden oder existiert nicht.
+    </div>
+
+    <!-- 4) FORMULAR, wenn Projekt und Fragen vorliegen -->
+    <div *ngIf="!loading && project" class="card response-card mb-4">
+      <div class="card-body">
+
+        <!-- 4a) Meldungen nach Submit -->
+        <div *ngIf="submitSuccess" class="alert alert-success">
+          Deine Antworten wurden erfolgreich gespeichert.
+        </div>
+        <div *ngIf="submitError" class="alert alert-danger">
+          {{ submitError }}
+        </div>
+
+        <!-- 4b) E-Mail-Feld -->
+        <div class="mb-4">
+          <label for="emailInput" class="form-label text-accent fw-semibold">
+            * Deine E-Mail-Adresse
+          </label>
+          <input
+            id="emailInput"
+            type="email"
+            class="form-control"
+            [(ngModel)]="respondentEmail"
+            name="email"
+            placeholder="z. B. max@beispiel.de"
+            required
+          />
+        </div>
+
+        <!-- 4c) Fragen-Formular -->
+       <form [formGroup]="responseForm" (ngSubmit)="onSubmit()">
+  <!-- answers ist unser Haupt-FormArray -->
+  <div formArrayName="answers">
+    <div *ngFor="let q of questions; let i = index" class="mb-4">
+      <div class="question-box p-4 rounded">
+        <p class="fw-semibold mb-3">{{ q.text }}</p>
+
+        <!-- 1) Freitext, Textarea, Date, Radio, Select (exakt diese Typen) -->
+        <ng-container *ngIf="
+             q.type === 'text' ||
+             q.type === 'textarea' ||
+             q.type === 'date' ||
+             q.type === 'radio' ||
+             q.type === 'select'">
+          <!-- Freitext -->
+          <input
+            *ngIf="q.type === 'text'"
+            type="text"
+            class="form-control"
+            formControlName="{{ i }}"
+          />
+
+          <!-- Textarea -->
+          <textarea
+            *ngIf="q.type === 'textarea'"
+            rows="4"
+            class="form-control"
+            formControlName="{{ i }}"
+          ></textarea>
+
+          <!-- Datum -->
+          <input
+            *ngIf="q.type === 'date'"
+            type="date"
+            class="form-control"
+            formControlName="{{ i }}"
+          />
+
+          <!-- Radio-Buttons -->
+          <div *ngIf="q.type === 'radio'" class="mt-2">
+            <div *ngFor="let opt of q.options; let idx = index" class="form-check">
+              <input
+                class="form-check-input"
+                type="radio"
+                formControlName="{{ i }}"
+                [value]="opt.value"
+                [id]="'radio_' + q.id + '_' + idx"
+              />
+              <label class="form-check-label" [for]="'radio_' + q.id + '_' + idx">
+                {{ opt.label }}
+              </label>
+            </div>
+          </div>
+
+          <!-- Select (Dropdown) -->
+          <select
+            *ngIf="q.type === 'select'"
+            class="form-select"
+            formControlName="{{ i }}"
+          >
+            <option value="">– Bitte wählen –</option>
+            <option *ngFor="let opt of q.options" [value]="opt.value">
+              {{ opt.label }}
+            </option>
+          </select>
+        </ng-container>
+
+        <!-- 2) Einfache Checkbox-Frage (Mehrfachauswahl) -->
+        <ng-container *ngIf="q.type === 'checkbox'">
+          <!-- Wechsle in das FormArray für diese Frage (Index i) -->
+          <div [formArrayName]="i">
+            <div *ngFor="let opt of q.options; let idx = index" class="form-check">
+              <input
+                class="form-check-input"
+                type="checkbox"
+                formControlName="{{ idx }}"
+                [id]="'cb_' + q.id + '_' + idx"
+              />
+              <label class="form-check-label" [for]="'cb_' + q.id + '_' + idx">
+                {{ opt.label }}
+              </label>
+            </div>
+          </div>
+        </ng-container>
+
+        <!-- 3) TERMINTABELLE (Checkbox-Grid) -->
+        <ng-container *ngIf="q.type === 'checkboxGrid'">
+          <!-- Erst inneren FormArray-Kontext öffnen -->
+          <div [formArrayName]="i">
+            <table class="table table-bordered">
+              <thead>
+                <tr>
+                  <th></th>
+                  <th *ngFor="let col of q.options" class="text-center">
+                    {{ col.label }}
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let row of q.rows; let rIdx = index">
+                  <!-- Zeilen-Label -->
+                  <td class="align-middle">{{ row.label }}</td>
+                  <!-- Pro Spalte eine Checkbox -->
+                  <td *ngFor="let col of q.options; let cIdx = index" class="text-center">
+                    <ng-container *ngIf="!col.exclude && !row.exclude">
+                      <input
+                        type="checkbox"
+                        formControlName="{{ rIdx * (q.options?.length || 0) + cIdx }}"
+                        [id]="'grid_' + q.id + '_' + rIdx + '_' + cIdx"
+                      />
+                    </ng-container>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </ng-container>
+
+               
+              </div>
+            </div>
+          </div>
+
+          <!-- 4d) Button-Leiste -->
+          <div class="d-flex justify-content-between align-items-center">
+            <button
+              type="submit"
+              class="btn btn-accent"
+              [disabled]="responseForm.invalid || !respondentEmail"
+            >
+              Antworten absenden
+            </button>
+            <button
+              type="button"
+              class="btn btn-outline-secondary"
+              (click)="router.navigate(['/projects'])"
+            >
+              <i class="bi bi-arrow-left me-1"></i> Zurück
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
   </div>
-</ng-template>
+</section>

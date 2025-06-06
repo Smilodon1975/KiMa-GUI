@@ -1,0 +1,48 @@
+/* project-view.component.css */
+
+/* Sektion mit halbtransparentem Logo-Hintergrund */
+.project-view-section {
+  background: 
+    url('/assets/Images/kima_logo_gruen_rot_rgb.png') no-repeat center center,
+    linear-gradient( to bottom, rgba(250,250,250,0.95), rgba(255,255,255,0.95) );
+  background-size: 200px auto, cover;
+}
+
+/* Karten-Stil */
+.project-card {
+  border: none;
+  border-radius: 0.75rem;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  background-color: #ffffffee;
+}
+
+.project-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.1);
+}
+
+/* Akzentfarbe und Buttons */
+:host ::ng-deep .text-accent {
+  color: var(--secondary-color) !important; /* z.B. #16A085 */
+}
+
+.btn-accent {
+  background-color: var(--secondary-color);
+  border-color: var(--secondary-color);
+  color: #fff;
+}
+
+.btn-accent:hover,
+.btn-accent:focus {
+  background-color: var(--light-secondary-color);
+  border-color: var(--light-secondary-color);
+  color: #333;
+}
+
+/* Responsive Anpassungen */
+@media (min-width: 992px) {
+  .project-card {
+    min-height: 260px;
+  }
+}

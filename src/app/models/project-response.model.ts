@@ -1,8 +1,7 @@
 export interface ProjectResponse {
   id?: number;           
-  projectId: number;     
-  userId?: number;      
-  email?: string;        
+  projectId: number;    
+  respondentEmail?: string;        
   answersJson: string;  
-  createdAt?: string;  
+  submittedAt?: string;  
 }

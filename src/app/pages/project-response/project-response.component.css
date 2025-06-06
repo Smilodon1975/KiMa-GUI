@@ -1,0 +1,53 @@
+/* project-response.component.css */
+
+/* Sektion mit Logo-Hintergrund in der Kopfzeile */
+.response-header {
+  background: 
+    url('/assets/Images/kima_logo_gruen_rot_rgb.png') no-repeat center center,
+    #f8f9fa;
+  background-size: 150px auto, cover;
+  padding: 2rem 1.5rem;
+  border-radius: 0.75rem;
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.05);
+  color: var(--headline-color);
+}
+
+/* Formular-Karte */
+.response-card {
+  border: none;
+  border-radius: 0.75rem;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  background-color: #ffffffee;
+}
+
+/* Jeder Fragen-Block */
+.question-box {
+  background-color: #fafafa;
+  border: 1px solid #e1e1e1;
+  border-radius: 0.5rem;
+}
+
+/* Akzent- und Button-Stile übernehmen */
+:host ::ng-deep .text-accent {
+  color: var(--secondary-color) !important;
+}
+
+.btn-accent {
+  background-color: var(--secondary-color);
+  border-color: var(--secondary-color);
+  color: #fff;
+}
+
+.btn-accent:hover,
+.btn-accent:focus {
+  background-color: var(--light-secondary-color);
+  border-color: var(--light-secondary-color);
+  color: #333;
+}
+
+/* Abstände */
+@media (min-width: 768px) {
+  .response-header {
+    padding: 3rem 2rem;
+  }
+}

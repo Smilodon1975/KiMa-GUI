@@ -1,0 +1,46 @@
+<!-- project-view.component.html -->
+<section class="project-view-section py-5">
+  <div class="container">
+
+    <!-- Überschrift -->
+    <div class="text-center mb-5">
+      <h2 class="display-5 text-accent">Unsere Projekte</h2>
+      <p class="text-muted">Wähle ein Projekt aus, um mit der Befragung zu beginnen.</p>
+    </div>
+
+    <!-- Lade-Spinner -->
+    <div *ngIf="loading" class="text-center py-10">
+      <div class="spinner-border text-accent" role="status">
+        <span class="visually-hidden">Lädt...</span>
+      </div>
+    </div>
+
+    <!-- Fehlermeldung -->
+    <div *ngIf="!loading && errorMsg" class="alert alert-danger text-center mb-4">
+      {{ errorMsg }}
+    </div>
+
+    <!-- Karten-Grid -->
+    <div *ngIf="!loading && projects.length" class="row g-4">
+      <div *ngFor="let project of projects" class="col-12 col-md-6 col-lg-4">
+        <div class="card project-card h-100">
+          <div class="card-body d-flex flex-column">
+            <h5 class="card-title text-accent">{{ project.name }}</h5>
+            <p class="card-text text-secondary flex-grow-1">{{ project.description }}</p>
+            <button 
+              (click)="openProject(project)" 
+              class="btn btn-accent mt-3 align-self-start">
+              Projekt öffnen
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Keine Projekte -->
+    <div *ngIf="!loading && projects.length === 0" class="text-center text-muted py-10">
+      Keine Projekte gefunden.
+    </div>
+
+  </div>
+</section>
