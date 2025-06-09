@@ -1,6 +1,21 @@
 <!-- project-view.component.html -->
+
+
 <section class="project-view-section py-5">
   <div class="container">
+    
+    <div *ngIf="responseSuccessMsg"
+     class="alert alert-success alert-fade"
+     [ngClass]="{ 'hidden': hideAlert }">
+  {{ responseSuccessMsg }}
+</div>
+    <div *ngIf="loading" class="text-center py-10">
+      <p class="text-gray-500">Lädt Projekte…</p>
+    </div>
+    <div *ngIf="!loading && errorMsg" class="text-center text-red-600 mb-6">
+    {{ errorMsg }}
+    </div>
+
 
     <!-- Überschrift -->
     <div class="text-center mb-5">
@@ -24,18 +39,34 @@
     <div *ngIf="!loading && projects.length" class="row g-4">
       <div *ngFor="let project of projects" class="col-12 col-md-6 col-lg-4">
         <div class="card project-card h-100">
-          <div class="card-body d-flex flex-column">
-            <h5 class="card-title text-accent">{{ project.name }}</h5>
-            <p class="card-text text-secondary flex-grow-1">{{ project.description }}</p>
-            <button 
-              (click)="openProject(project)" 
-              class="btn btn-accent mt-3 align-self-start">
-              Projekt öffnen
-            </button>
-          </div>
-        </div>
-      </div>
-    </div>
+          <!-- Kopf / Titel klickbar -->
+   <div
+     class="card-header bg-light"
+     data-bs-toggle="collapse"
+     [attr.data-bs-target]="'#collapse' + project.id"
+     style="cursor: pointer;"
+   >
+     <h5 class="card-title mb-0">{{ project.name }}</h5>
+   </div>
+
+   <!-- ausgeklappter Body mit Description + Button -->
+   <div
+     [id]="'collapse' + project.id"
+     class="collapse"
+   >
+     <div class="card-body d-flex flex-column">
+       <p class="card-text text-secondary">{{ project.description }}</p>
+       <button
+         class="btn btn-accent mt-auto"
+         (click)="openProject(project)"
+       >
+         Fragen beantworten
+       </button>
+     </div>
+   </div>
+  </div>
+</div>
+</div>
 
     <!-- Keine Projekte -->
     <div *ngIf="!loading && projects.length === 0" class="text-center text-muted py-10">

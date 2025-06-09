@@ -3,5 +3,5 @@ export interface ProjectResponse {
   projectId: number;    
   respondentEmail?: string;        
   answersJson: string;  
-  submittedAt?: string;  
+  submittedAt?: string;   
 }

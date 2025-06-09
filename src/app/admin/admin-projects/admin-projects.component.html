@@ -1,4 +1,5 @@
-<!-- src/app/admin-projects/admin-projects.component.html -->
+
+<!--===========================Admin-Projects-Html===============================================================-->
 
     <div class="container my-4">
 
@@ -17,8 +18,7 @@
           <button class="btn btn-primary" (click)="openNewModal()">Neues Projekt</button>
         </div>
       </div>
-
-      <!-- 2) Erfolg- und Fehlermeldungen als Alert-Card -->
+      
       <div *ngIf="successMessage" class="alert alert-success text-center mb-3">
         {{ successMessage }}
       </div>
@@ -26,7 +26,12 @@
         {{ errorMessage }}
       </div>
 
-      <!-- 4) Card mit Tabelle der Projekte -->
+      <!---------------------------------------------------------------------------------------------------------->
+      
+      <!-- ========================================-->
+      <!-- 4) Ansicht der Projekte als Tabelle     -->
+      <!-- ========================================-->
+
       <div class="card shadow-sm">
         <div class="card-body p-0">
           <div class="table-responsive">
@@ -45,23 +50,45 @@
                   <td>{{ proj.name }}</td>
                   <td>{{ proj.description }}</td>
                   <td class="text-center pe-4">
-                  <div class="btn-group" role="group" aria-label="Projektaktionen">
-                    <button class="btn btn-sm btn-info me-2" (click)="openDetailModal(proj)">
-                      Details
-                    </button>
-                    <button class="btn btn-sm btn-info me-2" (click)="openResponseModal(proj)">
-                      Antworten
-                    </button>
-                    <button class="btn btn-sm btn-warning me-2" (click)="openEditModal(proj)">
-                      Bearbeiten
-                    </button>
-                    <button class="btn btn-sm btn-danger" (click)="deleteProject(proj.id)">
-                      Löschen
-                    </button>
-                  </div>
-                </td>
-                </tr>
-                <!-- 6) Leere-Zustand anzeigen -->
+                    <div class="d-flex justify-content-start align-items-center">
+                      <!-- Haupt-Actions: Details, Antworten, Bearbeiten -->
+                      <div class="btn-group me-3" role="group" aria-label="Haupt-Aktionen">
+                        <button class="btn btn-sm btn-info me-2" (click)="openDetailModal(proj)">Details</button>
+                        <button class="btn btn-sm btn-info me-2" (click)="openResponseModal(proj)">Antworten</button>
+                        <button class="btn btn-sm btn-warning" (click)="openEditModal(proj)">Bearbeiten</button>
+                      </div>
+
+                      <!-- Trennlinie -->
+                      <div class="vr"></div>
+
+                      <!-- Status-Action: Fertig / Veröffentlichen / Zurückziehen -->
+                      <div class="btn-group ms-3" role="group" aria-label="Status-Aktion">
+                        <button
+                          *ngIf="proj.status === 'Draft'"
+                          class="btn btn-sm btn-secondary"
+                          (click)="finishProject(proj)"
+                        >
+                          Fertig stellen
+                        </button>
+                        <button
+                          *ngIf="proj.status === 'Finished'"
+                          class="btn btn-sm btn-success"
+                          (click)="publishProject(proj)"
+                        >
+                          Veröffentlichen
+                        </button>
+                        <button
+                          *ngIf="proj.status === 'Published'"
+                          class="btn btn-sm btn-danger"
+                          (click)="unpublishProject(proj)"
+                        >
+                          Zurückziehen
+                        </button>
+                      </div>
+                    </div>
+                  </td>
+
+                </tr>                
                 <tr *ngIf="projects.length === 0">
                   <td colspan="4" class="text-center py-3 text-muted">
                     Keine Projekte gefunden.
@@ -75,143 +102,157 @@
   </div>
        
 
-        <!-- ================================================ -->
-        <!-- Modal 1: Projekt anlegen / bearbeiten -->
-        <!-- ================================================ -->
-        <div class="modal fade" id="projectModal" tabindex="-1" aria-labelledby="projectModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-lg"><!-- modal-lg sorgt für mehr Breite -->
+        <!--=======================================Modale============================================-->
+
+
+
+
+        <!-- ========================================================================================= -->
+        <!-- Modal 1: Projekt neue anlegen oder Projekt bearbeiten (in einem Moadal zusammen gefügt)   -->
+        <!-- ========================================================================================= -->
+
+
+      <div class="modal fade" id="projectModal" tabindex="-1" aria-labelledby="projectModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
             <div class="modal-content">
-            <form #projectForm="ngForm" (ngSubmit)="saveProject(projectForm)">
+            <form #projectForm="ngForm" (ngSubmit)="saveProject(projectForm, false)">
                 <div class="modal-header">
                 <h5 class="modal-title" id="projectModalLabel">
                     {{ isEditMode ? 'Projekt bearbeiten' : 'Neues Projekt anlegen' }}
                 </h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Schließen"></button>
+                <button type="button" class="btn-close" (click)="closeModal()"></button>
                 </div>
-                <div class="modal-body">
-                <!-- ID verstecken -->
+
+                <!--Input Name-->
+                <div class="modal-body">               
                 <input type="hidden" [(ngModel)]="selectedProject.id" name="id" />
 
                 <div class="mb-3">
                     <label for="name" class="form-label">Name</label>
-                    <input type="text" id="name" class="form-control"required name="name" [(ngModel)]="selectedProject.name" #name="ngModel" />
+                    <input type="text" id="name" class="form-control"required name="name" [(ngModel)]="selectedProject.name" #name="ngModel" (ngModelChange)="markDirty()"/>
                     <div *ngIf="name.invalid && name.touched" class="text-danger small">
                     Der Name des Projektes ist erforderlich.
                     </div>
                 </div>
 
+                <!--Input Beschreibung-->
                 <div class="mb-3">
                     <label for="description" class="form-label">Beschreibung</label>
-                    <textarea id="description" class="form-control" rows="10" name="description" [(ngModel)]="selectedProject.description" #description="ngModel"></textarea>
+                    <textarea id="description" class="form-control" rows="10" name="description" [(ngModel)]="selectedProject.description" #description="ngModel" (ngModelChange)="markDirty()"></textarea>
                 </div>
 
-          <!-- =============================== -->
-          <!-- Hier kommt der Fragen‐Bereich: -->
-          <!-- =============================== -->
+          
+                  <!-- Fragen erstellen: -->          
 
-        <hr />
-        <h6>Fragen-Katalog verwalten</h6>
+                <hr />
+                <h6>Fragen-Katalog verwalten</h6>
 
-        <!-- 1) Neue Frage definieren -->
-        <div class="mb-3 border p-2">
-        <input [(ngModel)]="newQuestion.text" name="newQText" class="form-control mb-1" placeholder="Fragentext" />
+                <div class="mb-3 border p-2">
+                <input [(ngModel)]="newQuestion.text" name="newQText" class="form-control mb-1" placeholder="Fragentext" />
 
-        <select [(ngModel)]="newQuestion.type" name="newQType" class="form-select mb-2">
-            <option value="radio">Einzelauswahl (Radio)</option>
-            <option value="checkbox">Mehrfachauswahl (Checkbox)</option>
-            <option value="checkboxGrid">Termintabelle (Checkbox-Grid)</option>
-            <option value="text">Freitext</option>
-            <option value="date">Datum</option>
-        </select>
+                <select [(ngModel)]="newQuestion.type" name="newQType" class="form-select mb-2">
+                    <option value="radio">Einzelauswahl (Radio)</option>
+                    <option value="checkbox">Mehrfachauswahl (Checkbox)</option>
+                    <option value="checkboxGrid">Termintabelle (Checkbox-Grid)</option>
+                    <option value="text">Freitext</option>
+                    <option value="date">Datum</option>
+                </select>
 
-        <!-- Zusätzliche Felder für Grid (Spalten und Zeilen) -->
-        <div *ngIf="newQuestion.type === 'checkboxGrid'">
-          <!-- Spalten (Wochentage, Zeitarten etc.) -->
-          <h6>Spalten definieren:</h6>
-          <div *ngFor="let opt of newQuestion.options; let i = index" class="d-flex mb-1 align-items-center">
-            <input [(ngModel)]="opt.label" name="optLabel{{i}}" class="form-control form-control-sm me-1" placeholder="Spalten-Label (z.B. Montag)" />
-            <input [(ngModel)]="opt.value" name="optValue{{i}}" class="form-control form-control-sm me-1" placeholder="Wert (intern)" />
-            <div class="form-check form-check-inline">
-              <input class="form-check-input" type="checkbox" [(ngModel)]="opt.exclude" name="optExcl{{i}}" />
-              <label class="form-check-label small">Ausschluss?</label>
-            </div>
-            <button type="button" class="btn btn-outline-danger btn-sm ms-2" (click)="removeOption(i)">✖</button>
-          </div>
-          <button type="button" class="btn btn-sm btn-success mb-3" (click)="addOption()">+ Spalte hinzufügen</button>
+                
+                <div *ngIf="newQuestion.type === 'checkboxGrid'">
+              
+                  <h6>Spalten definieren:</h6>
+                  <div *ngFor="let opt of newQuestion.options; let i = index" class="d-flex mb-1 align-items-center">
+                    <input [(ngModel)]="opt.label" name="optLabel{{i}}" class="form-control form-control-sm me-1" placeholder="Spalten-Label (z.B. Montag)" />
+                    <input [(ngModel)]="opt.value" name="optValue{{i}}" class="form-control form-control-sm me-1" placeholder="Wert (intern)" />
+                    <div class="form-check form-check-inline">
+                      <input class="form-check-input" type="checkbox" [(ngModel)]="opt.exclude" name="optExcl{{i}}" />
+                      <label class="form-check-label small">Ausschluss?</label>
+                    </div>
+                    <button type="button" class="btn btn-outline-danger btn-sm ms-2" (click)="removeOption(i)">✖</button>
+                  </div>
+                  <button type="button" class="btn btn-sm btn-success mb-3" (click)="addOption()">+ Spalte hinzufügen</button>
 
-          <!-- Zeilen (z.B. Uhrzeiten, Räume, ...) -->
-          <h6>Zeilen definieren:</h6>
-          <div *ngFor="let r of newQuestion.rows; let j = index" class="d-flex mb-1 align-items-center">
-            <input [(ngModel)]="r.label" name="rowLabel{{j}}" class="form-control form-control-sm me-1" placeholder="Zeilen-Label (z.B. 08–10)" />
-            <input [(ngModel)]="r.value" name="rowValue{{j}}" class="form-control form-control-sm me-1" placeholder="Wert (intern)" />
-            <div class="form-check form-check-inline">
-              <input class="form-check-input" type="checkbox" [(ngModel)]="r.exclude" name="rowExcl{{j}}" />
-              <label class="form-check-label small">Ausschluss?</label>
-            </div>
-            <button type="button" class="btn btn-outline-danger btn-sm ms-2" (click)="removeRow(j)">✖</button>
-          </div>
-          <button type="button" class="btn btn-sm btn-success" (click)="addRow()">+ Zeile hinzufügen</button>
-        </div>
+                  
+                  <h6>Zeilen definieren:</h6>
+                  <div *ngFor="let r of newQuestion.rows; let j = index" class="d-flex mb-1 align-items-center">
+                    <input [(ngModel)]="r.label" name="rowLabel{{j}}" class="form-control form-control-sm me-1" placeholder="Zeilen-Label (z.B. 08–10)" />
+                    <input [(ngModel)]="r.value" name="rowValue{{j}}" class="form-control form-control-sm me-1" placeholder="Wert (intern)" />
+                    <div class="form-check form-check-inline">
+                      <input class="form-check-input" type="checkbox" [(ngModel)]="r.exclude" name="rowExcl{{j}}" />
+                      <label class="form-check-label small">Ausschluss?</label>
+                    </div>
+                    <button type="button" class="btn btn-outline-danger btn-sm ms-2" (click)="removeRow(j)">✖</button>
+                  </div>
+                  <button type="button" class="btn btn-sm btn-success" (click)="addRow()">+ Zeile hinzufügen</button>
+                </div>
 
 
-        <!-- Falls Auswahlfrage -->
-        <div *ngIf="newQuestion.type === 'radio' || newQuestion.type === 'checkbox'">
-            <div *ngFor="let opt of newQuestion.options; let i = index" class="d-flex mb-1 align-items-center">
-            <input [(ngModel)]="opt.label" name="optLabel{{i}}" class="form-control form-control-sm me-1" placeholder="Option-Label" />
-            <input [(ngModel)]="opt.value" name="optValue{{i}}" class="form-control form-control-sm me-1" placeholder="Option-Value" />
-            <div class="form-check form-check-inline">
-                <input class="form-check-input" type="checkbox" [(ngModel)]="opt.exclude" name="optExcl{{i}}" />
-                <label class="form-check-label small">Ausschluss?</label>
-            </div>
-            <button type="button" class="btn btn-outline-danger btn-sm ms-2" (click)="removeOption(i)">✖</button>
-            </div>
-            <button type="button" class="btn btn-sm btn-success" (click)="addOption()">+ Option hinzufügen</button>
-        </div>
+                <div *ngIf="newQuestion.type === 'radio' || newQuestion.type === 'checkbox'">
+                    <div *ngFor="let opt of newQuestion.options; let i = index" class="d-flex mb-1 align-items-center">
+                    <input [(ngModel)]="opt.label" name="optLabel{{i}}" class="form-control form-control-sm me-1" placeholder="Option-Label" />
+                    <input [(ngModel)]="opt.value" name="optValue{{i}}" class="form-control form-control-sm me-1" placeholder="Option-Value" />
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="checkbox" [(ngModel)]="opt.exclude" name="optExcl{{i}}" />
+                        <label class="form-check-label small">Ausschluss?</label>
+                    </div>
+                    <button type="button" class="btn btn-outline-danger btn-sm ms-2" (click)="removeOption(i)">✖</button>
+                    </div>
+                    <button type="button" class="btn btn-sm btn-success" (click)="addOption()">+ Option hinzufügen</button>
+                </div>
 
-        <button type="button" class="btn btn-primary btn-sm mt-2" (click)="addQuestion()">Frage hinzufügen</button>
-        </div>
-
-        <!-- 2) Bestehende Fragen anzeigen / bearbeiten -->
-        <ul class="list-group" *ngIf="questions.length > 0">
-        <li class="list-group-item" *ngFor="let q of questions; let idx = index">
-            <div class="d-flex justify-content-between align-items-start">
-            <div>
-                <strong>{{ q.id }}. {{ q.text }}</strong>
-                <span class="badge bg-secondary">{{ q.type }}</span>
-            </div>
-            <div>
-                <button type="button" class="btn btn-sm btn-outline-secondary me-1" (click)="editQuestion(idx)">Bearbeiten</button>
-                <button class="btn btn-sm btn-outline-danger" (click)="deleteQuestion(idx)">Löschen</button>
-            </div>
-            </div>
-            <div *ngIf="questions[idx].options">
-            <small>Optionen:</small>
-            <ul class="ps-3">
-                <li *ngFor="let o of q.options">
-                {{ o.label }} ({{ o.value }}) <span *ngIf="o.exclude" class="text-danger">(Exkl.)</span>
+                <button type="button" class="btn btn-primary btn-sm mt-2" (click)="addQuestion()">Frage hinzufügen</button>
+                </div>
+                
+                <ul class="list-group" *ngIf="questions.length > 0">
+                <li class="list-group-item" *ngFor="let q of questions; let idx = index">
+                    <div class="d-flex justify-content-between align-items-start">
+                    <div>
+                        <strong>{{ q.id }}. {{ q.text }}</strong>
+                        <span class="badge bg-secondary">{{ q.type }}</span>
+                    </div>
+                    <div>
+                        <button type="button" class="btn btn-sm btn-outline-secondary me-1" (click)="editQuestion(idx)">Bearbeiten</button>
+                        <button class="btn btn-sm btn-outline-danger" (click)="deleteQuestion(idx)">Löschen</button>
+                    </div>
+                    </div>
+                    <div *ngIf="questions[idx].options">
+                    <small>Optionen:</small>
+                    <ul class="ps-3">
+                        <li *ngFor="let o of q.options">
+                        {{ o.label }} ({{ o.value }}) <span *ngIf="o.exclude" class="text-danger">(Exkl.)</span>
+                        </li>
+                    </ul>
+                    </div>
                 </li>
-            </ul>
-            </div>
-        </li>
-        </ul>          
-
+                </ul>     
                 </div>
+
+                <!-- Modal-Footer mit Buttons -->
                 <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Abbrechen</button>
-                <button type="submit" class="btn btn-primary" [disabled]="projectForm.invalid">
-                    {{ isEditMode ? 'Speichern' : 'Anlegen' }}
-                </button>
+                  <button type="button" class="btn btn-secondary" (click)="closeModal()">Abbrechen</button>
+
+                  <button type="button" class="btn btn-outline-secondary me-2" [disabled]="projectForm.invalid"
+                  (click)="saveProject(projectForm, true)">Zwischenspeichern</button>
+
+                  <button type="submit" class="btn btn-primary me-2" [disabled]="projectForm.invalid">
+                    {{ isEditMode ? 'Speichern' : 'Anlegen' }}</button>
                 </div>
-            </form>
+              </form>
             </div>
-        </div>
+          </div>
         </div>
 
-        <!-- ================================================ -->
-        <!-- Modal 2: Projekt‐Details -->
-        <!-- ================================================ -->
+
+<!--===============================================================================================================-->
+
+        <!-- ==================================== -->
+        <!-- Modal 2: Projekt‐Details Modal       -->
+        <!-- =====================================-->
+
+
         <div class="modal fade" id="projectDetailModal" tabindex="-1" aria-labelledby="projectDetailModalLabel" aria-hidden="true">
-          <div class="modal-dialog modal-xl"><!-- noch breiter möglich -->
+          <div class="modal-dialog modal-xl">
             <div class="modal-content">
               <div class="modal-header">
                 <h5 class="modal-title" id="projectDetailModalLabel">Projekt‐Details</h5>
@@ -228,24 +269,48 @@
                 </ul>
                 <p *ngIf="questions.length === 0" class="text-muted">Keine Fragen definiert.</p>
               </div>
+
+              <!--  =======Detail-Modal-Footer mit Buttons=========  -->
               <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" (click)="closeDetailModal()">Schließen</button>
-                <button type="button" class="btn btn-warning" (click)="openEditModal(selectedProject)">Bearbeiten</button>
+                <button type="button" class="btn btn-secondary" 
+                (click)="closeDetailModal()">Schließen</button>
+
+                <button type="button" class="btn btn-warning" 
+                (click)="openEditModal(selectedProject)">Bearbeiten</button>   
+                
+                <button class="btn btn-sm btn-danger me-2" (click)="deleteProject(selectedProject.id)">
+                      Löschen
+                    </button>
+
+
+                <button *ngIf="selectedProject.status === 'Draft'" class="btn btn-sm btn-secondary me-2"
+                (click)="finishProject(selectedProject!)">Fertig stellen</button>
+
+                <button *ngIf="selectedProject.status === 'Finished'" class="btn btn-sm btn-success me-2"
+                (click)="publishProject(selectedProject!)">Veröffentlichen</button>
+
+                <button *ngIf="selectedProject.status === 'Published'" class="btn btn-sm btn-outline-danger" 
+                (click)="unpublishProject(selectedProject!)">Zurückziehen</button>
+                
               </div>
             </div>
           </div>
         </div>
 
-      <!-- ================================================ -->
-      <!-- Modal 3: Projekt‐Antworten-->
-      <!-- ================================================ -->
 
-      <!-- project-response-detail.component.html -->
-<div class="modal fade" id="responseDetailModal" tabindex="-1" aria-labelledby="responseDetailModalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-xl">
-    <div class="modal-content">
+<!-- ========================================================================================= -->
 
-      <!-- Kopfzeile -->
+
+      <!-- =================================== -->
+      <!-- Modal 3: Projekt‐Responses-Modal    -->
+      <!-- =================================== -->
+
+      
+    <div class="modal fade" id="responseDetailModal" tabindex="-1" aria-labelledby="responseDetailModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+
+      
       <div class="modal-header">
         <h5 class="modal-title" id="responseDetailModalLabel">
           Antworten zu Projekt: {{ selectedProject.name }}
@@ -253,31 +318,23 @@
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Schließen"></button>
       </div>
 
-      <!-- Body -->
       <div class="modal-body">
-
-        <!-- 1) Ladeanzeige -->
+        
         <div *ngIf="loadingResponses" class="text-center my-4">
           <div class="spinner-border text-primary" role="status">
             <span class="visually-hidden">Lädt...</span>
           </div>
           <p class="mt-2">Lade Antworten…</p>
         </div>
-
-        <!-- 2) Fehlermeldung -->
+       
         <div *ngIf="!loadingResponses && responseError" class="alert alert-danger text-center my-3">
           {{ responseError }}
         </div>
-
-        <!-- 3) Hinweis, wenn gar keine Antworten existieren -->
         <div
           *ngIf="!loadingResponses && !responseError && responses.length === 0"
-          class="text-center text-muted my-4"
-        >
-          Keine Antworten für dieses Projekt vorhanden.
+          class="text-center text-muted my-4"> Keine Antworten für dieses Projekt vorhanden.
         </div>
 
-        <!-- 4) Antworten-Tabelle, wenn mindestens eine Antwort geladen wurde -->
         <div *ngIf="!loadingResponses && responses.length > 0" class="table-responsive">
           <table class="table table-striped table-bordered table-hover table-sm mb-0">
             <thead class="table-light">
@@ -298,7 +355,6 @@
                   {{ resp.submittedAt | date: 'dd.MM.yyyy HH:mm' }}
                 </td>
                 <td>
-                  <!-- Scroll-Container, falls sehr viele Fragen -->
                   <div style="max-height: 250px; overflow-y: auto;">
                     <ul class="list-unstyled mb-0">
                       <li *ngFor="let item of parseAnswers(resp.answersJson)">
@@ -312,19 +368,12 @@
             </tbody>
           </table>
         </div>
-
       </div>
-
-      <!-- Fußzeile -->
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" (click)="closeResponseModal()">
           Schließen
         </button>
       </div>
-
     </div>
   </div>
 </div>
-
-
-

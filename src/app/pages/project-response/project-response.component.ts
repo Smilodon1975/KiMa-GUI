@@ -23,8 +23,7 @@ export class ProjectResponseComponent implements OnInit {
   responseForm!: FormGroup;
   respondentEmail: string = '';
   loading: boolean = true;
-
-  // <<< Neue Properties für Meldungen nach Submit >>>
+  submitting: boolean = false;
   submitSuccess: boolean = false;
   submitError: string = '';
 
@@ -106,49 +105,36 @@ export class ProjectResponseComponent implements OnInit {
     return checkboxArray.at(j) as FormControl;
   }
 
-  onSubmit(): void {
-  // 1) Validierung
+  onSubmit(): void {  
   if (this.responseForm.invalid || !this.respondentEmail) {
     this.submitError = 'Bitte beantworte alle Fragen und gib deine E-Mail ein.';
     this.submitSuccess = false;
     return;
   }
-
-  // 2) Raw-Array aus dem FormArray auslesen
+  this.submitting = true;
   const raw = this.responseForm.value.answers as any[];
-
-  // 3) answerPayload aufbauen
   const answerPayload = this.questions.map((q, idx) => {
     const controlValue = raw[idx];
-
     switch (q.type) {
-      // a) Text, Textarea, Date, Radio, Select: Wert direkt übernehmen
       case 'text':
       case 'textarea':
       case 'date':
       case 'radio':
       case 'select':
         return { questionId: q.id, answer: controlValue };
-
-      // b) Einfache Checkbox-Frage (Mehrfachauswahl)
       case 'checkbox':
         const selectedValues = q.options
           ?.filter((opt, optIdx) => controlValue[optIdx])
           .map((opt) => opt.value) ?? [];
         return {
           questionId: q.id,
-          // Hier als Komma-String gespeichert, kann aber auch Array sein, je nach API-Logik
           answer: selectedValues.join(',')
         };
-
-      // c) Termintabelle (Checkbox-Grid)
       case 'checkboxGrid':
         const cols = q.options?.length ?? 0;
         const rows = q.rows ?? [];
         const colsArr = q.options ?? [];
         const selections: { rowValue: string; colValue: string }[] = [];
-
-        // controlValue ist hier ein eindimensionales Boolean-Array der Länge rows×cols
         rows.forEach((row, rIdx) => {
           colsArr.forEach((col, cIdx) => {
             const flatIndex = rIdx * cols + cIdx;
@@ -157,32 +143,29 @@ export class ProjectResponseComponent implements OnInit {
             }
           });
         });
-
         return { questionId: q.id, answer: selections };
-
-      // d) Fallback: falls ein neuer Typ dazukommt
       default:
         return { questionId: q.id, answer: controlValue };
     }
   });
-
-  // 4) Payload zusammenstellen
   const payload = {
     projectId: this.projectId,
     respondentEmail: this.respondentEmail,
     answersJson: JSON.stringify(answerPayload)
   };
-
-  // 5) Absenden und Rückmeldung setzen
   this.projectSvc.submitResponse(payload).subscribe({
     next: () => {
+      this.submitting = false;  
       this.submitSuccess = true;
       this.submitError = '';
-      // Formular zurücksetzen (optional)
       this.responseForm.reset();
+      this.router.navigate(['/projects'], {
+          state: { responseSuccess: true }
+        });
     },
     error: (err) => {
       console.error('Fehler beim Absenden der Antworten:', err);
+      this.submitting = false; 
       this.submitError = 'Fehler beim Absenden. Bitte versuche es später erneut.';
       this.submitSuccess = false;
     }

@@ -25,6 +25,13 @@
     <div *ngIf="!loading && project" class="card response-card mb-4">
       <div class="card-body">
 
+         <!-- Spinner-Overlay beim Absenden -->
+        <div *ngIf="submitting" class="fixed inset-0 bg-white bg-opacity-75 flex items-center justify-center z-50">
+          <div class="spinner-border text-accent" role="status">
+            <span class="visually-hidden">Absenden…</span>
+          </div>
+        </div>
+
         <!-- 4a) Meldungen nach Submit -->
         <div *ngIf="submitSuccess" class="alert alert-success">
           Deine Antworten wurden erfolgreich gespeichert.

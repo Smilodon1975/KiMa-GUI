@@ -1,7 +1,7 @@
 // src/app/services/project.service.ts
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Project } from '../models/project.model';
+import { Project, ProjectStatus } from '../models/project.model';
 import { ProjectResponse } from '../models/project-response.model';
 import { Observable } from 'rxjs';
 import { environment } from '../../environments/environment';
@@ -23,12 +23,20 @@ export class ProjectService {
     return this.http.get<Project>(`${this.apiUrl}/${id}`);
   }
 
-  create(project: Partial<Project>): Observable<Project> {
-    return this.http.post<Project>(this.apiUrl, project);
+  createProject(data: Partial<Project>): Observable<Project> {
+    const payload = { ...data, status: 'draft' as Project['status'] };
+    return this.http.post<Project>(this.apiUrl, payload);
   }
 
-  update(id: number, project: Partial<Project>): Observable<void> {
-    return this.http.put<void>(`${this.apiUrl}/${id}`, project);
+  updateProject(id: number, data: Partial<Project>): Observable<Project> {
+    return this.http.put<Project>(`${this.apiUrl}/${id}`, data);
+  }
+
+  updateStatus(id: number, status: ProjectStatus): Observable<void> {
+  return this.http.patch<void>(
+    `${this.apiUrl}/${id}/status`,
+    { status }
+    );
   }
 
   delete(id: number): Observable<void> {
@@ -45,4 +53,7 @@ export class ProjectService {
   getResponses(projectId: number): Observable<ProjectResponse[]> {
     return this.http.get<ProjectResponse[]>(`${this.apiUrlResponses}/${projectId}/responses`);
   }
+
+  
+
 }
