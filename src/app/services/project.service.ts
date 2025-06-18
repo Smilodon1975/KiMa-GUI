@@ -1,6 +1,6 @@
 // src/app/services/project.service.ts
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Project, ProjectStatus } from '../models/project.model';
 import { ProjectResponse } from '../models/project-response.model';
 import { Observable } from 'rxjs';
@@ -30,6 +30,12 @@ export class ProjectService {
 
   updateProject(id: number, data: Partial<Project>): Observable<Project> {
     return this.http.put<Project>(`${this.apiUrl}/${id}`, data);
+  }
+
+  patchProject(id: number, patch: any[]): Observable<void> {
+    const url = `${this.apiUrl}/${id}`;
+    const headers = new HttpHeaders({ 'Content-Type': 'application/json-patch+json' });
+    return this.http.patch<void>(url, patch, { headers });
   }
 
   updateStatus(id: number, status: ProjectStatus): Observable<void> {

@@ -5,6 +5,7 @@ import { ProjectService } from '../../services/project.service';
 import { Project } from '../../models/project.model';
 import { ProjectResponse } from '../../models/project-response.model';
 import { CommonModule } from '@angular/common';
+import { trigger, transition, style, animate } from '@angular/animations';
 
 @Component({
   selector: 'app-project-view',
@@ -12,14 +13,26 @@ import { CommonModule } from '@angular/common';
   standalone: true,
   providers: [ProjectService],
   templateUrl: './project-view.component.html',
-  styleUrl: './project-view.component.css'
+  styleUrl: './project-view.component.css',
+  animations: [
+    trigger('slideToggle', [
+      transition('closed => open', [
+        style({ height: '0', overflow: 'hidden' }),
+        animate('200ms ease-in', style({ height: '*' }))
+      ]),
+      transition('open => closed', [
+        animate('200ms ease-out', style({ height: '0', overflow: 'hidden' }))
+      ])
+    ])
+  ]
 })
 export class ProjectViewComponent implements OnInit{
 projects: Project[] = [];
   loading = true;
   errorMsg = '';
-  responseSuccessMsg: string | null = null;
+  responseSuccessMsg = '';
   hideAlert = false;
+  openedIndex: number | null = null;
 
   constructor(
     private projectService: ProjectService,
@@ -41,7 +54,7 @@ projects: Project[] = [];
 
       // 3) Nach weiterer 0.5s die Meldung komplett entfernen
       setTimeout(() => {
-        this.responseSuccessMsg = null;
+        this.responseSuccessMsg = '';
         this.hideAlert = false;
       }, 4500);
     }
@@ -62,6 +75,10 @@ projects: Project[] = [];
         this.loading = false;
       }
     });
+  }
+
+   toggleProject(i: number): void {
+    this.openedIndex = this.openedIndex === i ? null : i;
   }
 
   openProject(project: Project): void {

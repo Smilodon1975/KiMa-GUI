@@ -21,11 +21,13 @@ export class ProjectResponseComponent implements OnInit {
   project?: Project;
   questions: QuestionDef[] = [];
   responseForm!: FormGroup;
-  respondentEmail: string = '';
-  loading: boolean = true;
-  submitting: boolean = false;
-  submitSuccess: boolean = false;
-  submitError: string = '';
+  respondentEmail = '';
+  loading = true;
+  submitting = false;
+  submitSuccess = false;
+  submitError = '';
+  currentIdx = 0;
+  reviewMode = false;
 
   constructor(
     private route: ActivatedRoute,
@@ -75,13 +77,12 @@ export class ProjectResponseComponent implements OnInit {
           const arr = q.options?.map(() => this.fb.control(false)) ?? [];
           return this.fb.array(arr);
 
-        case 'checkboxGrid':       
-        const cols = q.options?.length ?? 0;
-        const rows = q.rows?.length ?? 0;
-        const total = cols * rows;
-        const gridControls = Array(total).fill(0).map(() => this.fb.control(false));
-        return this.fb.array(gridControls);
-
+        case 'checkboxGrid':
+          // erstelle pro Zeile ein FormArray mit einer Kontrolle pro Spalte
+          const gridRows = q.rows?.map(_ =>
+            this.fb.array(q.options!.map(_ => this.fb.control(false)))
+          ) ?? [];
+          return this.fb.array(gridRows);
         default:
           return this.fb.control('');
       }
@@ -104,6 +105,18 @@ export class ProjectResponseComponent implements OnInit {
     const checkboxArray = this.answersArray.at(i) as FormArray;
     return checkboxArray.at(j) as FormControl;
   }
+
+      /** Gibt das FormArray für eine bestimmte Frage zurück */
+    getGridArray(qIndex: number): FormArray {
+      return this.answersArray.at(qIndex) as FormArray;
+    }
+
+    /** Greift auf die Checkbox-Control in Zeile r, Spalte c zu */
+    getGridControl(qIndex: number, r: number, c: number): FormControl {
+      const matrix = this.getGridArray(qIndex).at(r) as FormArray;
+      return matrix.at(c) as FormControl;
+    }
+
 
   onSubmit(): void {  
   if (this.responseForm.invalid || !this.respondentEmail) {
@@ -131,15 +144,16 @@ export class ProjectResponseComponent implements OnInit {
           answer: selectedValues.join(',')
         };
       case 'checkboxGrid':
-        const cols = q.options?.length ?? 0;
-        const rows = q.rows ?? [];
-        const colsArr = q.options ?? [];
-        const selections: { rowValue: string; colValue: string }[] = [];
-        rows.forEach((row, rIdx) => {
-          colsArr.forEach((col, cIdx) => {
-            const flatIndex = rIdx * cols + cIdx;
-            if (controlValue[flatIndex]) {
-              selections.push({ rowValue: row.value, colValue: col.value });
+        const matrix = raw[idx] as boolean[][];
+        const selections: { rowValue: string, colValue: string }[] = [];
+
+        matrix.forEach((rowSel, r) => {
+          rowSel.forEach((checked, c) => {
+            if (checked) {
+              selections.push({
+                rowValue: q.rows![r].label,
+                colValue: q.options![c].label
+              });
             }
           });
         });
@@ -173,9 +187,3 @@ export class ProjectResponseComponent implements OnInit {
 }
 
 }
-
-
-
-
-
-

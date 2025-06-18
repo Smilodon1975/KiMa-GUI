@@ -80,19 +80,7 @@ export class AdminProjectsComponent implements OnInit, AfterViewInit {
       this.saveDraft();
       }
 
-    private saveDraft(): void {
-      sessionStorage.setItem(this.draftKey, JSON.stringify({
-      selectedProject: {
-      id:             this.selectedProject.id,
-      name:           this.selectedProject.name,
-      description:    this.selectedProject.description
-      },
-      questions:      this.questions,
-      nextQId:        this.nextQId,
-      newQuestion:    this.newQuestion
-      }));
-    }
-      
+          
 
     @HostListener('window:beforeunload', ['$event'])
       handleBeforeUnload(event: BeforeUnloadEvent) {
@@ -175,33 +163,89 @@ export class AdminProjectsComponent implements OnInit, AfterViewInit {
           });
         }
 
-    
-      private updateExistingProject(
-        id: number,
-        payload: Partial<Project>,
-        draftOnly: boolean): void {
-        this.projectService.updateProject(id, payload).subscribe({
-          next: () => {
-            this.successMessage = draftOnly
-              ? 'Projekt zwischengespeichert.'
-              : 'Projekt wurde aktualisiert.';
-            setTimeout(() => (this.successMessage = ''), 3000);
 
-            this.dirty = false; sessionStorage.removeItem(this.draftKey);
-            this.loadAllProjects();
-            if (!draftOnly) this.closeModal();
-          },
-          error: (err) => {
-            console.error('Fehler beim Aktualisieren:', err);
-            this.errorMessage = draftOnly
-              ? 'Fehler beim Zwischenspeichern.'
-              : 'Fehler beim Aktualisieren.';
-            setTimeout(() => (this.errorMessage = ''), 3000);
+        private updateExistingProject(
+          id: number,
+          payload: Partial<Project>,
+          draftOnly: boolean
+          ): void {
+          if (draftOnly) {
+            const patch: any[] = [
+              { op: 'replace', path: '/name',           value: payload.name },
+              { op: 'replace', path: '/description',    value: payload.description },
+              { op: 'replace', path: '/questionsJson',  value: payload.questionsJson },
+              { op: 'replace', path: '/status',         value: payload.status }
+            ];
+            this.projectService.patchProject(id, patch).subscribe({
+              next: () => {
+                this.successMessage = 'Projekt zwischengespeichert.';
+                setTimeout(() => (this.successMessage = ''), 3000);
+                this.dirty = false;
+                sessionStorage.removeItem(this.draftKey);
+                this.loadAllProjects();
+              },
+              error: (err) => {
+                console.error('Fehler beim Zwischenspeichern:', err);
+                this.errorMessage = 'Fehler beim Zwischenspeichern.';
+                setTimeout(() => (this.errorMessage = ''), 3000);
+              }
+            });
+              } else {
+                // Volles Speichern per PUT
+                this.projectService.updateProject(id, payload).subscribe({
+                  next: () => {
+                    this.successMessage = 'Projekt wurde aktualisiert.';
+                    setTimeout(() => (this.successMessage = ''), 3000);
+                    this.dirty = false;
+                    sessionStorage.removeItem(this.draftKey);
+                    this.loadAllProjects();
+                    this.closeModal();
+                  },
+                  error: (err) => {
+                    console.error('Fehler beim Aktualisieren:', err);
+                    this.errorMessage = 'Fehler beim Aktualisieren.';
+                    setTimeout(() => (this.errorMessage = ''), 3000);
+                  }
+                });
+              }
             }
-          });
+
+
+        saveChanges(): void {
+          const patch = [
+            { op: 'replace', path: '/name',           value: this.selectedProject.name      },
+            { op: 'replace', path: '/description',    value: this.selectedProject.description },
+            { op: 'replace', path: '/questionsJson',  value: JSON.stringify(this.questions)   },
+            { op: 'replace', path: '/status',         value: this.selectedProject.status     }
+          ];
+          this.projectService.patchProject(this.selectedProject.id!, patch)
+            .subscribe({
+              next: () => {
+                this.successMessage = 'Projekt wurde gespeichert.';
+                this.dirty = false;
+                sessionStorage.removeItem(this.draftKey);
+              },
+              error: err => {
+                this.errorMessage = 'Speichern fehlgeschlagen.';
+                console.error(err);
+              }
+            });
+            }
+
+
+        private saveDraft(): void {
+          sessionStorage.setItem(this.draftKey, JSON.stringify({
+          selectedProject: {
+          id:             this.selectedProject.id,
+          name:           this.selectedProject.name,
+          description:    this.selectedProject.description
+          },
+          questions:      this.questions,
+          nextQId:        this.nextQId,
+          newQuestion:    this.newQuestion
+          }));
         }
-
-
+       
     // ----------------- Modale öffnen--------------------------->
 
     private openModalById(modalId: string): void {
@@ -476,65 +520,60 @@ export class AdminProjectsComponent implements OnInit, AfterViewInit {
           });
         }
 
-          parseAnswers(json: string): Array<{ questionId: number; answer: string }> {
-            if (!json) {
-              return [];
-            }
-            let rawArr: any[];
-            try {
-              rawArr = JSON.parse(json);
-            } catch {
-              return [];
-            }
-            return rawArr.map(item => {
-              const qId = item.questionId;
-              const ans = item.answer;
-              if (typeof ans === 'string' || typeof ans === 'number') {
-                return {
-                  questionId: qId,
-                  answer: `${ans}`
-                };
-              }
-              if (Array.isArray(ans) && ans.length > 0 && typeof ans[0] === 'string') {
-                return {
-                  questionId: qId,
-                  answer: (ans as string[]).join(', ')
-                };
-              }
-              if (Array.isArray(ans) && ans.length > 0 && typeof ans[0] === 'boolean') {            
-                return {
-                  questionId: qId,
-                  answer: (ans as boolean[]).map(b => (b ? '✓' : '✗')).join(', ')
-                };
-              }
-              if (
-                Array.isArray(ans) &&
-                ans.length > 0 &&
-                typeof ans[0] === 'object' &&
-                ('rowValue' in ans[0]) &&
-                ('colValue' in ans[0])
-              ) {
-                const gridItems = (ans as Array<{ rowValue: string; colValue: string }>).map(
-                  (g) => `${g.rowValue} – ${g.colValue}`
-                );
-                return {
-                  questionId: qId,
-                  answer: gridItems.join('; ')
-                };
-              }
+            parseAnswers(json: string): Array<{ questionId: number; answer: string }> {
+              if (!json) return [];
+
+              let rawArr: any[];
               try {
-                return {
-                  questionId: qId,
-                  answer: JSON.stringify(ans)
-                };
+                rawArr = JSON.parse(json);
               } catch {
-                return {
-                  questionId: qId,
-                  answer: String(ans)
-                };
+                return [];
               }
-            });
-          }
+
+              return rawArr.map(item => {
+                const qId = item.questionId;
+                const ans = item.answer;
+
+                // 1) Grid (Checkbox-Grid) ganz oben prüfen
+                if (Array.isArray(ans) &&
+                    ans.length > 0 &&
+                    ans[0] !== null &&
+                    typeof ans[0] === 'object' &&
+                    'rowValue' in ans[0] &&
+                    'colValue' in ans[0]
+                ) {
+                  // Nutze hier explizit die Labels
+                  const gridItems = (ans as Array<{ rowValue: string; colValue: string }>).map(
+                    ({ rowValue, colValue }) => `${rowValue} – ${colValue}`
+                  );
+                  return { questionId: qId, answer: gridItems.join('; ') };
+                }
+
+                // 2) Einfacher String oder Number
+                if (typeof ans === 'string' || typeof ans === 'number') {
+                  return { questionId: qId, answer: `${ans}` };
+                }
+
+                // 3) Array of strings (z.B. bei Checkbox-Einfach)
+                if (Array.isArray(ans) && ans.length > 0 && typeof ans[0] === 'string') {
+                  return { questionId: qId, answer: (ans as string[]).join(', ') };
+                }
+
+                // 4) Array of booleans (falls irgendwo genutzt)
+                if (Array.isArray(ans) && ans.length > 0 && typeof ans[0] === 'boolean') {
+                  const checkItems = (ans as boolean[]).map(b => (b ? '✓' : '✗'));
+                  return { questionId: qId, answer: checkItems.join(', ') };
+                }
+
+                // Fallback
+                try {
+                  return { questionId: qId, answer: JSON.stringify(ans) };
+                } catch {
+                  return { questionId: qId, answer: String(ans) };
+                }
+              });
+            }
+
 
 
     // ----------------- ungespeicherte Daten --------------------------->
