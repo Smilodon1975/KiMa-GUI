@@ -32,7 +32,7 @@ export class ProjectResponseComponent implements OnInit {
 
   constructor(
     private route: ActivatedRoute,
-    public router: Router,
+    private router: Router,
     private projectSvc: ProjectService,
     private fb: FormBuilder
   ) {}
@@ -229,4 +229,7 @@ private minGridSelected(min: number) {
     }
   }
   
+  goToProjectOverview(): void {
+    this.router.navigate(['/projects']);
+  }
 }

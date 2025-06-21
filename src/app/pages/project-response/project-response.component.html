@@ -24,6 +24,14 @@
     <div *ngIf="!loading && project" class="card response-card mb-4">
       <div class="card-body position-relative">
 
+        <button
+          type="button"
+          class="btn btn-outline-secondary mb-3"
+          (click)="goToProjectOverview()"
+        >
+          Zur Projektübersicht
+        </button>
+
         <!-- Overlay beim Absenden -->
         <div *ngIf="submitting" class="overlay-spinner d-flex justify-content-center align-items-center">
           <div class="spinner-border text-accent" role="status">

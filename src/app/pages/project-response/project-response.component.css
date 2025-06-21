@@ -2,14 +2,29 @@
 
 /* Sektion mit Logo-Hintergrund in der Kopfzeile */
 .response-header {
-  background: 
-    url('/assets/Images/kima_logo_gruen_rot_rgb.png') no-repeat center center,
-    #f8f9fa;
-  background-size: 150px auto, cover;
+  position: relative;
+  background: #f8f9fa;
   padding: 2rem 1.5rem;
   border-radius: 0.75rem;
   box-shadow: 0 3px 10px rgba(0, 0, 0, 0.05);
   color: var(--headline-color);
+  overflow: hidden;
+}
+
+.response-header::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: url('/assets/Images/kima_logo_gruen_rot_rgb.png') no-repeat center center;
+  background-size: 180px auto; /* Logo deutlich größer */
+  opacity: 0.08; /* macht das Logo sehr dezent */
+  pointer-events: none;
+  z-index: 0;
+}
+
+.response-header > * {
+  position: relative;
+  z-index: 1;
 }
 
 /* Formular-Karte */
