@@ -1,4 +1,3 @@
-
 <!--===========================Admin-Projects-Html===============================================================-->
 
     <div class="container my-4">
@@ -40,7 +39,7 @@
                 <tr>
                   <th scope="col" class="ps-4">#</th>
                   <th scope="col">Name</th>
-                  <th scope="col">Beschreibung</th>
+                  <th scope="col">Erstellt am</th>
                   <th scope="col" class="text-center pe-4">Aktionen</th>
                 </tr>
               </thead>
@@ -48,7 +47,7 @@
                 <tr *ngFor="let proj of projects; let i = index">
                   <th scope="row" class="ps-4">{{ i + 1 }}</th>
                   <td>{{ proj.name }}</td>
-                  <td>{{ proj.description }}</td>
+                  <td>{{ proj.createdAt | date:'dd.MM.yyyy' }}</td>
                   <td class="text-center pe-4">
                     <div class="d-flex justify-content-start align-items-center">
                       <!-- Haupt-Actions: Details, Antworten, Bearbeiten -->
@@ -358,8 +357,10 @@
                   <div style="max-height: 250px; overflow-y: auto;">
                     <ul class="list-unstyled mb-0">
                       <li *ngFor="let item of parseAnswers(resp.answersJson)">
-                        Frage {{ item.questionId }}: 
-                        <strong>{{ item.answer }}</strong>
+                        <span class="fw-semibold">
+                          {{ getQuestionText(item.questionId) }}:
+                        </span>
+                        <span class="ms-1"><strong>{{ item.answer }}</strong></span>
                       </li>
                     </ul>
                   </div>

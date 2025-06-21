@@ -296,7 +296,10 @@ export class AdminProjectsComponent implements OnInit, AfterViewInit {
 
       openResponseModal(project: Project): void {
         this.selectedProject = project;
-        this.loadResponses(project.id!);
+        this.questions = project.questionsJson
+          ? JSON.parse(project.questionsJson) as QuestionDef[]
+          : [];
+        this.loadResponses(project.id); // <-- Antworten laden!
         const modalEl = document.getElementById('responseDetailModal');
         if (modalEl) {
           const modal = new bootstrap.Modal(modalEl);
@@ -533,36 +536,58 @@ export class AdminProjectsComponent implements OnInit, AfterViewInit {
               return rawArr.map(item => {
                 const qId = item.questionId;
                 const ans = item.answer;
+                const q = this.questions.find(q => Number(q.id) === Number(qId));
 
-                // 1) Grid (Checkbox-Grid) ganz oben prüfen
-                if (Array.isArray(ans) &&
-                    ans.length > 0 &&
-                    ans[0] !== null &&
-                    typeof ans[0] === 'object' &&
-                    'rowValue' in ans[0] &&
-                    'colValue' in ans[0]
+                // 1) Checkbox-Grid (Matrix)
+                if (
+                  Array.isArray(ans) &&
+                  ans.length > 0 &&
+                  Array.isArray(ans[0]) &&
+                  q?.type === 'checkboxGrid'
                 ) {
-                  // Nutze hier explizit die Labels
-                  const gridItems = (ans as Array<{ rowValue: string; colValue: string }>).map(
-                    ({ rowValue, colValue }) => `${rowValue} – ${colValue}`
-                  );
-                  return { questionId: qId, answer: gridItems.join('; ') };
+                  // ans ist z.B. [[false,false,false],[false,true,false],[false,false,false]]
+                  const rows = q.rows || [];
+                  const cols = q.options || [];
+                  const checked: string[] = [];
+                  ans.forEach((rowArr: boolean[], rIdx: number) => {
+                    rowArr.forEach((checkedVal: boolean, cIdx: number) => {
+                      if (checkedVal && rows[rIdx] && cols[cIdx]) {
+                        checked.push(`${rows[rIdx].label} – ${cols[cIdx].label}`);
+                      }
+                    });
+                  });
+                  return {
+                    questionId: qId,
+                    answer: checked.length ? checked.join('; ') : '–'
+                  };
                 }
 
-                // 2) Einfacher String oder Number
+                // 2) Checkbox (Mehrfachauswahl)
+                if (
+                  Array.isArray(ans) &&
+                  ans.length > 0 &&
+                  typeof ans[0] === 'boolean' &&
+                  q?.type === 'checkbox'
+                ) {
+                  // ans ist z.B. [false, true, false]
+                  const options = q.options || [];
+                  const checkedLabels = ans
+                    .map((val: boolean, idx: number) => (val && options[idx] ? options[idx].label : null))
+                    .filter(label => !!label);
+                  return {
+                    questionId: qId,
+                    answer: checkedLabels.length ? checkedLabels.join(', ') : '–'
+                  };
+                }
+
+                // 3) Einfacher String oder Number
                 if (typeof ans === 'string' || typeof ans === 'number') {
                   return { questionId: qId, answer: `${ans}` };
                 }
 
-                // 3) Array of strings (z.B. bei Checkbox-Einfach)
+                // 4) Array of strings (z.B. bei Checkbox-Einfach mit Werten)
                 if (Array.isArray(ans) && ans.length > 0 && typeof ans[0] === 'string') {
                   return { questionId: qId, answer: (ans as string[]).join(', ') };
-                }
-
-                // 4) Array of booleans (falls irgendwo genutzt)
-                if (Array.isArray(ans) && ans.length > 0 && typeof ans[0] === 'boolean') {
-                  const checkItems = (ans as boolean[]).map(b => (b ? '✓' : '✗'));
-                  return { questionId: qId, answer: checkItems.join(', ') };
                 }
 
                 // Fallback
@@ -586,7 +611,10 @@ export class AdminProjectsComponent implements OnInit, AfterViewInit {
         }
 
 
-
+        getQuestionText(questionId: number): string {
+          const q = this.questions.find(q => Number(q.id) === Number(questionId));
+          return q ? q.text : `Frage ${questionId}`;
+        }
 
     }
 
