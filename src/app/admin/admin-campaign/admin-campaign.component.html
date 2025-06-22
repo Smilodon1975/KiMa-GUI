@@ -18,6 +18,17 @@
   
 
   <form (ngSubmit)="onSend(fm)" #fm="ngForm">
+
+    <!-- Erfolgsmeldung ganz oben -->
+    <div *ngIf="message" class="alert alert-info mb-3">{{ message }}</div>
+
+    <!-- Spinner während des Sendens -->
+    <div *ngIf="sending" class="d-flex justify-content-center align-items-center mb-3" style="min-height: 48px;">
+      <div class="spinner-border text-primary" role="status">
+        <span class="visually-hidden">Senden…</span>
+      </div>
+    </div>
+    
     <!-- Projekt-Name -->
     <div class="mb-3">
       <label>Projekt-Name</label>
@@ -40,6 +51,61 @@
         required
       />
     </div>
+
+    <!-- Betreff -->
+    <div class="mb-3">
+      <label for="emailSubject" class="form-label">Betreff</label>
+      <input
+        id="emailSubject"
+        type="text"
+        class="form-control"
+        [(ngModel)]="emailSubject"
+        name="emailSubject"
+        required
+      />
+    </div>
+
+    <!-- Nachricht (Text, HTML erlaubt) -->
+    <div class="mb-3">
+      <label for="emailBody" class="form-label">Nachricht (Text, HTML erlaubt)</label>
+      <textarea
+        id="emailBody"
+        class="form-control"
+        rows="6"
+        [(ngModel)]="emailBody"
+        name="emailBody"
+        required
+        placeholder="Ihre Nachricht an die Empfänger…"
+      ></textarea>
+    </div>
+
+    <!-- Link (optional) -->
+    <div class="mb-3">
+      <label for="emailLink" class="form-label">Link zum Projekt (optional)</label>
+      <input
+        id="emailLink"
+        type="url"
+        class="form-control"
+        [(ngModel)]="emailLink"
+        name="emailLink"
+        placeholder="https://…"
+      />
+    </div>
+
+
+    <div *ngIf="message" class="alert alert-info fade-message mb-2"
+        [class.show]="showMessage"
+        [class.hide]="!showMessage">{{ message }}
+      </div>
+
+      <!-- Spinner während des Sendens -->
+      <div *ngIf="sending" class="d-flex justify-content-center align-items-center mb-2" style="min-height: 32px;">
+        <div class="spinner-border text-primary" role="status" style="width: 2rem; height: 2rem;">
+          <span class="visually-hidden">Senden…</span>
+        </div>
+      </div>
+
+
 
     <!-- Filter + Zähler + Senden -->
     <label>Filter</label>
@@ -73,7 +139,7 @@
         <button
           class="btn btn-primary"
           type="submit"
-          [disabled]="!fm.form.valid || !file"
+          [disabled]="!fm.form.valid"
         >
           <i class="bi bi-envelope-fill me-1"></i>
           Senden
@@ -123,6 +189,24 @@
         </tbody>
       </table>
     </div>
-    <div *ngIf="message" class="alert alert-info">{{ message }}</div>
+
+    <div class="mb-3 position-relative">
+      <!-- Erfolgsmeldung mit Fade-Out -->
+      <div *ngIf="message" class="alert alert-info fade-message mb-2"
+        [class.show]="showMessage"
+        [class.hide]="!showMessage">{{ message }}
+      </div>
+
+      <!-- Spinner während des Sendens -->
+      <div *ngIf="sending" class="d-flex justify-content-center align-items-center mb-2" style="min-height: 32px;">
+        <div class="spinner-border text-primary" role="status" style="width: 2rem; height: 2rem;">
+          <span class="visually-hidden">Senden…</span>
+        </div>
+      </div>
+
+      <button type="submit" class="btn btn-primary w-100" [disabled]="sending || selected.size === 0">
+        Senden
+      </button>
+    </div>
   </form>  
 </div>

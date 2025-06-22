@@ -24,10 +24,15 @@ export class AdminCampaignComponent implements OnInit {
   totalPages: number[] = [];         // ← neu
   filterOption: 'all' | 'subscribed' | 'unsubscribed' = 'all';
   campaignName = '';
-  file?: File;
+  attachment?: File;
   message?: string;
   searchText: string = '';
-  
+  emailSubject = '';
+  emailBody = '';
+  emailLink = '';
+
+  sending = false;
+  showMessage = true;
 
   constructor(private campaignSvc: CampaignService) {}
 
@@ -93,24 +98,39 @@ export class AdminCampaignComponent implements OnInit {
 
   onFile(event: Event): void {
     const input = event.target as HTMLInputElement;
-    this.file = input.files?.[0];
+    this.attachment = input.files?.[0];
   }
 
   onSend(fm: NgForm): void {
-    if (!fm.valid || !this.file || this.selected.size === 0) return;
-
-    this.campaignSvc.sendCampaign(
-      this.campaignName,
-      this.file,
-      Array.from(this.selected)
-    ).subscribe(() => {
+  if (!fm.valid || this.selected.size === 0) return;
+  this.sending = true;
+  this.campaignSvc.sendCampaign(
+    this.campaignName,
+    Array.from(this.selected),
+    this.attachment,
+    this.emailSubject,
+    this.emailBody,
+    this.emailLink
+  ).subscribe({
+    next: () => {
       this.message = `Newsletter an ${this.selected.size} Empfänger verschickt.`;
+      this.showMessage = true;
       fm.resetForm();
-      this.file = undefined;
+      this.attachment = undefined;
       this.loadUsers();
-    }, () => {
+      this.sending = false;
+      // Erfolgsmeldung langsam ausfaden
+      setTimeout(() => this.showMessage = false, 3000); // nach 3s ausfaden
+      setTimeout(() => this.message = '', 4000);        // nach 4s entfernen
+    },
+    error: () => {
       this.message = 'Fehler beim Versand.';
-    });
-  }    
+      this.showMessage = true;
+      this.sending = false;
+      setTimeout(() => this.showMessage = false, 3000);
+      setTimeout(() => this.message = '', 4000);
+    }
+  });
+}    
 
 }
