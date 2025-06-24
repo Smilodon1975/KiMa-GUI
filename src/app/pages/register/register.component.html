@@ -69,6 +69,14 @@
         </div>
 
 
+        <div *ngIf="isLoading" class="d-flex justify-content-center my-3">
+          <div class="spinner-border text-success" role="status">
+            <span class="visually-hidden">Lädt…</span>
+          </div>
+        </div>
+        <p *ngIf="successMessage" class="text-success">{{ successMessage }}</p>
+        <p *ngIf="errorMessage" class="text-danger">{{ errorMessage }}</p>
+
         <button
           type="submit"
           class="btn btn-success w-100"
