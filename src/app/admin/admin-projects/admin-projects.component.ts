@@ -34,7 +34,7 @@ export class AdminProjectsComponent implements OnInit, AfterViewInit {
   };
   isEditingQuestionIndex: number | null = null;
   private nextQId = 1;
-   responses: ProjectResponse[] = [];
+  responses: ProjectResponse[] = [];
   loadingResponses = false;
   responseError = '';
   draftKey = 'adminProjectDraft';
