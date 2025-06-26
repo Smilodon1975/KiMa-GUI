@@ -259,15 +259,17 @@
 
               <!--  =======Detail-Modal-Footer mit Buttons=========  -->
               <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" 
-                (click)="closeDetailModal()">Schließen</button>
+                <button type="button" class="btn btn-secondary" (click)="closeDetailModal()">
+                Schließen</button>
 
-                <button type="button" class="btn btn-warning" 
-                (click)="openEditModal(selectedProject)">Bearbeiten</button>   
+                <button type="button" class="btn btn-warning" (click)="openEditModal(selectedProject)">
+                Bearbeiten</button>
+
+                <button type="button" class="btn btn-info" (click)="openCopyModal(selectedProject)" title="Projekt kopieren">
+                <i class="bi bi-files"></i> Kopieren</button>
                 
                 <button class="btn btn-sm btn-danger me-2" (click)="deleteProject(selectedProject.id)">
-                      Löschen
-                    </button>
+                Löschen</button>
 
 
                 <button *ngIf="selectedProject.status === 'Draft'" class="btn btn-sm btn-secondary me-2"
