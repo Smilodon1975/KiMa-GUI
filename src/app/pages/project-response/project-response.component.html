@@ -51,6 +51,7 @@
 
           <!-- Startseite: Nur E-Mail -->
           <div *ngIf="showStart">
+            
             <div formGroupName="user" class="mb-4">
               <label for="emailInput" class="form-label text-accent fw-semibold">
                 * Deine E-Mail-Adresse
@@ -61,9 +62,17 @@
                 class="form-control"
                 formControlName="email"
                 placeholder="z. B. max@beispiel.de"
+                [readonly]="emailAlreadyAnswered"
               />
+              <div *ngIf="checkingEmail" class="text-muted small">
+                Prüfe, ob schon eine Antwort existiert…
+              </div>
+              <div *ngIf="emailAlreadyAnswered" class="alert alert-warning mt-2">
+                Für diese E-Mail-Adresse wurde bereits eine Antwort für dieses Projekt abgegeben.
+                Mehrfachteilnahme ist nicht möglich.
+              </div>
               <div
-                *ngIf="responseForm.get('user.email')?.invalid && responseForm.get('user.email')?.touched"
+                *ngIf="responseForm.get('user.email')?.invalid && responseForm.get('user.email')?.touched && !emailAlreadyAnswered"
                 class="text-danger small"
               >
                 Bitte eine gültige E-Mail-Adresse eingeben.
@@ -72,11 +81,12 @@
             <button
               type="button"
               class="btn btn-accent"
-              [disabled]="responseForm.get('user.email')?.invalid"
+              [disabled]="responseForm.get('user.email')?.invalid || emailAlreadyAnswered"
               (click)="showStart = false"
             >
               Start
             </button>
+
           </div>
 
           <!-- Wizard: Fragen erst nach Start -->

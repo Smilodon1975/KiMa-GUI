@@ -37,6 +37,15 @@ h1, h2, h3, h4, h5, h6 {
     
 }
 
+.modal-header {
+  cursor: move;
+}
+.modal-dialog {
+  max-width: 100%;
+  max-height: 100%;
+  z-index: 1055;
+}
+
 .content-wrapper {
     flex: 1;
     display: flex;

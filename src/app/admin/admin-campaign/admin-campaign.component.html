@@ -19,38 +19,50 @@
 
   <!---------------------------------------------------------Projekte-Liste--------------------------------------------------------------------->
 
-    <div class="mb-4">
-      <h4>Projekte</h4>
-      <ul class="list-group">
-        <li *ngFor="let proj of projects" class="list-group-item d-flex justify-content-between align-items-center">
-          <span>{{ proj.name }}</span>
-          <button class="btn btn-sm btn-outline-primary"
-                  (click)="openProjectResponseModal(proj)">
-            Details & Antworten
-          </button>
-        </li>
-      </ul>
-    </div>
+    <!-- Projektliste ein-/ausklappbar -->
+<div class="mb-4">
+  <button class="btn btn-outline-secondary mb-2" (click)="showProjects = !showProjects">
+    <i class="bi" [ngClass]="showProjects ? 'bi-caret-down-fill' : 'bi-caret-right-fill'"></i>
+    Projekte {{ showProjects ? 'ausblenden' : 'anzeigen' }}
+  </button>
+  <div *ngIf="showProjects">
+    <h4>Projekte</h4>
+    <ul class="list-group">
+      <li *ngFor="let proj of projects" class="list-group-item d-flex justify-content-between align-items-center">
+        <span>{{ proj.name }}</span>
+        <button class="btn btn-sm btn-outline-primary"
+                (click)="openProjectResponseModal(proj)">
+          Details & Antworten
+        </button>
+      </li>
+    </ul>
+  </div>
+</div>
 
     <!-- Projektdetails und Antworten (nur für ausgewähltes Projekt) -->
-    <div *ngIf="selectedProject">
+    <!-- <div *ngIf="selectedProject">
       <h5>{{ selectedProject.name }}</h5>
       <p>{{ selectedProject.description }}</p>
-      <div *ngFor="let resp of projectResponses">
+      <div *ngFor="let resp of projectResponses let idx = index">
         <div>
           <input type="checkbox"
                  [checked]="resp.respondentEmail ? selectedFromAnswers.has(resp.respondentEmail) : false"
                  (change)="toggleAnswerRecipient(resp.respondentEmail)">
           <strong>{{ resp.respondentEmail }}</strong>
+            <button class="btn btn-sm btn-outline-secondary mb-2"
+              (click)="toggleResponse(idx)" [attr.aria-expanded]="openResponses.has(idx)">
+              <i class="bi" [ngClass]="openResponses.has(idx) ? 'bi-caret-down-fill' : 'bi-caret-right-fill'"></i>
+              Antworten {{ openResponses.has(idx) ? 'ausblenden' : 'anzeigen' }}
+          </button>
         </div>
-        <ul>
+        <ul *ngIf="openResponses.has(idx)" class="ps-3 mb-2">
           <li *ngFor="let ans of parseAnswers(resp.answersJson)">
             <span class="fw-semibold">{{ getQuestionText(ans.questionId) }}:</span>
             <span>{{ ans.answer }}</span>
           </li>
         </ul>
       </div>
-    </div>
+    </div> -->
 
     <!-- Empfängerliste aus Antworten -->
     <div *ngIf="selectedFromAnswers.size > 0" class="mb-3">
@@ -145,19 +157,22 @@
           <option value="unsubscribed">Nur Nicht-Abonnenten</option>
         </select>
       </div>
+      </div>
 
-      <!-- ---------------------------- Zähler -------------------------------------------------------------------------->
-      <div class="d-flex flex-wrap align-items-center gap-2 mb-3 mt-2 mt-md-0"><span class="me-2">{{ filteredUsers.length }} Empfänger</span>
-
-      <!-- ---------------------------- Button→Senden ------------------------------------------------------------------->
-        <button class="btn btn-primary flex-grow-1" type="submit" [disabled]="!fm.form.valid || allRecipients.length === 0">
-          <i class="bi bi-envelope-fill me-1"></i>Senden</button>
       
-        <button type="button" class="btn btn-danger flex-grow-1" (click)="resetAllRecipients()"><i class="bi bi-x-circle me-1"></i>
-        Empfänger abwählen</button>
-        </div>
-    </div>
-
+      
+      <!-- ---------------------------- Zähler und Button→Senden ------------------------------------------------------------------->
+      
+      <div class="d-flex flex-wrap align-items-center gap-3 mb-3">
+        <span class="me-2"><strong>{{ selected.size + selectedFromAnswers.size }}</strong> Empfänger ausgewählt</span>
+        <button class="btn btn-primary" type="submit" style="min-width: 60px; max-width: 100px; width: 100%;"
+          [disabled]="!fm.form.valid || (selected.size + selectedFromAnswers.size) === 0"><i class="bi bi-envelope-fill me-1"></i>Senden
+        </button>
+        <button type="button" class="btn btn-danger" style="min-width: 60px; max-width: 120px; width: 100%;"
+          (click)="resetAllRecipients()"><i class="bi bi-x-circle me-1"></i>abwählen
+        </button>
+      </div>
+      
     <!-------------------------------- Button Empfänger-Liste anzeigen -------------------------------------------------->
 
     <button type="button" class="btn btn-outline-secondary mb-3" (click)="toggleUserList()">
@@ -168,7 +183,9 @@
 
   <div *ngIf="showUserList">
     <div class="mb-3">
-      <label class="form-label">Empfänger wählen</label>
+      <label class="form-label">
+        Empfänger wählen <span class="text-muted small">(Filterung ergab {{ filteredUsers.length }} Ergebisse)</span>
+      </label>
       <table class="table table-striped">
         <thead><tr><th>
           <input type="checkbox" [(ngModel)]="allSelected"(change)="toggleAll()" name="allSelected"/>
@@ -243,14 +260,17 @@
                   <td>{{ resp.respondentEmail || '–' }}</td>
                   <td>{{ resp.submittedAt | date:'dd.MM.yyyy HH:mm' }}</td>
                   <td>                    
-                    <button class="btn btn-link btn-sm p-0 me-2" (click)="toggleResponse(idx)" [attr.aria-expanded]="openResponses.has(idx)">
-                    <i class="bi" [ngClass]="openResponses.has(idx) ? 'bi-caret-down-fill' : 'bi-caret-right-fill'"></i>Antworten anzeigen
-                    </button>
-
-                    <ul *ngIf="openResponses.has(idx)" class="ps-3 mb-0">
+                    <button class="btn btn-sm btn-outline-secondary mb-2"
+                      (click)="toggleResponse(idx)" [attr.aria-expanded]="openResponses.has(idx)">
+                      <i class="bi" [ngClass]="openResponses.has(idx) ? 'bi-caret-down-fill' : 'bi-caret-right-fill'"></i>
+                      Antworten {{ openResponses.has(idx) ? 'ausblenden' : 'anzeigen' }}
+                  </button>
+                  <ul *ngIf="openResponses.has(idx)" class="ps-3 mb-2">
                     <li *ngFor="let ans of parseAnswers(resp.answersJson)">
-                    <span class="fw-semibold">{{ getQuestionText(ans.questionId) }}:</span>{{ ans.answer }}</li>
-                    </ul>
+                      <span class="fw-semibold">{{ getQuestionText(ans.questionId) }}:</span>
+                      <span>{{ ans.answer }}</span>
+                    </li>
+                  </ul>
                   </td>
                   <td>
                     <input type="checkbox"

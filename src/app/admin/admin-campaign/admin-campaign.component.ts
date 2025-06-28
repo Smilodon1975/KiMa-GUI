@@ -47,6 +47,7 @@ export class AdminCampaignComponent implements OnInit {
   questions: QuestionDef[] = [];
   openResponses = new Set<number>();
   showProjectDropdown = false;
+  showProjects = false;
 
   constructor(private campaignSvc: CampaignService,private projectService: ProjectService) {}
 
@@ -152,10 +153,10 @@ export class AdminCampaignComponent implements OnInit {
       });
     }
 
-    resetAllRecipients(): void {
-      this.selected.clear();
-      this.selectedFromAnswers.clear();
-      }
+  resetAllRecipients(): void {
+    this.selected.clear();
+    this.selectedFromAnswers.clear();
+    }
 
   toggleProjectDetails(proj: Project) {
     if (this.selectedProject === proj) {

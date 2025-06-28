@@ -107,6 +107,7 @@
                 <h5 class="modal-title" id="projectModalLabel">
                     {{ isEditMode ? 'Projekt bearbeiten' : 'Neues Projekt anlegen' }}
                 </h5>
+                
                 <button type="button" class="btn-close" (click)="closeModal()"></button>
                 </div>
 
@@ -335,31 +336,40 @@
               </tr>
             </thead>
             <tbody>
-              <tr *ngFor="let resp of responses; let idx = index">
-                <td>{{ idx + 1 }}</td>
-                <td class="text-truncate" style="max-width: 200px;">
-                  {{ resp.respondentEmail || '–' }}
-                </td>
-                <td>
-                  {{ resp.submittedAt | date: 'dd.MM.yyyy HH:mm' }}
-                </td>
-                <td>
-                  <div style="max-height: 250px; overflow-y: auto;">
-                    <ul class="list-unstyled mb-0">
-                      <li *ngFor="let item of parseAnswers(resp.answersJson)">
-                        <span class="fw-semibold">
-                          {{ getQuestionText(item.questionId) }}:
-                        </span>
-                        <span class="ms-1"><strong>{{ item.answer }}</strong></span>
-                      </li>
-                    </ul>
-                  </div>
-                </td>
-              </tr>
-            </tbody>
+  <tr *ngFor="let resp of responses; let idx = index">
+    <td>{{ idx + 1 }}</td>
+    <td class="text-truncate" style="max-width: 200px;">
+      {{ resp.respondentEmail || '–' }}
+    </td>
+    <td>
+      {{ resp.submittedAt | date: 'dd.MM.yyyy HH:mm' }}
+    </td>
+    <td>
+      <button class="btn btn-sm btn-outline-secondary mb-2"
+              (click)="toggleResponse(idx)">
+        <i class="bi"
+           [ngClass]="openedResponses.has(idx) ? 'bi-caret-down-fill' : 'bi-caret-right-fill'"></i>
+        Antworten {{ openedResponses.has(idx) ? 'ausblenden' : 'anzeigen' }}
+      </button>
+      <div *ngIf="openedResponses.has(idx)" style="max-height: 250px; overflow-y: auto;">
+        <ul class="list-unstyled mb-0">
+          <li *ngFor="let item of parseAnswers(resp.answersJson)">
+            <span class="fw-semibold">
+              {{ getQuestionText(item.questionId) }}:
+            </span>
+            <span class="ms-1"><strong>{{ item.answer }}</strong></span>
+          </li>
+        </ul>
+      </div>
+    </td>
+  </tr>
+</tbody>
           </table>
         </div>
       </div>
+
+      <!-- ======== Response-Modal-Footer ========-->
+
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" (click)="closeResponseModal()">
           Schließen

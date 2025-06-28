@@ -30,8 +30,7 @@ export class AdminProjectsComponent implements OnInit, AfterViewInit {
     type: 'text',
     text: '',
     options: [],
-    rows: []
-  };
+    rows: []};
   isEditingQuestionIndex: number | null = null;
   private nextQId = 1;
   responses: ProjectResponse[] = [];
@@ -39,6 +38,8 @@ export class AdminProjectsComponent implements OnInit, AfterViewInit {
   responseError = '';
   draftKey = 'adminProjectDraft';
   dirty = false; 
+  isModalMaximized = false;
+  openedResponses = new Set<number>();
 
   constructor(private projectService: ProjectService, private router: Router) {}
 
@@ -83,7 +84,6 @@ export class AdminProjectsComponent implements OnInit, AfterViewInit {
   @HostListener('window:beforeunload', ['$event'])
     handleBeforeUnload(event: BeforeUnloadEvent) {
       if (this.dirty) {
-    // Standard-Dialogfeld für ungesicherte Änderungen auslösen
       event.returnValue = true;
     }
   }
@@ -93,7 +93,7 @@ export class AdminProjectsComponent implements OnInit, AfterViewInit {
     if (modalEl) {     
       modalEl.addEventListener('hidden.bs.modal', () => {
         this.resetFormState();
-      });
+      });  
     }
   }
 
@@ -601,6 +601,14 @@ export class AdminProjectsComponent implements OnInit, AfterViewInit {
     getQuestionText(questionId: number): string {
       const q = this.questions.find(q => Number(q.id) === Number(questionId));
       return q ? q.text : `Frage ${questionId}`;
+    }
+
+    toggleResponse(idx: number): void {
+      if (this.openedResponses.has(idx)) {
+        this.openedResponses.delete(idx);
+      } else {
+        this.openedResponses.add(idx);
+      }
     }
 
   // ----------------- Ende der Anwendung --------------------------->

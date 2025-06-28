@@ -28,6 +28,8 @@ export class ProjectResponseComponent implements OnInit {
   currentIdx = 0;
   reviewMode = false;
   showStart = true;
+  emailAlreadyAnswered = false;
+  checkingEmail = false;
   
 
   constructor(
@@ -38,33 +40,30 @@ export class ProjectResponseComponent implements OnInit {
   ) {}
 
 
-ngOnInit(): void {
-    this.projectId = Number(this.route.snapshot.paramMap.get('id'));
-    if (isNaN(this.projectId)) {
-      this.router.navigate(['/']);
-      return;
-    }
-    this.projectSvc.getById(this.projectId).subscribe({
-      next: proj => {
-        this.project = proj;
-        this.questions = JSON.parse(proj.questionsJson || '[]');
-        this.buildForm();
-        this.loading = false;
-      },
-      error: err => {
-        console.error(err);
+  ngOnInit(): void {
+      this.projectId = Number(this.route.snapshot.paramMap.get('id'));
+      if (isNaN(this.projectId)) {
         this.router.navigate(['/']);
+        return;
       }
-    });
-  }
+      this.projectSvc.getById(this.projectId).subscribe({
+        next: proj => {
+          this.project = proj;
+          this.questions = JSON.parse(proj.questionsJson || '[]');
+          this.buildForm();
+          this.loading = false;
+        },
+        error: err => {
+          console.error(err);
+          this.router.navigate(['/']);
+        }
+      });
+    }
  
   private buildForm(): void {
-  // 1) User-Gruppe für E-Mail
   const userGroup = this.fb.group({
     email: ['', [Validators.required, Validators.email]]
   });
-
-  // 2) Antworten-Array
   const answerControls = this.questions.map(q => {
     switch (q.type) {
       case 'text':
@@ -90,39 +89,39 @@ ngOnInit(): void {
 
       default:
         return this.fb.control('');
-    }
-  });
-
-  this.responseForm = this.fb.group({
-    user: userGroup,
-    answers: this.fb.array(answerControls)
-  });
-}
-
-// Hilfs-Validator: mindestens N Boxen in einem FormArray ausgewählt
-private minSelected(min: number) {
-  return (fa: AbstractControl) => {
-    const arr = fa as FormArray;
-    const total = arr.controls
-      .map(ctrl => ctrl.value)
-      .reduce((sum, v) => sum + (v ? 1 : 0), 0);
-    return total >= min ? null : { minSelected: true };
-  };
-}
-
-// Für Grid: zählt alle Zeilen×Spalten-Zellen durch 
-private minGridSelected(min: number) {
-  return (fa: AbstractControl) => {
-    const outer = fa as FormArray; // Array<FormArray>
-    let total = 0;
-    outer.controls.forEach(inner => {
-      (inner as FormArray).controls.forEach(c => {
-        if (c.value) total++;
+    }});
+    this.responseForm = this.fb.group({
+        user: userGroup,
+        answers: this.fb.array(answerControls)
       });
-    });
-    return total >= min ? null : { minGridSelected: true };
-  };
-}
+    this.responseForm.get('user.email')?.valueChanges
+      .subscribe(() => this.checkIfAlreadyAnswered());
+    }
+
+  // Hilfs-Validator: mindestens N Boxen in einem FormArray ausgewählt
+  private minSelected(min: number) {
+    return (fa: AbstractControl) => {
+      const arr = fa as FormArray;
+      const total = arr.controls
+        .map(ctrl => ctrl.value)
+        .reduce((sum, v) => sum + (v ? 1 : 0), 0);
+      return total >= min ? null : { minSelected: true };
+    };
+  }
+
+  // Für Grid: zählt alle Zeilen×Spalten-Zellen durch 
+  private minGridSelected(min: number) {
+    return (fa: AbstractControl) => {
+      const outer = fa as FormArray; // Array<FormArray>
+      let total = 0;
+      outer.controls.forEach(inner => {
+        (inner as FormArray).controls.forEach(c => {
+          if (c.value) total++;
+        });
+      });
+      return total >= min ? null : { minGridSelected: true };
+    };
+  }
 
   get answers(): FormArray {
     return this.responseForm.get('answers') as FormArray;
@@ -163,6 +162,10 @@ private minGridSelected(min: number) {
   onSubmit(): void {
     if (this.responseForm.invalid) {
       this.submitError = 'Bitte alle Pflichtfelder ausfüllen.';
+      return;
+    }
+    if (this.emailAlreadyAnswered) {
+      this.submitError = 'Für diese E-Mail-Adresse wurde bereits eine Antwort abgegeben.';
       return;
     }
     this.submitting = true;
@@ -228,6 +231,26 @@ private minGridSelected(min: number) {
         return '';
     }
   }
+
+  checkIfAlreadyAnswered() {
+    const email = this.responseForm.get('user.email')?.value;
+    if (!email || this.responseForm.get('user.email')?.invalid) {
+      this.emailAlreadyAnswered = false;
+      return;
+    }
+    this.checkingEmail = true;
+    this.projectSvc.checkResponseExists(this.projectId, email).subscribe({
+      next: exists => {
+        this.emailAlreadyAnswered = exists;
+        this.checkingEmail = false;
+      },
+      error: () => {
+        this.emailAlreadyAnswered = false;
+        this.checkingEmail = false;
+      }
+    });
+  }
+
   
   goToProjectOverview(): void {
     this.router.navigate(['/projects']);

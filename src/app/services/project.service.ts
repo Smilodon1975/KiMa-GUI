@@ -5,6 +5,8 @@ import { Project, ProjectStatus } from '../models/project.model';
 import { ProjectResponse } from '../models/project-response.model';
 import { Observable } from 'rxjs';
 import { environment } from '../../environments/environment';
+import { HttpParams } from '@angular/common/http';
+
 
 @Injectable({
   providedIn: 'root'
@@ -58,6 +60,13 @@ export class ProjectService {
 
   getResponses(projectId: number): Observable<ProjectResponse[]> {
     return this.http.get<ProjectResponse[]>(`${this.apiUrlResponses}/${projectId}/responses`);
+  }
+
+  checkResponseExists(projectId: number, email: string): Observable<boolean> {
+    return this.http.get<boolean>(
+      `${this.apiUrlResponses}/${projectId}/responses/hasResponded`,
+      { params: { email } }
+    );
   }
 
   
