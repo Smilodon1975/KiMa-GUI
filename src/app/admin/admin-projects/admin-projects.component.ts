@@ -40,6 +40,8 @@ export class AdminProjectsComponent implements OnInit, AfterViewInit {
   dirty = false; 
   isModalMaximized = false;
   openedResponses = new Set<number>();
+  projectSearch = '';
+  filteredProjects: Project[] = [];
 
   constructor(private projectService: ProjectService, private router: Router) {}
 
@@ -67,6 +69,7 @@ export class AdminProjectsComponent implements OnInit, AfterViewInit {
           ...p,
           status: p.status || ProjectStatus.Draft
         }));
+        this.filterProjects();
       },
       error: (err) => {
         console.error('Fehler beim Laden der Projekte:', err);
@@ -95,6 +98,16 @@ export class AdminProjectsComponent implements OnInit, AfterViewInit {
         this.resetFormState();
       });  
     }
+  }
+
+  filterProjects(): void {
+  const term = this.projectSearch.trim().toLowerCase();
+  this.filteredProjects = !term
+    ? this.projects
+    : this.projects.filter(p =>
+        (p.name || '').toLowerCase().includes(term) ||
+        (p.description || '').toLowerCase().includes(term)
+      );
   }
 
   private resetFormState(): void {

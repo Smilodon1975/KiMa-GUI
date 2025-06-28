@@ -20,15 +20,29 @@
   <!---------------------------------------------------------Projekte-Liste--------------------------------------------------------------------->
 
     <!-- Projektliste ein-/ausklappbar -->
-<div class="mb-4">
-  <button class="btn btn-outline-secondary mb-2" (click)="showProjects = !showProjects">
-    <i class="bi" [ngClass]="showProjects ? 'bi-caret-down-fill' : 'bi-caret-right-fill'"></i>
-    Projekte {{ showProjects ? 'ausblenden' : 'anzeigen' }}
-  </button>
-  <div *ngIf="showProjects">
+
+  <div class="d-flex align-items-stretch gap-2 mb-3 flex-wrap">
+    <button class="btn btn-outline-secondary h-100" (click)="showProjects = !showProjects">
+      <i class="bi" [ngClass]="showProjects ? 'bi-caret-down-fill' : 'bi-caret-right-fill'"></i>
+      Projekte {{ showProjects ? 'ausblenden' : 'anzeigen' }}
+    </button>
+    <div style="max-width: 350px; flex: 1 1 220px;">      
+      <div class="input-group">
+        <span class="input-group-text bg-white border-end-0">
+          <i class="bi bi-search"></i>
+        </span>
+        <input type="text" class="form-control border-start-0" placeholder="Projekte filtern…" [(ngModel)]="projectSearch" (input)="filterProjects()" style="border-left: 0;" />
+        <button *ngIf="projectSearch" type="button" class="btn btn-outline-secondary border-start-0"
+            (click)="projectSearch=''; filterProjects()">
+          <i class="bi bi-x-lg"></i>
+        </button>
+      </div>
+    </div>
+  </div>
+  <div *ngIf="showProjects" class="mb-4">
     <h4>Projekte</h4>
     <ul class="list-group">
-      <li *ngFor="let proj of projects" class="list-group-item d-flex justify-content-between align-items-center">
+      <li *ngFor="let proj of filteredProjects" class="list-group-item d-flex justify-content-between align-items-center">
         <span>{{ proj.name }}</span>
         <button class="btn btn-sm btn-outline-primary"
                 (click)="openProjectResponseModal(proj)">
@@ -37,45 +51,19 @@
       </li>
     </ul>
   </div>
-</div>
 
-    <!-- Projektdetails und Antworten (nur für ausgewähltes Projekt) -->
-    <!-- <div *ngIf="selectedProject">
-      <h5>{{ selectedProject.name }}</h5>
-      <p>{{ selectedProject.description }}</p>
-      <div *ngFor="let resp of projectResponses let idx = index">
-        <div>
-          <input type="checkbox"
-                 [checked]="resp.respondentEmail ? selectedFromAnswers.has(resp.respondentEmail) : false"
-                 (change)="toggleAnswerRecipient(resp.respondentEmail)">
-          <strong>{{ resp.respondentEmail }}</strong>
-            <button class="btn btn-sm btn-outline-secondary mb-2"
-              (click)="toggleResponse(idx)" [attr.aria-expanded]="openResponses.has(idx)">
-              <i class="bi" [ngClass]="openResponses.has(idx) ? 'bi-caret-down-fill' : 'bi-caret-right-fill'"></i>
-              Antworten {{ openResponses.has(idx) ? 'ausblenden' : 'anzeigen' }}
-          </button>
-        </div>
-        <ul *ngIf="openResponses.has(idx)" class="ps-3 mb-2">
-          <li *ngFor="let ans of parseAnswers(resp.answersJson)">
-            <span class="fw-semibold">{{ getQuestionText(ans.questionId) }}:</span>
-            <span>{{ ans.answer }}</span>
-          </li>
-        </ul>
-      </div>
-    </div> -->
+  <!-- Empfängerliste aus Antworten -->
+  <div *ngIf="selectedFromAnswers.size > 0" class="mb-3">
+    <h6>ausgewählte Empfänger aus Projekt-Antworten:</h6>
+    <span *ngFor="let email of selectedFromAnswersArray()" class="badge bg-primary me-1">{{ email }}</span>
+  </div>
 
-    <!-- Empfängerliste aus Antworten -->
-    <div *ngIf="selectedFromAnswers.size > 0" class="mb-3">
-      <h6>Empfänger aus Antworten:</h6>
-      <span *ngFor="let email of selectedFromAnswersArray()" class="badge bg-primary me-1">{{ email }}</span>
-    </div>
+  <!--===================================================================================================================================-->
 
-    <!--===================================================================================================================================-->
-
-    <!-------------------------------------------------------E-Mail erstellen---------------------------------------------------------------->
+  <!-------------------------------------------------------E-Mail erstellen---------------------------------------------------------------->
     
-<form (ngSubmit)="onSend(fm)" #fm="ngForm">
-
+    <form (ngSubmit)="onSend(fm)" #fm="ngForm">
+      <h4>Email erstellen</h4>
     <!-- Projekt-Name -->
     <div class="mb-3"><label>Projekt-Name</label>
       <input type="text" class="form-control" [(ngModel)]="campaignName" name="campaignName" required/>
@@ -126,7 +114,7 @@
       </div>
 
       <div *ngIf="selectedFromAnswers.size > 0" class="alert alert-info">
-        <strong>Empfänger aus Antworten:</strong>
+        <strong>ausgewählte Empfänger aus Projekt-Antworten:  </strong>
         <span *ngFor="let mail of selectedFromAnswersArray()" class="badge bg-primary me-1">
           {{ mail }}
         </span>
@@ -211,81 +199,81 @@
     </div>
   </div>
     <div class="mb-3 position-relative"></div> 
-</form>      
-  </div>
+    </form>      
+        
 
 
-  <!--========================================================================================================================================-->
+    <!--========================================================================================================================================-->
 
-  <!-------------------------------------------------Modal:Projekt-Details & Antworten---------------------------------------------------------->
+    <!-------------------------------------------------Modal:Projekt-Details & Antworten---------------------------------------------------------->
 
-<div class="modal fade" id="projectResponseModal" tabindex="-1" aria-labelledby="projectResponseModalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-xl">
-    <div class="modal-content">
 
-      <div class="modal-header">
-        <h5 class="modal-title" id="projectResponseModalLabel">Antworten zum Projekt: {{ selectedProject?.name }}</h5>
-        <button type="button" class="btn-close" (click)="closeProjectResponseModal()" aria-label="Schließen"></button>
-      </div>
-         <div class="alert alert-info py-2 px-3 mb-0 mt-2 small" *ngIf="selectedProject?.description">{{ selectedProject?.description }}</div>
-        <div class="modal-body">
-
-          <div *ngIf="loadingResponses" class="text-center my-4">
-            <div class="spinner-border text-primary" role="status">
-              <span class="visually-hidden">Lädt...</span>
-            </div>
-            <p class="mt-2">Lade Antworten…</p>
-          </div>
-          <div *ngIf="!loadingResponses && responseError" class="alert alert-danger text-center my-3">
-            {{ responseError }}
-          </div>
-          <div *ngIf="!loadingResponses && !responseError && responses.length === 0" class="text-center text-muted my-4">
-            Keine Antworten für dieses Projekt vorhanden.
-          </div>
-          <div *ngIf="!loadingResponses && responses.length > 0" class="table-responsive">
-            <table class="table table-striped table-bordered table-hover table-sm mb-0">
-              <thead class="table-light">
-                <tr>
-                  <th style="width: 5%;">#</th>
-                  <th style="width: 20%;">E-Mail</th>
-                  <th style="width: 15%;">Datum</th>
-                  <th>Antworten</th>
-                  <th>zur Empfängerliste hinzufügen</th>
-                </tr>
-              </thead>
-              <!-- innerhalb des Modal-Body -->
-              <tbody>
-                <tr *ngFor="let resp of responses; let idx = index">
-                  <td>{{ idx + 1 }}</td>
-                  <td>{{ resp.respondentEmail || '–' }}</td>
-                  <td>{{ resp.submittedAt | date:'dd.MM.yyyy HH:mm' }}</td>
-                  <td>                    
-                    <button class="btn btn-sm btn-outline-secondary mb-2"
-                      (click)="toggleResponse(idx)" [attr.aria-expanded]="openResponses.has(idx)">
-                      <i class="bi" [ngClass]="openResponses.has(idx) ? 'bi-caret-down-fill' : 'bi-caret-right-fill'"></i>
-                      Antworten {{ openResponses.has(idx) ? 'ausblenden' : 'anzeigen' }}
-                  </button>
-                  <ul *ngIf="openResponses.has(idx)" class="ps-3 mb-2">
-                    <li *ngFor="let ans of parseAnswers(resp.answersJson)">
-                      <span class="fw-semibold">{{ getQuestionText(ans.questionId) }}:</span>
-                      <span>{{ ans.answer }}</span>
-                    </li>
-                  </ul>
-                  </td>
-                  <td>
-                    <input type="checkbox"
-                      [checked]="selectedFromAnswers.has(resp.respondentEmail || '')"
-                      (change)="toggleAnswerRecipient(resp.respondentEmail || '')">
-                  </td>
-                </tr>
-              </tbody>
-          </table>
+  <div class="modal fade" id="projectResponseModal" tabindex="-1" aria-labelledby="projectResponseModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="projectResponseModalLabel">Antworten zum Projekt: {{ selectedProject?.name }}</h5>
+          <button type="button" class="btn-close" (click)="closeProjectResponseModal()" aria-label="Schließen"></button>
         </div>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" (click)="closeProjectResponseModal()">
-          Schließen
-        </button>
+          <div class="alert alert-info py-2 px-3 mb-0 mt-2 small" *ngIf="selectedProject?.description">{{ selectedProject?.description }}</div>
+          <div class="modal-body">
+            <div *ngIf="loadingResponses" class="text-center my-4">
+              <div class="spinner-border text-primary" role="status">
+                <span class="visually-hidden">Lädt...</span>
+              </div>
+              <p class="mt-2">Lade Antworten…</p>
+            </div>
+            <div *ngIf="!loadingResponses && responseError" class="alert alert-danger text-center my-3">
+              {{ responseError }}
+            </div>
+            <div *ngIf="!loadingResponses && !responseError && responses.length === 0" class="text-center text-muted my-4">
+              Keine Antworten für dieses Projekt vorhanden.
+            </div>
+            <div *ngIf="!loadingResponses && responses.length > 0" class="table-responsive">
+              <table class="table table-striped table-bordered table-hover table-sm mb-0">
+                <thead class="table-light">
+                  <tr>
+                    <th style="width: 5%;">#</th>
+                    <th style="width: 20%;">E-Mail</th>
+                    <th style="width: 15%;">Datum</th>
+                    <th>Antworten</th>
+                    <th>zur Empfängerliste hinzufügen</th>
+                  </tr>
+                </thead>
+                <!-- innerhalb des Modal-Body -->
+                <tbody>
+                  <tr *ngFor="let resp of responses; let idx = index">
+                    <td>{{ idx + 1 }}</td>
+                    <td>{{ resp.respondentEmail || '–' }}</td>
+                    <td>{{ resp.submittedAt | date:'dd.MM.yyyy HH:mm' }}</td>
+                    <td>                    
+                      <button class="btn btn-sm btn-outline-secondary mb-2"
+                        (click)="toggleResponse(idx)" [attr.aria-expanded]="openResponses.has(idx)">
+                        <i class="bi" [ngClass]="openResponses.has(idx) ? 'bi-caret-down-fill' : 'bi-caret-right-fill'"></i>
+                        Antworten {{ openResponses.has(idx) ? 'ausblenden' : 'anzeigen' }}
+                    </button>
+                    <ul *ngIf="openResponses.has(idx)" class="ps-3 mb-2">
+                      <li *ngFor="let ans of parseAnswers(resp.answersJson)">
+                        <span class="fw-semibold">{{ getQuestionText(ans.questionId) }}:</span>
+                        <span>{{ ans.answer }}</span>
+                      </li>
+                    </ul>
+                    </td>
+                    <td>
+                      <input type="checkbox"
+                        [checked]="selectedFromAnswers.has(resp.respondentEmail || '')"
+                        (change)="toggleAnswerRecipient(resp.respondentEmail || '')">
+                    </td>
+                  </tr>
+                </tbody>
+            </table>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" (click)="closeProjectResponseModal()">
+            Schließen
+          </button>
+        </div>
       </div>
     </div>
   </div>

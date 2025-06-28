@@ -48,6 +48,8 @@ export class AdminCampaignComponent implements OnInit {
   openResponses = new Set<number>();
   showProjectDropdown = false;
   showProjects = false;
+  projectSearch = '';
+  filteredProjects: Project[] = [];
 
   constructor(private campaignSvc: CampaignService,private projectService: ProjectService) {}
 
@@ -67,9 +69,23 @@ export class AdminCampaignComponent implements OnInit {
   private loadProjects(): void {
     this.projectService.getAll().subscribe({
       next: (projects) => {
-        this.projects = projects;},
+        this.projects = projects;
+        this.filterProjects();
+      },
       error: (err) => {
-        console.error('Fehler beim Laden der Projekte:', err);}});
+        console.error('Fehler beim Laden der Projekte:', err);
+      }
+    });
+  }
+
+  filterProjects(): void {
+  const term = this.projectSearch.trim().toLowerCase();
+  this.filteredProjects = !term
+    ? this.projects
+    : this.projects.filter(p =>
+        (p.name || '').toLowerCase().includes(term) ||
+        (p.description || '').toLowerCase().includes(term)
+      );
   }
 
   filterRecipients(): void {
