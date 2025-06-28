@@ -115,18 +115,15 @@
 
       <div class="modal fade" id="projectModal" tabindex="-1" aria-labelledby="projectModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-lg">
-            <div class="modal-content">
+          <div class="modal-content">
             <form #projectForm="ngForm" (ngSubmit)="saveProject(projectForm, false)">
-                <div class="modal-header">
+              <div class="modal-header">
                 <h5 class="modal-title" id="projectModalLabel">
-                    {{ isEditMode ? 'Projekt bearbeiten' : 'Neues Projekt anlegen' }}
-                </h5>
-                
+                {{ isEditMode ? 'Projekt bearbeiten' : 'Neues Projekt anlegen' }}</h5>
                 <button type="button" class="btn-close" (click)="closeModal()"></button>
-                </div>
-
+              </div>
                 <!--Input Name-->
-                <div class="modal-body">               
+              <div class="modal-body">               
                 <input type="hidden" [(ngModel)]="selectedProject.id" name="id" />
 
                 <div class="mb-3">
@@ -136,16 +133,12 @@
                     Der Name des Projektes ist erforderlich.
                     </div>
                 </div>
-
                 <!--Input Beschreibung-->
                 <div class="mb-3">
-                    <label for="description" class="form-label">Beschreibung</label>
-                    <textarea id="description" class="form-control" rows="10" name="description" [(ngModel)]="selectedProject.description" #description="ngModel" (ngModelChange)="markDirty()"></textarea>
+                  <label for="description" class="form-label">Beschreibung</label>
+                  <textarea id="description" class="form-control" rows="10" name="description" [(ngModel)]="selectedProject.description" #description="ngModel" (ngModelChange)="markDirty()"></textarea>
                 </div>
-
-          
-                  <!-- Fragen erstellen: -->          
-
+                  <!-- Fragen erstellen: -->    
                 <hr />
                 <h6>Fragen-Katalog verwalten</h6>
 
@@ -153,11 +146,11 @@
                 <input [(ngModel)]="newQuestion.text" name="newQText" class="form-control mb-1" placeholder="Fragentext" />
 
                 <select [(ngModel)]="newQuestion.type" name="newQType" class="form-select mb-2">
-                    <option value="radio">Einzelauswahl (Radio)</option>
-                    <option value="checkbox">Mehrfachauswahl (Checkbox)</option>
-                    <option value="checkboxGrid">Termintabelle (Checkbox-Grid)</option>
-                    <option value="text">Freitext</option>
-                    <option value="date">Datum</option>
+                  <option value="radio">Einzelauswahl (Radio)</option>
+                  <option value="checkbox">Mehrfachauswahl (Checkbox)</option>
+                  <option value="checkboxGrid">Termintabelle (Checkbox-Grid)</option>
+                  <option value="text">Freitext</option>
+                  <option value="date">Datum</option>
                 </select>
 
                 
@@ -174,8 +167,6 @@
                     <button type="button" class="btn btn-outline-danger btn-sm ms-2" (click)="removeOption(i)">✖</button>
                   </div>
                   <button type="button" class="btn btn-sm btn-success mb-3" (click)="addOption()">+ Spalte hinzufügen</button>
-
-                  
                   <h6>Zeilen definieren:</h6>
                   <div *ngFor="let r of newQuestion.rows; let j = index" class="d-flex mb-1 align-items-center">
                     <input [(ngModel)]="r.label" name="rowLabel{{j}}" class="form-control form-control-sm me-1" placeholder="Zeilen-Label (z.B. 08–10)" />
@@ -191,7 +182,7 @@
 
 
                 <div *ngIf="newQuestion.type === 'radio' || newQuestion.type === 'checkbox'">
-                    <div *ngFor="let opt of newQuestion.options; let i = index" class="d-flex mb-1 align-items-center">
+                  <div *ngFor="let opt of newQuestion.options; let i = index" class="d-flex mb-1 align-items-center">
                     <input [(ngModel)]="opt.label" name="optLabel{{i}}" class="form-control form-control-sm me-1" placeholder="Option-Label" />
                     <input [(ngModel)]="opt.value" name="optValue{{i}}" class="form-control form-control-sm me-1" placeholder="Option-Value" />
                     <div class="form-check form-check-inline">
@@ -199,51 +190,72 @@
                         <label class="form-check-label small">Ausschluss?</label>
                     </div>
                     <button type="button" class="btn btn-outline-danger btn-sm ms-2" (click)="removeOption(i)">✖</button>
-                    </div>
+                  </div>
                     <button type="button" class="btn btn-sm btn-success" (click)="addOption()">+ Option hinzufügen</button>
                 </div>
-
-                <button type="button" class="btn btn-primary btn-sm mt-2" (click)="addQuestion()">Frage hinzufügen</button>
-                </div>
+                  <button type="button" class="btn btn-primary btn-sm mt-2" (click)="addQuestion()">Frage hinzufügen</button>
+              </div>
                 
-                <ul class="list-group" *ngIf="questions.length > 0">
-                <li class="list-group-item" *ngFor="let q of questions; let idx = index">
-                    <div class="d-flex justify-content-between align-items-start">
-                    <div>
-                        <strong>{{ q.id }}. {{ q.text }}</strong>
+                <table class="table table-sm align-middle mb-0" cdkDropList (cdkDropListDropped)="dropQuestion($event)" *ngIf="questions.length > 0">
+                  <thead>
+                    <tr>
+                      <th style="width: 5%;">Nr.</th>
+                      <th style="width: 40%;">Fragetext</th>
+                      <th style="width: 15%;">Typ</th>
+                      <th style="width: 25%;">Antwortmöglichkeiten</th>
+                      <th style="width: 15%;">Aktionen</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr *ngFor="let q of questions; let idx = index" cdkDrag>
+                      <td>{{ q.id }}</td>
+                      <td>
+                        <span>{{ q.text }}</span>
+                      </td>
+                      <td>
                         <span class="badge bg-secondary">{{ q.type }}</span>
-                    </div>
-                    <div>
-                        <button type="button" class="btn btn-sm btn-outline-secondary me-1" (click)="editQuestion(idx)">Bearbeiten</button>
-                        <button class="btn btn-sm btn-outline-danger" (click)="deleteQuestion(idx)">Löschen</button>
-                    </div>
-                    </div>
-                    <div *ngIf="questions[idx].options">
-                    <small>Optionen:</small>
-                    <ul class="ps-3">
-                        <li *ngFor="let o of q.options">
-                        {{ o.label }} ({{ o.value }}) <span *ngIf="o.exclude" class="text-danger">(Exkl.)</span>
-                        </li>
-                    </ul>
-                    </div>
-                </li>
-                </ul>     
-                </div>
+                      </td>
+                      <td>
+                        <ng-container *ngIf="q.options && q.options.length > 0">
+                          <ul class="mb-0 ps-3">
+                            <li *ngFor="let o of q.options" style="white-space:nowrap;">
+                              {{ o.label }} <span class="text-muted small">({{ o.value }})</span>
+                              <span *ngIf="o.exclude" class="text-danger small">(Exkl.)</span>
+                            </li>
+                          </ul>
+                        </ng-container>
+                        <ng-container *ngIf="q.rows && q.rows.length > 0">
+                          <div class="small text-muted">Zeilen: {{ getRowLabels(q.rows) }}</div>
+                        </ng-container>
+                      </td>
+                      <td>
+                        <div class="d-flex align-items-center gap-1">
+                          <button type="button" class="btn btn-sm btn-outline-secondary" (click)="editQuestion(idx)">Bearbeiten</button>
+                          <button class="btn btn-sm btn-outline-danger" (click)="deleteQuestion(idx)">Löschen</button>
+                          <span cdkDragHandle style="cursor: grab;" title="Frage verschieben">
+                            <i class="bi bi-arrows-move"></i>
+                          </span>
+                        </div>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>     
+              </div>
 
                 <!-- Modal-Footer mit Buttons -->
-                <div class="modal-footer">
-                  <button type="button" class="btn btn-secondary" (click)="closeModal()">Abbrechen</button>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" (click)="closeModal()">Abbrechen</button>
 
-                  <button type="button" class="btn btn-outline-secondary me-2" [disabled]="projectForm.invalid"
-                  (click)="saveProject(projectForm, true)">Zwischenspeichern</button>
+                <button type="button" class="btn btn-outline-secondary me-2" [disabled]="projectForm.invalid"
+                (click)="saveProject(projectForm, true)">Zwischenspeichern</button>
 
-                  <button type="submit" class="btn btn-primary me-2" [disabled]="projectForm.invalid">
-                    {{ isEditMode ? 'Speichern' : 'Anlegen' }}</button>
-                </div>
-              </form>
-            </div>
+                <button type="submit" class="btn btn-primary me-2" [disabled]="projectForm.invalid">
+                {{ isEditMode ? 'Speichern' : 'Anlegen' }}</button>
+              </div>
+            </form>
           </div>
         </div>
+      </div>
 
 
 <!--===============================================================================================================-->
@@ -267,7 +279,7 @@
                 <hr />
                 <h6>Fragen:</h6>
                 <ul *ngIf="questions.length > 0">
-                  <li *ngFor="let q of questions">{{ q.text }}</li>
+                  <li *ngFor="let q of questions">{{ q.id }}) {{ q.text }}</li>
                 </ul>
                 <p *ngIf="questions.length === 0" class="text-muted">Keine Fragen definiert.</p>
               </div>

@@ -7,13 +7,13 @@ import { QuestionDef } from '../../models/question-def.model';
 import { ProjectService } from '../../services/project.service';
 import * as bootstrap from 'bootstrap';
 import { RouterModule, Router } from '@angular/router';
-
-
+import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
+import { DragDropModule } from '@angular/cdk/drag-drop';
 
 @Component({
   selector: 'app-admin-projects',
   standalone: true,
-  imports: [CommonModule, FormsModule, RouterModule],
+  imports: [CommonModule, FormsModule, RouterModule, DragDropModule],
   templateUrl: './admin-projects.component.html',
   styleUrls: ['./admin-projects.component.css']
 })
@@ -516,6 +516,11 @@ export class AdminProjectsComponent implements OnInit, AfterViewInit {
     this.markDirty();  
   }
 
+  dropQuestion(event: CdkDragDrop<any[]>) {
+    moveItemInArray(this.questions, event.previousIndex, event.currentIndex);
+    this.questions.forEach((q, idx) => q.id = idx + 1);
+  }
+
   // ----------------- Responses laden --------------------------->
 
 
@@ -625,5 +630,9 @@ export class AdminProjectsComponent implements OnInit, AfterViewInit {
     }
 
   // ----------------- Ende der Anwendung --------------------------->
+
+  getRowLabels(rows: any[]): string {
+  return Array.isArray(rows) ? rows.map(r => r.label).join(', ') : '';
+  }
 }
 
