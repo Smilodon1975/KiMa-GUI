@@ -195,7 +195,7 @@
                 </div>
                   <button type="button" class="btn btn-primary btn-sm mt-2" (click)="addQuestion()">Frage hinzufügen</button>
               </div>
-                
+                <div class="table-responsive">
                 <table class="table table-sm align-middle mb-0" cdkDropList (cdkDropListDropped)="dropQuestion($event)" *ngIf="questions.length > 0">
                   <thead>
                     <tr>
@@ -239,7 +239,8 @@
                       </td>
                     </tr>
                   </tbody>
-                </table>     
+                </table>
+                </div>     
               </div>
 
                 <!-- Modal-Footer mit Buttons -->

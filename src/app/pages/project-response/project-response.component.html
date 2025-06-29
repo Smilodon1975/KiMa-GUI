@@ -70,6 +70,11 @@
               <div *ngIf="emailAlreadyAnswered" class="alert alert-warning mt-2">
                 Für diese E-Mail-Adresse wurde bereits eine Antwort für dieses Projekt abgegeben.
                 Mehrfachteilnahme ist nicht möglich.
+                <div class="mt-2">
+                  <button type="button" class="btn btn-outline-secondary btn-sm" (click)="resetEmailInput()">
+                    Neue E-Mail eingeben
+                  </button>
+                </div>
               </div>
               <div
                 *ngIf="responseForm.get('user.email')?.invalid && responseForm.get('user.email')?.touched && !emailAlreadyAnswered"

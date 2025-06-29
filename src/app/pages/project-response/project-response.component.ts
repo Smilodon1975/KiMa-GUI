@@ -250,9 +250,16 @@ export class ProjectResponseComponent implements OnInit {
       }
     });
   }
-
   
   goToProjectOverview(): void {
     this.router.navigate(['/projects']);
   }
+
+  resetEmailInput() {
+    this.responseForm.get('user.email')?.reset('');
+    this.emailAlreadyAnswered = false;
+    this.checkingEmail = false;    
+  }
+
+
 }

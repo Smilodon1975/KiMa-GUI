@@ -168,19 +168,23 @@
     </button>
 
   <!---------------------------------------------- Empfänger-Tabelle ---------------------------------------------------->
-
+   
   <div *ngIf="showUserList">
     <div class="mb-3">
       <label class="form-label">
         Empfänger wählen <span class="text-muted small">(Filterung ergab {{ filteredUsers.length }} Ergebisse)</span>
       </label>
+      <div class="table-responsive">
       <table class="table table-striped">
         <thead><tr><th>
           <input type="checkbox" [(ngModel)]="allSelected"(change)="toggleAll()" name="allSelected"/>
             </th>
             <th>E-Mail</th>
             <th>Benutzername</th>
-            <th>Newsletter?</th>
+            <th style="min-width: 110px; white-space: nowrap;">
+              <span class="d-none d-sm-inline">Newsletter?</span>
+              <span class="d-inline d-sm-none">NL?</span>
+            </th>
           </tr>
         </thead>
         <tbody>
@@ -198,7 +202,7 @@
       </table>
     </div>
   </div>
-    <div class="mb-3 position-relative"></div> 
+  </div>
     </form>      
         
 
