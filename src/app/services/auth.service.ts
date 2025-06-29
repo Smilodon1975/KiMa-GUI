@@ -133,41 +133,28 @@ export class AuthService {
       return null;
     }
   }
-
-  // ✅ Holt Benutzerdaten anhand der Benutzer-ID
-  // getUserData(): Observable<any> {
-  //   const userId = this.getUserId();
-  //   if (!userId) return of(null);
-  
-  //   return this.http.get<any>(`${this.userUrl}/user-role/${userId}`); 
-  // }
+ 
   getUserData(): Observable<{ email: string; userName: string; /* ... */ } | null> {
   const userId = this.getUserId();
   if (!userId) return of(null);
   return this.http
-    .get<any>(`${this.userUrl}/${userId}`)   // ← richtige URL: /api/user/{id}
+    .get<any>(`${this.userUrl}/${userId}`)
     .pipe(
       catchError(err => {
-        // statt Error ins Console: einfach null zurückliefern
         console.warn('getUserData fehlgeschlagen, ignoriere:', err.status);
         return of(null);
       })
     );
 }
 
-  // ✅ Passwort-Reset anfordern
   requestPasswordReset(email: string) {
     return this.http.post(`${this.authUrl}/request-password-reset`, { email });
   }
-
-  // ✅ Neues Passwort setzen
+  
   resetPassword(data: { email: string; token: string; newPassword: string; userName: string }) {
     console.log("🚀 Sende Reset-Passwort-Anfrage mit:", data);
     return this.http.post(`${this.authUrl}/reset-password`, data);
   }
-  
-
- 
 
   confirmEmail(email: string, token: string): Observable<any> {
     const url = `${this.authUrl}/confirm-email?email=${encodeURIComponent(email)}&token=${encodeURIComponent(token)}`;

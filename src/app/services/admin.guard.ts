@@ -9,11 +9,10 @@ import { Observable, map, of } from 'rxjs';
 export class AdminGuard implements CanActivate {
   constructor(private authService: AuthService, private router: Router) {}
 
-  // ✅ Prüft, ob der Benutzer Admin ist und die Route aufrufen darf
+ 
   canActivate(): Observable<boolean> {
     const token = localStorage.getItem('token');
-
-    // ❌ Falls kein Token vorhanden, Weiterleitung zur Startseite
+   
     if (!token) {
       console.log("AdminGuard: Kein Token gefunden!");
       this.router.navigate(['/home']);
@@ -23,8 +22,6 @@ export class AdminGuard implements CanActivate {
     return this.authService.getUserRole().pipe(
       map(role => {
         console.log("AdminGuard prüft Rolle:", role);
-
-        // ✅ Erlaubt den Zugriff, wenn der Benutzer Admin ist
         if (role === 'Admin') {
           return true;
         } else {

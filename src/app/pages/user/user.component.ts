@@ -331,6 +331,7 @@ export class UserComponent implements OnInit {
         this.deleteSuccessMessage = "Dein Account wurde erfolgreich gelöscht.";
         setTimeout(() => {
           this.deleteFadeOut = true;
+          this.closeModal();
         }, 2000);
         setTimeout(() => {
           this.deleteSuccessMessage = '';
@@ -338,7 +339,7 @@ export class UserComponent implements OnInit {
           // Schließe das Modal
           const modalElement = document.getElementById('deleteAccountModal');
           if (modalElement) {
-            const deleteModal = bootstrap.Modal.getInstance(modalElement);
+            const deleteModal = bootstrap.Modal.getOrCreateInstance(modalElement);
             if (deleteModal) {
               deleteModal.hide();
             }

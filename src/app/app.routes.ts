@@ -32,7 +32,7 @@ const authGuard: CanActivateFn = () => {
   if (authService.isLoggedIn()) {
     return true;
   } else {
-    router.navigate(['/login']);
+    router.navigate(['/home']);
     return false;
   }
 };
@@ -55,7 +55,6 @@ const maintenanceGuard: CanActivateFn = () => {
   return false;
 };
 
-// ✅ Definiert die Anwendungsrouten
 export const routes: Routes = [
   { path: '', component: HomeComponent, canActivate: [maintenanceGuard] },
   { path: 'home', component: HomeComponent, canActivate: [maintenanceGuard] },

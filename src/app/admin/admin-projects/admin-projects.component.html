@@ -373,21 +373,16 @@
     </td>
     <td>
       <button class="btn btn-sm btn-outline-secondary mb-2"
-              (click)="toggleResponse(idx)">
-        <i class="bi"
+              (click)="toggleResponse(idx)"><i class="bi"
            [ngClass]="openedResponses.has(idx) ? 'bi-caret-down-fill' : 'bi-caret-right-fill'"></i>
         Antworten {{ openedResponses.has(idx) ? 'ausblenden' : 'anzeigen' }}
       </button>
-      <div *ngIf="openedResponses.has(idx)" style="max-height: 250px; overflow-y: auto;">
-        <ul class="list-unstyled mb-0">
-          <li *ngFor="let item of parseAnswers(resp.answersJson)">
-            <span class="fw-semibold">
-              {{ getQuestionText(item.questionId) }}:
-            </span>
-            <span class="ms-1"><strong>{{ item.answer }}</strong></span>
-          </li>
-        </ul>
-      </div>
+      <ul *ngIf="openedResponses.has(idx)" class="mb-0 ps-3">
+    <li *ngFor="let item of parseAnswers(resp.answersJson)">
+      <span class="fw-semibold">{{ item.questionId }}) {{ getQuestionText(item.questionId) }}:</span>
+      <span class="ms-1">{{ item.answer }}</span>
+    </li>
+  </ul>
     </td>
   </tr>
 </tbody>
