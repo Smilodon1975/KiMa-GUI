@@ -1,5 +1,5 @@
 // src/environments/version.ts
 export const version = {
-    number: '2.6.1-dev'
+    number: '2.6.2-dev'
   };
   

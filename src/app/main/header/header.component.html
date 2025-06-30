@@ -44,6 +44,9 @@
         <li class="nav-item" *ngIf="isLoggedIn">
           <a class="nav-link" style="cursor: pointer;" (click)="logout(); closeNavbar()">Logout</a>
         </li>
+        <li class="nav-item">
+          <a class="nav-link" routerLink="/automotive" (click)="closeNavbar()" routerLinkActive="active-nav-link">Automotive</a>
+        </li>
       </ul>
     </div>
   </div>
