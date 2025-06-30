@@ -32,7 +32,6 @@ export class AuthService {
     if (!token) return false;
     try {
       const { exp } = jwtDecode<JwtPayload>(token);
-      // exp ist Unix-Zeit in Sekunden
       return Math.floor(Date.now() / 1000) < exp;
     } catch {
       return false;

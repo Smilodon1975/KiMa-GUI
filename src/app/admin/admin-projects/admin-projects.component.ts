@@ -541,6 +541,33 @@ export class AdminProjectsComponent implements OnInit, AfterViewInit {
     });
   }
 
+  deleteResponse(response: ProjectResponse): void {
+  if (!confirm('Antwort wirklich löschen?')) return;
+
+  const projectId = this.selectedProject.id;
+  if (projectId == null) {
+    this.responseError = 'Projekt-ID fehlt, Antwort kann nicht gelöscht werden.';
+    return;
+  }
+  this.loadingResponses = true;
+  this.responseError = '';
+  if (response.id == null) {
+    this.responseError = 'Antwort-ID fehlt, Antwort kann nicht gelöscht werden.';
+    this.loadingResponses = false;
+    return;
+  }
+  this.projectService
+    .deleteResponse(projectId, response.id!)
+    .subscribe({
+      next: () => this.loadResponses(projectId),
+      error: err => {
+        console.error('Fehler beim Löschen:', err);
+        this.responseError = 'Antwort konnte nicht gelöscht werden.';
+        this.loadingResponses = false;
+      }
+    });
+  }
+
   parseAnswers(json: string): Array<{ questionId: number; answer: string }> {
     if (!json) return [];
 

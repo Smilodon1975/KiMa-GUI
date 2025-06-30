@@ -69,6 +69,9 @@ export class ProjectService {
     );
   }
 
-  
+  deleteResponse(projectId: number, responseId: number): Observable<void> {
+  const url = `${this.apiUrlResponses}/${projectId}/responses/${responseId}`;
+  return this.http.delete<void>(url);
+}
 
 }

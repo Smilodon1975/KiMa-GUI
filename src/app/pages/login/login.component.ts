@@ -29,19 +29,14 @@ export class LoginComponent {
       this.isLoading = true;
       
       this.authService.login(this.loginData)
-
-      .pipe( finalize(() => {
+          .pipe( finalize(() => {
           this.isLoading = false;
         })
       )
-      
       .subscribe({
         next: (response) => {
-          // ✅ Token im Local Storage speichern
           localStorage.setItem('token', response.token);
           localStorage.setItem('loginMessage', 'Login erfolgreich!');
-
-          // ✅ Benutzerrolle abrufen und zur entsprechenden Ansicht weiterleiten
           this.authService.getUserRole().subscribe(role => {
             console.log("Ermittelte Rolle:", role);
             if (role === 'Admin') {
@@ -52,10 +47,9 @@ export class LoginComponent {
           });
         },
         error: (err) => {
-          // ❌ Falls der Login fehlschlägt, Fehlermeldung anzeigen
           this.loginMessage = 'Login fehlgeschlagen! Bitte überprüfe deine Eingaben.';
           this.isSuccess = false;
-          setTimeout(() => this.loginMessage = '', 3000); // ❌ Fehlermeldung nach 3 Sek. ausblenden
+          setTimeout(() => this.loginMessage = '', 3000);
         }
       });
     }
