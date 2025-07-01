@@ -17,6 +17,7 @@ export class FeedbackComponent implements OnInit {
   message = '';
   userId: number | null = null;
   email:  string | null = null;
+  sending = false;
 
   constructor(
     private fb:   FeedbackService,
@@ -36,17 +37,19 @@ export class FeedbackComponent implements OnInit {
   }
 
   send() {
-    const dto = {
-      content: this.content,
-      userId:  this.userId ?? undefined,
-      email:   this.email  ?? undefined
-    };
-    this.fb.submit(dto).subscribe({
+    if (!this.content) return;
+    this.sending = true;
+    this.fb.submit({ content: this.content }).subscribe({
       next: () => {
-        this.message = 'Danke für dein Feedback!';
+        this.message = 'Feedback erfolgreich gesendet!';
         this.content = '';
+        this.sending = false;
       },
-      error: () => this.message = 'Fehler beim Senden.'
+      error: () => {
+        this.message = 'Fehler beim Senden des Feedbacks.';
+        this.sending = false;
+      }
     });
   }
+
 }

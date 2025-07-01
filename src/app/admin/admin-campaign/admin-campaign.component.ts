@@ -152,7 +152,7 @@ export class AdminCampaignComponent implements OnInit {
       this.emailLink
       ).subscribe({
     next: () => {
-      this.message = `Newsletter an ${this.allRecipients.length} Empfänger verschickt.`;
+      this.message = `E-Mail an ${this.allRecipients.length} Empfänger verschickt.`;
       this.showMessage = true; fm.resetForm();
       this.attachment = undefined;
       this.loadUsers();

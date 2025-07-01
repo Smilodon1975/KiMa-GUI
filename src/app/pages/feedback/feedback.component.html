@@ -4,21 +4,16 @@
   
     <form (ngSubmit)="send()" #fbForm="ngForm">
       <div class="mb-3">
-        <textarea
-          class="form-control"
-          rows="4"
-          placeholder="Dein Feedback..."
-          required
-          [(ngModel)]="content"
-          name="content"></textarea>
+        <textarea  class="form-control" rows="4" placeholder="Dein Feedback..." 
+            required [(ngModel)]="content" name="content">
+      </textarea>
       </div>
-      <button
-        type="submit"
-        class="btn btn-accent"
-        [disabled]="!fbForm.valid"
-      >
+      <button type="submit" class="btn btn-accent" [disabled]="!fbForm.valid || sending">
         <i class="bi bi-send-fill me-1"></i> Absenden
       </button>
+      <span *ngIf="sending" class="ms-2 align-middle">
+        <span class="spinner-border spinner-border-sm text-accent" role="status" aria-hidden="true"></span>
+      </span>
     </form>
   
     <p *ngIf="message" class="mt-3 alert alert-success">{{ message }}</p>

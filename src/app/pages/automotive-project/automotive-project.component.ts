@@ -4,10 +4,11 @@ import { environment } from '../../../environments/environment';
 import { Project, ProjectStatus } from '../../models/project.model';
 import { Router } from '@angular/router';
 import { RouterModule } from '@angular/router';
+import { CommonModule, NgIf } from '@angular/common';
 
 @Component({
   selector: 'app-automotive-project',
-  imports: [RouterModule],
+  imports: [RouterModule, CommonModule],
   standalone: true,
   templateUrl: './automotive-project.component.html',
   styleUrl: './automotive-project.component.css'
