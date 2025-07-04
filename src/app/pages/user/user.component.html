@@ -223,7 +223,14 @@
                       </div>
                       <div class="col-md-6">
                         <label for="username" class="form-label">Benutzername</label>
-                        <input type="text" class="form-control" id="username" [(ngModel)]="updatedUserData.userName" name="userName">
+                        <div class="input-group">
+                        <input type="text" class="form-control" id="username" 
+                        [(ngModel)]="updatedUserData.userName" name="userName">
+                        <button *ngIf="updatedUserData.userName" type="button" 
+                        class="btn btn-outline-secondary" title="Eingabe löschen"
+                        (click)="updatedUserData.userName = ''">&times;
+                        </button>
+                      </div>
                       </div>
                     </div>
 
@@ -231,11 +238,24 @@
                     <div class="row mt-3">
                       <div class="col-md-6">
                         <label for="firstName" class="form-label">Vorname</label>
+                        <div class="input-group">
                         <input type="text" class="form-control" id="firstName" [(ngModel)]="updatedUserData.firstName" name="firstName">
+                        <button *ngIf="updatedUserData.firstName" type="button" 
+                        class="btn btn-outline-secondary" title="Eingabe löschen"
+                        (click)="updatedUserData.firstName = ''">&times;
+                        </button>
+                        </div>
                       </div>
                       <div class="col-md-6">
                         <label for="lastName" class="form-label">Nachname</label>
-                        <input type="text" class="form-control" id="lastName" [(ngModel)]="updatedUserData.lastName" name="lastName">
+                        <div class="input-group">
+                        <input type="text" class="form-control" id="lastName" 
+                        [(ngModel)]="updatedUserData.lastName" name="lastName">
+                        <button *ngIf="updatedUserData.lastName" type="button" 
+                        class="btn btn-outline-secondary" title="Eingabe löschen"
+                        (click)="updatedUserData.lastName = ''">&times;
+                        </button>
+                        </div>
                       </div>
                     </div>
 
@@ -243,6 +263,7 @@
                     <div class="row mt-3">
                       <div class="col-md-6">
                         <label for="title" class="form-label">Titel</label>
+                        <div class="input-group">
                         <select class="form-control" id="title" [(ngModel)]="updatedUserData.title" name="title">
                           <option value="">Kein Titel</option>
                           <option value="Dr.">Dr.</option>
@@ -256,14 +277,25 @@
                           <option value="Mag.">Mag.</option>
                           <option value="MBA">MBA</option>
                         </select>
+                        <button *ngIf="updatedUserData.title" type="button" 
+                        class="btn btn-outline-secondary" title="Eingabe löschen"
+                        (click)="updatedUserData.title = ''">&times;
+                        </button>
+                        </div>
                       </div>
                       <div class="col-md-6">
                         <label for="gender" class="form-label">Geschlecht</label>
+                        <div class="input-group">
                         <select class="form-control" id="gender" [(ngModel)]="updatedUserData.gender" name="gender">
                           <option value="male">Männlich</option>
                           <option value="female">Weiblich</option>
                           <option value="other">Divers</option>
                         </select>
+                        <button *ngIf="updatedUserData.gender" type="button" 
+                        class="btn btn-outline-secondary" title="Eingabe löschen"
+                        (click)="updatedUserData.gender = ''">&times;
+                        </button>
+                      </div>
                       </div>
                     </div>
 
@@ -273,53 +305,110 @@
                     <div class="row mt-3">
                       <div class="col-md-6">
                         <label for="street" class="form-label">Straße</label>
-                        <input type="text" class="form-control" id="street" [(ngModel)]="updatedUserData.street" name="street">
+                        <div class="input-group">
+                        <input type="text" class="form-control" id="street" 
+                        [(ngModel)]="updatedUserData.street" name="street">
+                        <button *ngIf="updatedUserData.street" type="button" 
+                        class="btn btn-outline-secondary" title="Eingabe löschen"
+                        (click)="updatedUserData.street = ''">&times;
+                        </button>
+                        </div>
                       </div>
                       <div class="col-md-6">
                         <label for="zip" class="form-label">PLZ</label>
-                        <input type="text" class="form-control" id="zip" [(ngModel)]="updatedUserData.zip" name="zip">
+                        <div class="input-group">
+                        <input type="text" class="form-control" id="zip" 
+                        [(ngModel)]="updatedUserData.zip" name="zip">
+                        <button *ngIf="updatedUserData.zip" type="button" 
+                        class="btn btn-outline-secondary" title="Eingabe löschen"
+                        (click)="updatedUserData.zip = ''">&times;
+                        </button>
+                        </div>
                       </div>
                     </div>
 
                     <div class="row mt-3">
                       <div class="col-md-6">
                         <label for="city" class="form-label">Stadt</label>
-                        <input type="text" class="form-control" id="city" [(ngModel)]="updatedUserData.city" name="city">
+                        <div class="input-group">
+                        <input type="text" class="form-control" id="city" 
+                        [(ngModel)]="updatedUserData.city" name="city">
+                        <button *ngIf="updatedUserData.city" type="button" 
+                        class="btn btn-outline-secondary" title="Eingabe löschen"
+                        (click)="updatedUserData.city = ''">&times;
+                        </button>
+                        </div>
                       </div>
                       <div class="col-md-6">
-                      <label for="country" class="form-label">Land</label>
-                        <select class="form-control" id="country" [(ngModel)]="updatedUserData.country" name="country">
-                          <optgroup label="Beliebte Länder">
-                            <option *ngFor="let country of popularCountries" [value]="country">{{ country }}</option>
-                          </optgroup>
-                          <optgroup label="Alle Länder">
-                            <option *ngFor="let country of allCountries" [value]="country">{{ country }}</option>
-                          </optgroup>
-                        </select>
+                        <label for="country" class="form-label">Land</label>
+                        <div class="input-group">
+                          <select class="form-control" id="country" 
+                          [(ngModel)]="updatedUserData.country" name="country">
+                            <optgroup label="Beliebte Länder">
+                              <option *ngFor="let country of popularCountries" [value]="country">{{ country }}</option>
+                            </optgroup>
+                            <optgroup label="Alle Länder">
+                              <option *ngFor="let country of allCountries" [value]="country">{{ country }}</option>
+                            </optgroup>
+                          </select>
+                          <button *ngIf="updatedUserData.country" type="button" 
+                          class="btn btn-outline-secondary" title="Eingabe löschen"
+                          (click)="updatedUserData.country = ''">&times;
+                          </button>
+                        </div>
                       </div> 
-                    </div>  
+                    </div>
+                    
 
                     <!-- ✅ Telefonnummern -->
                     <div class="row mt-3">
                       <div class="col-md-6">
                         <label for="phoneMobile" class="form-label">Mobilnummer</label>
-                        <input type="text" class="form-control" id="phoneMobile" [(ngModel)]="updatedUserData.phoneMobile" name="phoneMobile">
+                        <div class="input-group">
+                        <input type="text" class="form-control" id="phoneMobile" 
+                        [(ngModel)]="updatedUserData.phoneMobile" name="phoneMobile">
+                        <button *ngIf="updatedUserData.phoneMobile" type="button" 
+                        class="btn btn-outline-secondary" title="Eingabe löschen"
+                        (click)="updatedUserData.phoneMobile = ''">&times;
+                        </button>
+                        </div>
                       </div>
                       <div class="col-md-6">
                         <label for="phonePrivate" class="form-label">Telefon (Privat)</label>
-                        <input type="text" class="form-control" id="phonePrivate" [(ngModel)]="updatedUserData.phonePrivate" name="phonePrivate">
+                        <div class="input-group">
+                        <input type="text" class="form-control" id="phonePrivate" 
+                        [(ngModel)]="updatedUserData.phonePrivate" name="phonePrivate">
+                        <button *ngIf="updatedUserData.phonePrivate" type="button" 
+                        class="btn btn-outline-secondary" title="Eingabe löschen"
+                        (click)="updatedUserData.phonePrivate = ''">&times;
+                        </button>
+                        </div>
                       </div>
                     </div>
 
                     <div class="row mt-3">
                       <div class="col-md-6">
                         <label class="form-label">Telefon Arbeit</label>
-                        <input type="text" class="form-control" [(ngModel)]="updatedUserData.phoneWork" name="phoneWork">
+                        <div class="input-group">
+                        <input type="text" class="form-control" 
+                        [(ngModel)]="updatedUserData.phoneWork" name="phoneWork">
+                        <button *ngIf="updatedUserData.phoneWork" type="button" 
+                        class="btn btn-outline-secondary" title="Eingabe löschen"
+                        (click)="updatedUserData.phoneWork = ''">&times;
+                        </button>
+                        </div>
                       </div>            
                       <!-- ✅ Geburtsdatum -->
                       <div class="col-md-6">
                         <label for="birthDate" class="form-label">Geburtsdatum</label>
-                        <input type="date" class="form-control" id="birthDate" [(ngModel)]="updatedUserData.birthDate" name="birthDate">
+                        <div class="input-group">
+                        <input type="date" class="form-control" id="birthDate" 
+                        [(ngModel)]="updatedUserData.birthDate" name="birthDate">
+                        <button *ngIf="updatedUserData.birthDate" type="button" 
+                        class="btn btn-outline-secondary" title="Eingabe löschen"
+                        (click)="updatedUserData.birthDate = ''">&times;
+                        </button>
+                        </div>
                       </div>
                     </div>
                     
@@ -329,12 +418,26 @@
                     <h5>Passwort ändern (Optional)</h5>
                     <div class="mt-3">
                       <label for="password" class="form-label">Neues Passwort</label>
-                      <input type="password" class="form-control" id="password" [(ngModel)]="updatedUserData.password" name="password">
+                      #<div class="input-group">
+                      <input type="password" class="form-control" id="password" 
+                      [(ngModel)]="updatedUserData.password" name="password">
+                      <button *ngIf="updatedUserData.password" type="button" 
+                        class="btn btn-outline-secondary" title="Eingabe löschen"
+                        (click)="updatedUserData.password = ''">&times;
+                        </button>
+                        </div>
                     </div>
 
                     <div class="mt-2">
                       <label for="confirmPassword" class="form-label">Neues Passwort wiederholen</label>
-                      <input type="password" class="form-control" id="confirmPassword" [(ngModel)]="confirmPassword" name="confirmPassword">
+                      <div class="input-group">
+                      <input type="password" class="form-control" id="confirmPassword" 
+                      [(ngModel)]="confirmPassword" name="confirmPassword">
+                      <button *ngIf="confirmPassword" type="button" 
+                        class="btn btn-outline-secondary" title="Eingabe löschen"
+                        (click)="confirmPassword = ''">&times;
+                        </button>
+                        </div>
                     </div>
                     
                     <small class="text-muted d-block mt-2">
@@ -358,7 +461,7 @@
                         <div class="consent-container d-flex align-items-start my-3">
                           <input class="form-check-input me-2 mt-1" type="checkbox" id="newsletterSubToggle" [(ngModel)]="updatedUserData.newsletterSub" name="newsletterSub" />
                     <label class="form-check-label" for="newsletterSubToggle">
-                      Ja, ich möchte mich für den Newsletter anmelden.
+                      Ja, ich möchte den Studien-Newsletter erhalten und so erfahren ob es für mich geeignete Projekte gibt.
                     </label>
                   </div>
 
