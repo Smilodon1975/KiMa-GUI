@@ -14,8 +14,10 @@ import { FormsModule } from '@angular/forms';
 export class PasswordResetComponent {
   passwordResetData = { email: '', token: '', newPassword: '', userName: '' };
   successMessage = '';
+  alertType: 'success' | 'danger' = 'success';
   confirmNewPassword: string = '';
   passwordMismatch: boolean = false;
+  loading = false;
 
   constructor(
     private authService: AuthService,
@@ -34,23 +36,34 @@ export class PasswordResetComponent {
 
   // ✅ Sendet das neue Passwort an den AuthService und verarbeitet die Antwort
   resetPassword() {
+    this.loading = true;
     if (this.passwordResetData.newPassword !== this.confirmNewPassword) {
       this.passwordMismatch = true;
       return;
     }
   
-    this.passwordMismatch = false; // Zurücksetzen, falls erfolgreich
+  this.passwordMismatch = false;
   
-    this.authService.resetPassword(this.passwordResetData).subscribe({
-      next: () => {
-        this.successMessage = 'Passwort erfolgreich geändert!';
-        setTimeout(() => this.router.navigate(['/login']), 2000);
-      },
-      error: () => {
-        this.successMessage = 'Fehler beim Zurücksetzen des Passworts!';
-      }
-    });
-  }
+  this.authService.resetPassword(this.passwordResetData).subscribe({
+        next: () => {
+          this.successMessage = 'Passwort erfolgreich geändert!';
+          this.alertType = 'success';
+          setTimeout(() => {
+            this.loading = false;
+            this.router.navigate(['/login']);
+          }, 4000);
+        },
+        error: () => {
+          this.successMessage = 'Fehler beim Zurücksetzen des Passworts!';
+          this.alertType = 'danger';
+          setTimeout(() => {
+            this.successMessage = '';
+            this.loading = false;
+          }, 6000);
+        }
+      });
+    }
+  
 
   getPasswordStrength(password: string): string {
     if (!password || password.length < 8) return "❌ Ungültig (mind. 8 Zeichen)";
