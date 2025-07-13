@@ -44,7 +44,8 @@ export class PasswordResetComponent {
   
   this.passwordMismatch = false;
   
-  this.authService.resetPassword(this.passwordResetData).subscribe({
+  this.authService.resetPassword({ email: this.passwordResetData.email, token: this.passwordResetData.token,
+     newPassword: this.passwordResetData.newPassword}).subscribe({
         next: () => {
           this.successMessage = 'Passwort erfolgreich geändert!';
           this.alertType = 'success';

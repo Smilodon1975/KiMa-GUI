@@ -153,9 +153,17 @@
       
       <div class="d-flex flex-wrap align-items-center gap-3 mb-3">
         <span class="me-2"><strong>{{ selected.size + selectedFromAnswers.size }}</strong> Empfänger ausgewählt</span>
-        <button class="btn btn-primary" type="submit" style="min-width: 60px; max-width: 100px; width: 100%;"
-          [disabled]="!fm.form.valid || (selected.size + selectedFromAnswers.size) === 0"><i class="bi bi-envelope-fill me-1"></i>Senden
-        </button>
+
+      <button class="btn btn-primary" type="submit"
+        style="min-width: 60px; max-width: 100px; width: 100%;"
+        [disabled]="!fm.form.valid || (selected.size + selectedFromAnswers.size) === 0 || sending">
+        <i class="bi bi-envelope-fill me-1"></i>
+        <span *ngIf="!sending">Senden</span><span *ngIf="sending">
+          <span class="spinner-border spinner-border-sm text-light align-middle" role="status" aria-hidden="true"></span>
+          Wird gesendet…
+        </span>
+      </button>
+
         <button type="button" class="btn btn-danger" style="min-width: 60px; max-width: 120px; width: 100%;"
           (click)="resetAllRecipients()"><i class="bi bi-x-circle me-1"></i>abwählen
         </button>

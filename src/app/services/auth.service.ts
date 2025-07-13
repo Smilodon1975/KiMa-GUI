@@ -150,7 +150,7 @@ export class AuthService {
     return this.http.post(`${this.authUrl}/request-password-reset`, { email });
   }
   
-  resetPassword(data: { email: string; token: string; newPassword: string; userName: string }) {
+  resetPassword(data: { email: string; token: string; newPassword: string}) {
     console.log("🚀 Sende Reset-Passwort-Anfrage mit:", data);
     return this.http.post(`${this.authUrl}/reset-password`, data);
   }
