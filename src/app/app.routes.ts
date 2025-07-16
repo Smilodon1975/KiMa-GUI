@@ -2,6 +2,8 @@ import { inject } from '@angular/core';
 import { Routes, CanActivateFn, Router } from '@angular/router';
 import { AuthService } from './services/auth.service';
 import { HomeComponent } from './main/home/home.component';
+import { ImpressumComponent } from './main/impressum/impressum.component';
+import { DatenschutzComponent } from './main/datenschutz/datenschutz.component';
 import { InfoComponent } from './pages/info/info.component';
 import { LoginComponent } from './pages/login/login.component';
 import { AdminComponent } from './admin/admin-dashboard/admin-dashboard.component';
@@ -60,6 +62,8 @@ export const routes: Routes = [
   { path: '', component: HomeComponent, canActivate: [maintenanceGuard] },
   { path: 'home', component: HomeComponent, canActivate: [maintenanceGuard] },
   { path: 'info', component: InfoComponent, canActivate: [maintenanceGuard] },
+  { path: 'impressum', component: ImpressumComponent },
+  { path: 'datenschutz', component: DatenschutzComponent },
   { path: 'user', component: UserComponent, canActivate: [authGuard, maintenanceGuard] },
   { path: 'login', component: LoginComponent, canActivate: [maintenanceGuard] },
   { path: 'admin', component: AdminComponent, canActivate: [AdminGuard, maintenanceGuard], data: { role: 'Admin' } },
