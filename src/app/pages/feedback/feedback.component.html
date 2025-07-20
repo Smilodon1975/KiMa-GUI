@@ -8,14 +8,21 @@
             required [(ngModel)]="content" name="content">
       </textarea>
       </div>
-      <button type="submit" class="btn btn-accent" [disabled]="!fbForm.valid || sending">
-        <i class="bi bi-send-fill me-1"></i> Absenden
+      <button type="submit" class="btn btn-accent d-flex align-items-center gap-2"
+        [disabled]="!fbForm.valid || sending">
+        <i class="bi bi-send-fill me-1"></i>
+        <span *ngIf="!sending">Absenden</span>
+        <span *ngIf="sending">
+          <span class="spinner-border spinner-border-sm text-accent" role="status" aria-hidden="true"></span>
+          Wird gesendet…
+        </span>
       </button>
-      <span *ngIf="sending" class="ms-2 align-middle">
-        <span class="spinner-border spinner-border-sm text-accent" role="status" aria-hidden="true"></span>
-      </span>
     </form>
   
-    <p *ngIf="message" class="mt-3 alert alert-success">{{ message }}</p>
+    <p *ngIf="message"
+       class="mt-3 alert alert-success fade-message"
+       [class.fade-out]="fadeMessage">
+      {{ message }}
+    </p>
   </section>
-  
+

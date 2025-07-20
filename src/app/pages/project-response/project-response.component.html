@@ -226,8 +226,13 @@
                   <button type="button" class="btn btn-outline-secondary" (click)="reviewMode = false">
                     Zurück bearbeiten
                   </button>
-                  <button type="submit" class="btn btn-accent" [disabled]="responseForm.get('user.email')?.invalid">
-                    Antworten absenden
+                  <button type="submit" class="btn btn-accent d-flex align-items-center gap-2"
+                    [disabled]="responseForm.get('user.email')?.invalid || submitting">
+                    <span *ngIf="!submitting">Antworten absenden</span>
+                    <span *ngIf="submitting">
+                      <span class="spinner-border spinner-border-sm text-accent" role="status" aria-hidden="true"></span>
+                      Wird gesendet…
+                    </span>
                   </button>
                 </div>
               </ng-container>

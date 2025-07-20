@@ -1,4 +1,3 @@
-
 <div *ngIf="isLoading" class="d-flex justify-content-center my-3">
   <div class="spinner-border text-success" role="status">
     <span class="visually-hidden">Lädt…</span>
@@ -20,43 +19,55 @@
         </p>
       </div>
 
-      <p *ngIf="successMessage" class="text-success">{{ successMessage }}</p>
-      <p *ngIf="errorMessage" class="text-danger">{{ errorMessage }}</p>
-
       <form (ngSubmit)="onRegister()" autocomplete="off">        
 
         <!-- E-Mail -->
         <div class="mb-3">
           <label for="email" class="form-label">* E-Mail</label>
-          <input type="email" class="form-control" id="email" name="email" [(ngModel)]="registerData.email" required/>
+          <div class="input-group">
+            <input type="email" class="form-control" id="email" name="email" [(ngModel)]="registerData.email" required/>
+            <button *ngIf="registerData.email" type="button" class="btn btn-outline-secondary"
+              (click)="registerData.email = ''" title="E-Mail löschen">&times;</button>
+          </div>
         </div>
 
         <!-- Passwort -->
         <div class="mb-3">
           <label for="password" class="form-label">* Passwort</label>
-          <input type="password" class="form-control" id="password" name="password" [(ngModel)]="registerData.password" required/>
+          <div class="input-group">
+            <input type="password" class="form-control" id="password" name="password" [(ngModel)]="registerData.password" required/>
+            <button *ngIf="registerData.password" type="button" class="btn btn-outline-secondary"
+              (click)="registerData.password = ''" title="Passwort löschen">&times;</button>
+          </div>
           <small class="text-muted"> Passwörter sollten Großbuchstaben, Zahlen & Sonderzeichen enthalten.</small>
           <p *ngIf="registerData.password" class="mt-1"
-             [ngClass]="{
-               'text-danger': getPasswordStrength(registerData.password) === '❌ Ungültig (mind. 8 Zeichen)',
-               'text-warning': getPasswordStrength(registerData.password) === '⚠️ Schwach',
-               'text-primary': getPasswordStrength(registerData.password) === '🟡 Mittel',
-               'text-success': getPasswordStrength(registerData.password).startsWith('🟢')}">
-               {{ getPasswordStrength(registerData.password) }}
+            [ngClass]="{
+              'text-danger': getPasswordStrength(registerData.password) === '❌ Ungültig (mind. 8 Zeichen)',
+              'text-warning': getPasswordStrength(registerData.password) === '⚠️ Schwach',
+              'text-primary': getPasswordStrength(registerData.password) === '🟡 Mittel',
+              'text-success': getPasswordStrength(registerData.password).startsWith('🟢')}">
+              {{ getPasswordStrength(registerData.password) }}
           </p>
         </div>
 
         <!-- Passwort bestätigen -->
         <div class="mb-3">
           <label for="confirmPassword" class="form-label">* Passwort wiederholen</label>
-          <input
-            type="password" class="form-control" id="confirmPassword" name="confirmPassword" [(ngModel)]="confirmPassword" required/>
+          <div class="input-group">
+            <input type="password" class="form-control" id="confirmPassword" name="confirmPassword" [(ngModel)]="confirmPassword" required/>
+            <button *ngIf="confirmPassword" type="button" class="btn btn-outline-secondary"
+              (click)="confirmPassword = ''" title="Feld löschen">&times;</button>
+          </div>
         </div>
 
         <!-- Username -->
         <div class="mb-3">
           <label for="username" class="form-label">Username</label>
-          <input type="text" class="form-control" id="username" name="username" [(ngModel)]="registerData.userName"/>
+          <div class="input-group">
+            <input type="text" class="form-control" id="username" name="username" [(ngModel)]="registerData.userName"/>
+            <button *ngIf="registerData.userName" type="button" class="btn btn-outline-secondary"
+              (click)="registerData.userName = ''" title="Feld löschen">&times;</button>
+          </div>
         </div>
 
         <!-- Datenschutz Zustimmung -->
@@ -69,18 +80,19 @@
         </div>
 
 
-        <div *ngIf="isLoading" class="d-flex justify-content-center my-3">
-          <div class="spinner-border text-success" role="status">
-            <span class="visually-hidden">Lädt…</span>
-          </div>
-        </div>
+        
         <p *ngIf="successMessage" class="text-success">{{ successMessage }}</p>
         <p *ngIf="errorMessage" class="text-danger">{{ errorMessage }}</p>
 
         <button
           type="submit"
-          class="btn btn-success w-100"
-          [disabled]="registerData.password !== confirmPassword || !registerData.newsletterSub">Registrieren
+          class="btn btn-success w-100 d-flex align-items-center justify-content-center gap-2"
+          [disabled]="registerData.password !== confirmPassword || !registerData.newsletterSub || isLoading">
+          <span *ngIf="!isLoading">Registrieren</span>
+          <span *ngIf="isLoading">
+            <span class="spinner-border spinner-border-sm text-light" role="status" aria-hidden="true"></span>
+            Wird gesendet…
+          </span>
         </button>
 
         <div class="text-center mt-3">
