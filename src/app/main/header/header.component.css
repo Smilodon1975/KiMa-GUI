@@ -65,4 +65,12 @@ a.navbar-brand.logo:hover img {
  color: red; /* Beispiel */
  border-bottom-color: red;
 }
-  
+
+/* Dropdown-Menü immer anzeigen, wenn darüber gehovert wird */
+.navbar-nav .dropdown:hover .dropdown-menu {
+  display: block;
+}
+
+.navbar-nav {
+  margin-left: 0; /* oder ein kleiner Wert, z.B. 0.5rem */
+}
