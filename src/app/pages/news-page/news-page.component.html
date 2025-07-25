@@ -25,7 +25,7 @@
     <div *ngIf="!isLoading && !errorMessage">
       <div class="row" *ngIf="allNewsList?.length && allNewsList.length > 0; else noNews">
         <div class="col-md-6 col-lg-4 mb-4" *ngFor="let news of allNewsList">
-          <div class="card h-100">
+          <div class="card h-100 news-card">
             <div class="card-body d-flex flex-column">
               <h5 class="card-title">{{ news.title }}</h5>
               <p class="card-text">{{ news.content }}</p> 
