@@ -661,5 +661,10 @@ export class AdminProjectsComponent implements OnInit, AfterViewInit {
   getRowLabels(rows: any[]): string {
   return Array.isArray(rows) ? rows.map(r => r.label).join(', ') : '';
   }
+
+  isDateQuestion(qId: number): boolean {
+    const q = this.questions.find(q => q.id === qId);
+    return q?.type === 'date';
+  }
 }
 

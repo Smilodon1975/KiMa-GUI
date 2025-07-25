@@ -375,7 +375,14 @@
                     <ul *ngIf="openedResponses.has(idx)" class="mb-0 ps-3">
                   <li *ngFor="let item of parseAnswers(resp.answersJson)">
                     <span class="fw-semibold">{{ item.questionId }}) {{ getQuestionText(item.questionId) }}:</span>
-                    <span class="ms-1">{{ item.answer }}</span>
+                    <span class="ms-1">
+                      <ng-container *ngIf="isDateQuestion(item.questionId); else normalAnswer">
+                        {{ item.answer | date:'dd.MM.yyyy' }}
+                      </ng-container>
+                      <ng-template #normalAnswer>
+                        {{ item.answer }}
+                      </ng-template>
+                    </span>
                   </li>
                 </ul>
                 </td>
