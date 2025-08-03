@@ -9,11 +9,12 @@ import * as bootstrap from 'bootstrap';
 import { RouterModule, Router } from '@angular/router';
 import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 import { DragDropModule } from '@angular/cdk/drag-drop';
+import { QuillModule } from 'ngx-quill';
 
 @Component({
   selector: 'app-admin-projects',
   standalone: true,
-  imports: [CommonModule, FormsModule, RouterModule, DragDropModule],
+  imports: [CommonModule, FormsModule, RouterModule, DragDropModule, QuillModule],
   templateUrl: './admin-projects.component.html',
   styleUrls: ['./admin-projects.component.css']
 })
@@ -42,6 +43,24 @@ export class AdminProjectsComponent implements OnInit, AfterViewInit {
   openedResponses = new Set<number>();
   projectSearch = '';
   filteredProjects: Project[] = [];
+  quillModules: QuillModule = {
+    toolbar: [
+      ['bold', 'italic', 'underline', 'strike'],
+      ['blockquote', 'code-block'],
+      [{ header: 1 }, { header: 2 }],
+      [{ list: 'ordered' }, { list: 'bullet' }],
+      [{ script: 'sub' }, { script: 'super' }],
+      [{ indent: '-1' }, { indent: '+1' }],
+      [{ direction: 'rtl' }],
+      [{ size: ['small', false, 'large', 'huge'] }],
+      [{ header: [1, 2, 3, 4, 5, 6, false] }],
+      [{ color: [] }, { background: [] }],
+      [{ font: [] }],
+      [{ align: [] }],
+      ['link', 'image', 'video'],
+      ['clean'] 
+    ]
+  };
 
   constructor(private projectService: ProjectService, private router: Router) {}
 

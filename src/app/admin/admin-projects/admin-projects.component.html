@@ -136,7 +136,10 @@
                 <!--Input Beschreibung-->
                 <div class="mb-3">
                   <label for="description" class="form-label">Beschreibung</label>
-                  <textarea id="description" class="form-control" rows="10" name="description" [(ngModel)]="selectedProject.description" #description="ngModel" (ngModelChange)="markDirty()"></textarea>
+                  <quill-editor
+                    [(ngModel)]="selectedProject.description" name="description"
+                    (ngModelChange)="markDirty()" [style]="{height: '250px'}">
+                  </quill-editor>
                 </div>
                   <!-- Fragen erstellen: -->    
                 <hr />
