@@ -1,5 +1,5 @@
 // src/environments/version.ts
 export const version = {
-    number: '2.7.2-ofa'
+    number: '2.7.3-ofa'
   };
   
