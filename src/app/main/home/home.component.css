@@ -77,3 +77,8 @@ section {
     transition: opacity 1s ease-out;
     opacity: 0;
   }
+
+.news-card {
+  border: 2px solid #16a085;
+  border-radius: 0.5rem;
+}

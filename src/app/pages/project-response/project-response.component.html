@@ -56,17 +56,14 @@
               <label for="emailInput" class="form-label text-accent fw-semibold">
                 * Deine E-Mail-Adresse
               </label>
-              <input
-                id="emailInput"
-                type="email"
-                class="form-control"
-                formControlName="email"
-                placeholder="z. B. max@beispiel.de"
-                [readonly]="emailAlreadyAnswered"
-              />
+
+              <input id="emailInput" type="email" class="form-control"
+                formControlName="email" placeholder="z. B. max@beispiel.de" [readonly]="emailAlreadyAnswered"/>
+
               <div *ngIf="checkingEmail" class="text-muted small">
                 Prüfe, ob schon eine Antwort existiert…
               </div>
+
               <div *ngIf="emailAlreadyAnswered" class="alert alert-warning mt-2">
                 Für diese E-Mail-Adresse wurde bereits eine Antwort für dieses Projekt abgegeben.
                 Mehrfachteilnahme ist nicht möglich.
@@ -76,6 +73,7 @@
                   </button>
                 </div>
               </div>
+
               <div
                 *ngIf="responseForm.get('user.email')?.invalid && responseForm.get('user.email')?.touched && !emailAlreadyAnswered"
                 class="text-danger small"
@@ -219,7 +217,16 @@
                 <ul class="list-group mb-4">
                   <li *ngFor="let q of questions; let i = index" class="list-group-item">
                     <strong>{{ q.text }}</strong>
-                    <p class="mb-0">{{ previewAnswer(i) }}</p>
+                    <p class="mb-0">
+                      <ng-container [ngSwitch]="q.type">
+                        <span *ngSwitchCase="'date'">
+                          {{ previewAnswer(i) | date:'dd.MM.yyyy' }}
+                        </span>
+                        <span *ngSwitchDefault>
+                          {{ previewAnswer(i) }}
+                        </span>
+                      </ng-container>
+                    </p>
                   </li>
                 </ul>
                 <div class="d-flex justify-content-between">
@@ -236,11 +243,8 @@
                   </button>
                 </div>
               </ng-container>
-
-            </div> <!-- <-- formArrayName="answers" schließen -->
-
+            </div>
           </div>
-
         </form>
       </div>
     </div>

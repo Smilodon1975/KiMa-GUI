@@ -1,4 +1,3 @@
-
 <div class="container my-4">
     <nav class="nav nav-pills mb-4 shadow-sm">
     <a class="nav-link" routerLink="/admin">Admin Dashboard</a>
@@ -27,7 +26,7 @@
           <strong>{{ news.title }}</strong>
           <p>{{ news.content }}</p>
           <small class="text-muted">
-            Veröffentlicht am: {{ news.publishDate | date: 'shortDate' }}
+            Veröffentlicht am: {{ news.publishDate | date: 'dd.MM.yyyy' }}
           </small>
         </div>
         <div class="d-flex flex-column gap-2">
@@ -111,4 +110,4 @@
       </div>
     </div>
   </div>
-  
+
