@@ -1,5 +1,4 @@
 import { Component, OnInit, AfterViewInit, HostListener  } from '@angular/core';
-import { CommonModule } from '@angular/common';
 import { FormsModule, NgForm } from '@angular/forms';
 import { Project, ProjectStatus } from '../../models/project.model';
 import { ProjectResponse } from '../../models/project-response.model';
@@ -10,11 +9,13 @@ import { RouterModule, Router } from '@angular/router';
 import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 import { DragDropModule } from '@angular/cdk/drag-drop';
 import { QuillModule } from 'ngx-quill';
+import { DatePipe } from '@angular/common';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-admin-projects',
   standalone: true,
-  imports: [CommonModule, FormsModule, RouterModule, DragDropModule, QuillModule],
+  imports: [FormsModule, RouterModule, DragDropModule, QuillModule, DatePipe, CommonModule],
   templateUrl: './admin-projects.component.html',
   styleUrls: ['./admin-projects.component.css']
 })
@@ -650,7 +651,15 @@ export class AdminProjectsComponent implements OnInit, AfterViewInit {
     });
   }
 
+  getAnswer(resp: any, qId: number): any {
+    const ans = this.parseAnswers(resp.answersJson).find(a => a.questionId === qId);
+    return ans ? ans.answer : '';
+  }
 
+  isChecked(resp: any, qId: number): boolean {
+    const ans = this.getAnswer(resp, qId);
+    return ans === true || ans === 'true' || ans === 1;
+  }
 
     // ----------------- ungespeicherte Daten --------------------------->
 

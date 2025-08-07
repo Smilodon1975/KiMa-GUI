@@ -342,63 +342,123 @@
             </div>
             <p class="mt-2">Lade Antworten…</p>
           </div>
-          <div *ngIf="!loadingResponses && responseError" class="alert alert-danger text-center my-3">
-            {{ responseError }}
-          </div>
-          <div
-            *ngIf="!loadingResponses && !responseError && responses.length === 0"
-            class="text-center text-muted my-4"> Keine Antworten für dieses Projekt vorhanden.
-          </div>
-          <div *ngIf="!loadingResponses && responses.length > 0" class="table-responsive">
-            <table class="table table-striped table-bordered table-hover table-sm mb-0">
-              <thead class="table-light">
+
+
+
+          
+         <!-- Vergleichstabelle für Responses -->
+        <div *ngIf="!loadingResponses && responses.length > 0" class="table-responsive mb-4">
+  <table class="table table-bordered align-middle">
+    <thead class="table-light">
+      <tr>
+        <th style="width:20%">E-Mail</th>
+        <th *ngFor="let q of questions">{{ q.text }}</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let resp of responses">
+        <td class="text-truncate" style="max-width:200px">
+          {{ resp.respondentEmail || '–' }}
+        </td>
+        <td *ngFor="let q of questions">
+          <ng-container [ngSwitch]="q.type">
+            <!-- Single-Choice: einfach den String ausgeben -->
+            <span *ngSwitchCase="'radio'">
+              {{ getAnswer(resp, q.id) }}
+            </span>
+            <!-- Multi-Choice: Array joinen -->
+            <span *ngSwitchCase="'checkbox'">
+              {{ getAnswer(resp, q.id) }}
+            </span>
+            <!-- Datum -->
+            <span *ngSwitchCase="'date'">
+              {{ getAnswer(resp, q.id) | date:'dd.MM.yyyy' }}
+            </span>
+            <!-- Freitext -->
+            <span *ngSwitchCase="'text'">
+              {{ getAnswer(resp, q.id) }}
+            </span>
+            <!-- Grid (falls Du noch eine Grid-Frage hast) -->
+            <span *ngSwitchCase="'checkboxGrid'">
+              {{ getAnswer(resp, q.id) }}            </span>
+            <!-- Fallback -->
+            <span *ngSwitchDefault>
+              {{ getAnswer(resp, q.id) }}
+            </span>
+          </ng-container>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+
+        <!-- Detaillierte Antwort-Ansicht -->
+        <div *ngIf="!loadingResponses && responses.length > 0" class="table-responsive">
+          <table class="table table-striped table-bordered table-hover table-sm mb-0">
+            <thead class="table-light">
+              <tr>
+                <th style="width:5%">#</th>
+                <th style="width:20%">E-Mail</th>
+                <th style="width:15%">Datum</th>
+                <th>Antworten</th>
+                <th style="width:40px">&nbsp;</th>
+              </tr>
+            </thead>
+            <tbody>
+              <ng-container *ngFor="let resp of responses; let idx = index">
                 <tr>
-                  <th style="width: 5%;">#</th>
-                  <th style="width: 20%;">E-Mail</th>
-                  <th style="width: 15%;">Datum</th>
-                  <th>Antworten</th>
-                  <th style="width: 40px;">&nbsp;</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr *ngFor="let resp of responses; let idx = index">
                   <td>{{ idx + 1 }}</td>
-                  <td class="text-truncate" style="max-width: 200px;">
+                  <td class="text-truncate" style="max-width:200px">
                     {{ resp.respondentEmail || '–' }}
                   </td>
+                  <td>{{ resp.submittedAt | date:'dd.MM.yyyy HH:mm' }}</td>
                   <td>
-                    {{ resp.submittedAt | date: 'dd.MM.yyyy HH:mm' }}
-                  </td>
-                  <td>
-                    <button class="btn btn-sm btn-outline-secondary mb-2"
-                            (click)="toggleResponse(idx)"><i class="bi"
-                        [ngClass]="openedResponses.has(idx) ? 'bi-caret-down-fill' : 'bi-caret-right-fill'"></i>
+                    <button
+                      class="btn btn-sm btn-outline-secondary mb-2"
+                      (click)="toggleResponse(idx)">
+                      <i
+                        class="bi"
+                        [ngClass]="openedResponses.has(idx)
+                          ? 'bi-caret-down-fill'
+                          : 'bi-caret-right-fill'"></i>
                       Antworten {{ openedResponses.has(idx) ? 'ausblenden' : 'anzeigen' }}
                     </button>
+
                     <ul *ngIf="openedResponses.has(idx)" class="mb-0 ps-3">
-                  <li *ngFor="let item of parseAnswers(resp.answersJson)">
-                    <span class="fw-semibold">{{ item.questionId }}) {{ getQuestionText(item.questionId) }}:</span>
-                    <span class="ms-1">
-                      <ng-container *ngIf="isDateQuestion(item.questionId); else normalAnswer">
-                        {{ item.answer | date:'dd.MM.yyyy' }}
+                      <ng-container *ngFor="let item of parseAnswers(resp.answersJson)">
+                        <li>
+                          <span class="fw-semibold">
+                            {{ item.questionId }}) {{ getQuestionText(item.questionId) }}:
+                          </span>
+                          <span class="ms-1">
+                            <ng-container *ngIf="isDateQuestion(item.questionId); else notDate">
+                              {{ item.answer | date:'dd.MM.yyyy' }}
+                            </ng-container>
+                            <ng-template #notDate>
+                              {{ item.answer }}
+                            </ng-template>
+                          </span>
+                        </li>
                       </ng-container>
-                      <ng-template #normalAnswer>
-                        {{ item.answer }}
-                      </ng-template>
-                    </span>
-                  </li>
-                </ul>
-                </td>
-                <td class="text-center">
-                  <button class="btn btn-sm btn-outline-danger" title="Antwort löschen"
-                          (click)="deleteResponse(resp)"><i class="bi bi-x-lg"></i>
-                  </button>
-                </td>
+                    </ul>
+                  </td>
+                  <td class="text-center">
+                    <button
+                      class="btn btn-sm btn-outline-danger"
+                      title="Antwort löschen"
+                      (click)="deleteResponse(resp)">
+                      <i class="bi bi-x-lg"></i>
+                    </button>
+                  </td>
                 </tr>
-              </tbody>
-            </table>
-          </div>
-      </div>
+              </ng-container>
+            </tbody>
+          </table>
+        </div>
+
+
+
 
       <!-- ======== Response-Modal-Footer ========-->
 
