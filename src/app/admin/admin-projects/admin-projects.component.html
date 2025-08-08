@@ -136,9 +136,9 @@
                 <!--Input Beschreibung-->
                 <div class="mb-3">
                   <label for="description" class="form-label">Beschreibung</label>
-                  <quill-editor
-                    [(ngModel)]="selectedProject.description" name="description"
-                    (ngModelChange)="markDirty()" [style]="{height: '250px'}">
+                  <quill-editor [(ngModel)]="selectedProject.description"
+                    name="description" format="html" [modules]="quillModules"
+                    [theme]="'snow'" (ngModelChange)="markDirty()" [style]="{ height: '250px' }">
                   </quill-editor>
                 </div>
                   <!-- Fragen erstellen: -->    
@@ -279,7 +279,8 @@
               <div class="modal-body">
                 <p><strong>ID:</strong> {{ selectedProject.id }}</p>
                 <p><strong>Name:</strong> {{ selectedProject.name }}</p>
-                <p><strong>Beschreibung:</strong> {{ selectedProject.description }}</p>
+                <p><strong>Beschreibung:</strong></p>
+                <div class="quill-content" [innerHTML]="selectedProject.description"></div>
                 <hr />
                 <h6>Fragen:</h6>
                 <ul *ngIf="questions.length > 0">
