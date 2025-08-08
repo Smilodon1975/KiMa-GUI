@@ -348,51 +348,65 @@
 
           
          <!-- Vergleichstabelle für Responses -->
-        <div *ngIf="!loadingResponses && responses.length > 0" class="table-responsive mb-4">
-  <table class="table table-bordered align-middle">
-    <thead class="table-light">
-      <tr>
-        <th style="width:20%">E-Mail</th>
-        <th *ngFor="let q of questions">{{ q.text }}</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr *ngFor="let resp of responses">
-        <td class="text-truncate" style="max-width:200px">
-          {{ resp.respondentEmail || '–' }}
-        </td>
-        <td *ngFor="let q of questions">
-          <ng-container [ngSwitch]="q.type">
-            <!-- Single-Choice: einfach den String ausgeben -->
-            <span *ngSwitchCase="'radio'">
-              {{ getAnswer(resp, q.id) }}
-            </span>
-            <!-- Multi-Choice: Array joinen -->
-            <span *ngSwitchCase="'checkbox'">
-              {{ getAnswer(resp, q.id) }}
-            </span>
-            <!-- Datum -->
-            <span *ngSwitchCase="'date'">
-              {{ getAnswer(resp, q.id) | date:'dd.MM.yyyy' }}
-            </span>
-            <!-- Freitext -->
-            <span *ngSwitchCase="'text'">
-              {{ getAnswer(resp, q.id) }}
-            </span>
-            <!-- Grid (falls Du noch eine Grid-Frage hast) -->
-            <span *ngSwitchCase="'checkboxGrid'">
-              {{ getAnswer(resp, q.id) }}            </span>
-            <!-- Fallback -->
-            <span *ngSwitchDefault>
-              {{ getAnswer(resp, q.id) }}
-            </span>
-          </ng-container>
-        </td>
-      </tr>
-    </tbody>
-  </table>
-</div>
 
+        <div class="mb-3"> <strong>Fragen ein-/ausblenden:</strong>
+          <div class="d-flex flex-wrap gap-2 mt-2">
+            <div class="mb-2">
+              <button type="button" class="btn btn-sm btn-success me-2" (click)="showAllQuestions()">Alle anzeigen</button>
+              <button type="button" class="btn btn-sm btn-danger" (click)="hideAllQuestions()">Alle ausblenden</button>
+            </div>
+
+            <button *ngFor="let q of questions" type="button"
+              class="btn btn-sm" [ngClass]="visibleQuestionIds.has(q.id) ? 'btn-primary' : 'btn-outline-secondary'"
+              (click)="toggleQuestionVisibility(q.id)"> {{ q.text }}
+            </button>
+          </div>
+        </div>
+
+        <div *ngIf="!loadingResponses && responses.length > 0" class="table-responsive mb-4">
+          <table class="table table-bordered align-middle">
+            <thead class="table-light">
+              <tr>
+                <th style="width:20%">E-Mail</th>
+                <th *ngFor="let q of questions" [hidden]="!visibleQuestionIds.has(q.id)"> {{ q.text }}</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let resp of responses">
+                <td class="text-truncate" style="max-width:200px">
+                  {{ resp.respondentEmail || '–' }}
+                </td>
+                <td *ngFor="let q of questions" [hidden]="!visibleQuestionIds.has(q.id)">
+                  <ng-container [ngSwitch]="q.type">
+                    <!-- Single-Choice: einfach den String ausgeben -->
+                    <span *ngSwitchCase="'radio'">
+                      {{ getAnswer(resp, q.id) }}
+                    </span>
+                    <!-- Multi-Choice: Array joinen -->
+                    <span *ngSwitchCase="'checkbox'">
+                      {{ getAnswer(resp, q.id) }}
+                    </span>
+                    <!-- Datum -->
+                    <span *ngSwitchCase="'date'">
+                      {{ getAnswer(resp, q.id) | date:'dd.MM.yyyy' }}
+                    </span>
+                    <!-- Freitext -->
+                    <span *ngSwitchCase="'text'">
+                      {{ getAnswer(resp, q.id) }}
+                    </span>
+                    <!-- Grid (falls Du noch eine Grid-Frage hast) -->
+                    <span *ngSwitchCase="'checkboxGrid'">
+                      {{ getAnswer(resp, q.id) }}            </span>
+                    <!-- Fallback -->
+                    <span *ngSwitchDefault>
+                      {{ getAnswer(resp, q.id) }}
+                    </span>
+                  </ng-container>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
 
         <!-- Detaillierte Antwort-Ansicht -->
         <div *ngIf="!loadingResponses && responses.length > 0" class="table-responsive">

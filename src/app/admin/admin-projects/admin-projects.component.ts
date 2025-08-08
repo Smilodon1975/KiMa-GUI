@@ -44,7 +44,7 @@ export class AdminProjectsComponent implements OnInit, AfterViewInit {
   openedResponses = new Set<number>();
   projectSearch = '';
   filteredProjects: Project[] = [];
-  
+  visibleQuestionIds = new Set<number>();
   quillModules = {
   toolbar: [
     ['bold', 'italic', 'underline', 'strike'],
@@ -144,7 +144,9 @@ export class AdminProjectsComponent implements OnInit, AfterViewInit {
     this.dirty = false;
   }
     
-  // ----------------- Projekt speichern --------------------------->
+  //===========================================================||
+  // ----------------- Projekt speichern ----------------------->
+  //===========================================================||
 
 
   saveProject(form: NgForm, draftOnly: boolean = false): void {
@@ -269,7 +271,9 @@ export class AdminProjectsComponent implements OnInit, AfterViewInit {
     }));
   }
        
+  //===========================================================||
   // ----------------- Modale öffnen--------------------------->
+  //===========================================================||
 
   private openModalById(modalId: string): void {
     const modalEl = document.getElementById(modalId);
@@ -335,21 +339,40 @@ export class AdminProjectsComponent implements OnInit, AfterViewInit {
     this.openModalById('projectDetailModal');
   }
 
+  // openResponseModal(project: Project): void {
+  //   this.selectedProject = project;
+  //   this.questions = project.questionsJson
+  //     ? JSON.parse(project.questionsJson) as QuestionDef[]
+  //     : [];
+  //   this.loadResponses(project.id); // <-- Antworten laden!
+  //   const modalEl = document.getElementById('responseDetailModal');
+  //   if (modalEl) {
+  //     const modal = new bootstrap.Modal(modalEl);
+  //     modal.show();
+  //   }
+  // }
   openResponseModal(project: Project): void {
     this.selectedProject = project;
     this.questions = project.questionsJson
       ? JSON.parse(project.questionsJson) as QuestionDef[]
       : [];
-    this.loadResponses(project.id); // <-- Antworten laden!
+    this.visibleQuestionIds = new Set(this.questions.map(q => q.id)); // alle sichtbar
+    this.loadResponses(project.id);
     const modalEl = document.getElementById('responseDetailModal');
-    if (modalEl) {
-      const modal = new bootstrap.Modal(modalEl);
-      modal.show();
+    if (modalEl) new bootstrap.Modal(modalEl).show();
+  }
+
+  toggleQuestionVisibility(qId: number): void {
+    if (this.visibleQuestionIds.has(qId)) {
+      this.visibleQuestionIds.delete(qId);
+    } else {
+      this.visibleQuestionIds.add(qId);
     }
   }
 
-
+  //================================================================||
   //------------------ Modale schließen --------------------------->
+  //================================================================||
 
   closeModal(): void {
     console.log('closeModal called');
@@ -392,7 +415,9 @@ export class AdminProjectsComponent implements OnInit, AfterViewInit {
         }
       }
 
- // ---------- Projekt "fertig" markieren, veröffentlichen oder zurückziehen --------------------------->
+      //====================================================================================================||
+      // ---------- Projekt "fertig" markieren, veröffentlichen oder zurückziehen --------------------------->
+      //====================================================================================================||
 
   finishProject(proj: Project): void {
     this.projectService
@@ -450,7 +475,9 @@ export class AdminProjectsComponent implements OnInit, AfterViewInit {
       });
     }
 
-  // ----------------- Neue Frage erstellen oder bearbeiten--------------------------->
+  //=================================================================||
+  // --------- Neue Frage erstellen oder bearbeiten------------------->
+  //=================================================================||
 
   addQuestion(): void {
     if (!this.newQuestion.text) return;
@@ -542,7 +569,9 @@ export class AdminProjectsComponent implements OnInit, AfterViewInit {
     this.questions.forEach((q, idx) => q.id = idx + 1);
   }
 
-  // ----------------- Responses laden --------------------------->
+  //=================================================================||
+  // ----------------- Responses laden ------------------------------->
+  //=================================================================||
 
 
   loadResponses(projectId: number): void {
@@ -662,7 +691,18 @@ export class AdminProjectsComponent implements OnInit, AfterViewInit {
     return ans === true || ans === 'true' || ans === 1;
   }
 
-    // ----------------- ungespeicherte Daten --------------------------->
+  showAllQuestions(): void {
+    this.visibleQuestionIds = new Set(this.questions.map(q => q.id));
+  }
+
+  hideAllQuestions(): void {
+    this.visibleQuestionIds.clear();
+  }
+
+
+    //===========================================================||
+    // ----------------- ungespeicherte Daten ------------------->
+    //===========================================================||
 
   canDeactivate(): boolean {
     if (this.questions.length > 0 || this.newQuestion.text) {
@@ -685,7 +725,9 @@ export class AdminProjectsComponent implements OnInit, AfterViewInit {
       }
     }
 
+  //================================================================||
   // ----------------- Ende der Anwendung --------------------------->
+  //================================================================||
 
   getRowLabels(rows: any[]): string {
   return Array.isArray(rows) ? rows.map(r => r.label).join(', ') : '';
