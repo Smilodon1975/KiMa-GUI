@@ -45,6 +45,7 @@ export class AdminProjectsComponent implements OnInit, AfterViewInit {
   projectSearch = '';
   filteredProjects: Project[] = [];
   visibleQuestionIds = new Set<number>();
+  displayMode: 'label' | 'value' | 'both' = 'value';
   quillModules = {
   toolbar: [
     ['bold', 'italic', 'underline', 'strike'],
@@ -151,14 +152,15 @@ export class AdminProjectsComponent implements OnInit, AfterViewInit {
 
   saveProject(form: NgForm, draftOnly: boolean = false): void {
     if (form.invalid) return;
-    const jsonQuestions = JSON.stringify(this.questions);
     const isUpdate = this.isEditMode && this.selectedProject.id != null;
+    const normalizedQuestions = this.normalizeQuestions(this.questions);
     const payload: Partial<Project> = {
       id: this.selectedProject.id!,
       name: this.selectedProject.name!,
       description: this.selectedProject.description!,
-      questionsJson: JSON.stringify(this.questions),
-      status: draftOnly ? ProjectStatus.Draft : this.selectedProject.status};
+      questionsJson: JSON.stringify(normalizedQuestions),
+      status: draftOnly ? ProjectStatus.Draft : this.selectedProject.status
+    };
     if (isUpdate) {
       this.updateExistingProject(this.selectedProject.id!, payload, draftOnly);
     } else {
@@ -237,25 +239,37 @@ export class AdminProjectsComponent implements OnInit, AfterViewInit {
           }});}
     }
 
+    private normalizeOne(q: any): any {
+      const clone = JSON.parse(JSON.stringify(q));
+      if (Array.isArray(clone.options)) {
+        clone.options.forEach((o: any) => { if (!o.value) o.value = o.label ?? ''; delete o._autoValue; });
+      }
+      if (Array.isArray(clone.rows)) {
+        clone.rows.forEach((r: any) => { if (!r.value) r.value = r.label ?? ''; delete r._autoValue; });
+      }
+      return clone;
+    }
+
+    private normalizeQuestions(questions: any[]): any[] {
+      return (questions ?? []).map(q => this.normalizeOne(q));
+    }
+
+
 
   saveChanges(): void {
+    const normalizedQuestions = this.normalizeQuestions(this.questions);
     const patch = [
       { op: 'replace', path: '/name',           value: this.selectedProject.name      },
       { op: 'replace', path: '/description',    value: this.selectedProject.description },
-      { op: 'replace', path: '/questionsJson',  value: JSON.stringify(this.questions)   },
+      { op: 'replace', path: '/questionsJson',  value: JSON.stringify(normalizedQuestions)   },
       { op: 'replace', path: '/status',         value: this.selectedProject.status     }
     ];
     this.projectService.patchProject(this.selectedProject.id!, patch)
       .subscribe({
         next: () => {
-          this.successMessage = 'Projekt wurde gespeichert.';
-          this.dirty = false;
-          sessionStorage.removeItem(this.draftKey);
+          this.successMessage = 'Projekt wurde gespeichert.'; this.dirty = false; sessionStorage.removeItem(this.draftKey);
         },
-        error: err => {
-          this.errorMessage = 'Speichern fehlgeschlagen.';
-          console.error(err);
-        }});
+        error: err => {this.errorMessage = 'Speichern fehlgeschlagen.'; console.error(err);}});
       }
 
   private saveDraft(): void {
@@ -339,18 +353,6 @@ export class AdminProjectsComponent implements OnInit, AfterViewInit {
     this.openModalById('projectDetailModal');
   }
 
-  // openResponseModal(project: Project): void {
-  //   this.selectedProject = project;
-  //   this.questions = project.questionsJson
-  //     ? JSON.parse(project.questionsJson) as QuestionDef[]
-  //     : [];
-  //   this.loadResponses(project.id); // <-- Antworten laden!
-  //   const modalEl = document.getElementById('responseDetailModal');
-  //   if (modalEl) {
-  //     const modal = new bootstrap.Modal(modalEl);
-  //     modal.show();
-  //   }
-  // }
   openResponseModal(project: Project): void {
     this.selectedProject = project;
     this.questions = project.questionsJson
@@ -507,9 +509,10 @@ export class AdminProjectsComponent implements OnInit, AfterViewInit {
       id: q.id,
       type: q.type,
       text: q.text,
-      options: q.options ? q.options.map(o => ({ ...o })) : [],
-      // <<< rows ebenfalls übernehmen, wenn vorhanden >>>
-      rows: q.rows ? q.rows.map(r => ({ ...r })) : []
+      options: (q.options ?? []).map(o => ({...o,
+        _autoValue: !o.value || o.value === o.label}) as any),
+      rows: (q.rows ?? []).map(r => ({...r,
+        _autoValue: !r.value || r.value === r.label}) as any)
     };
     this.isEditingQuestionIndex = idx;
     this.markDirty();
@@ -544,13 +547,13 @@ export class AdminProjectsComponent implements OnInit, AfterViewInit {
 
   addOption(): void {
     this.newQuestion.options = this.newQuestion.options ?? [];
-    this.newQuestion.options.push({ label: '', value: '', exclude: false });
+    this.newQuestion.options.push({ label: '', value: '', exclude: false, _autoValue: true } as any);
     this.markDirty();
   }
 
   addRow(): void {
     this.newQuestion.rows = this.newQuestion.rows ?? [];
-    this.newQuestion.rows.push({ label: '', value: '', exclude: false });
+    this.newQuestion.rows.push({ label: '', value: '', exclude: false, _autoValue: true } as any);
     this.markDirty();
   }
 
@@ -567,6 +570,42 @@ export class AdminProjectsComponent implements OnInit, AfterViewInit {
   dropQuestion(event: CdkDragDrop<any[]>) {
     moveItemInArray(this.questions, event.previousIndex, event.currentIndex);
     this.questions.forEach((q, idx) => q.id = idx + 1);
+  }
+
+  onOptionLabelChange(i: number, newLabel: string): void {
+    const opt: any = this.newQuestion.options?.[i];
+    if (!opt) return;
+    if (opt._autoValue || !opt.value) {
+      opt.value = newLabel ?? '';
+    }
+    this.markDirty();
+  }
+
+  onGridColLabelChange(i: number, newLabel: string): void {
+    this.onOptionLabelChange(i, newLabel);
+  }
+
+  onRowLabelChange(j: number, newLabel: string): void {
+    const row: any = this.newQuestion.rows?.[j];
+    if (!row) return;
+    if (row._autoValue || !row.value) {
+      row.value = newLabel ?? '';
+    }
+    this.markDirty();
+  }
+
+  markOptionValueManual(i: number): void {
+    const opt: any = this.newQuestion.options?.[i];
+    if (opt) opt._autoValue = false;
+  }
+
+  markGridColValueManual(i: number): void {
+    this.markOptionValueManual(i);
+  }
+
+  markRowValueManual(j: number): void {
+    const row: any = this.newQuestion.rows?.[j];
+    if (row) row._autoValue = false;
   }
 
   //=================================================================||
@@ -618,78 +657,95 @@ export class AdminProjectsComponent implements OnInit, AfterViewInit {
     });
   }
 
-  parseAnswers(json: string): Array<{ questionId: number; answer: string }> {
-    if (!json) return [];
+  parseAnswers(json: string, mode: 'label' | 'value' | 'both' = this.displayMode)
+    : Array<{ questionId: number; answer: string }> {
+      if (!json) return [];
+      let rawArr: any[];
+      try { rawArr = JSON.parse(json); } catch { return []; }
 
-    let rawArr: any[];
-    try {
-      rawArr = JSON.parse(json);
-    } catch {
-      return [];
-    }
-    return rawArr.map(item => {
-      const qId = item.questionId;
-      const ans = item.answer;
-      const q = this.questions.find(q => Number(q.id) === Number(qId));
-      if (
-        Array.isArray(ans) &&
-        ans.length > 0 &&
-        Array.isArray(ans[0]) &&
-        q?.type === 'checkboxGrid'
-      ) {
-        const rows = q.rows || [];
-        const cols = q.options || [];
-        const checked: string[] = [];
-        ans.forEach((rowArr: boolean[], rIdx: number) => {
-          rowArr.forEach((checkedVal: boolean, cIdx: number) => {
-            if (checkedVal && rows[rIdx] && cols[cIdx]) {
-              checked.push(`${rows[rIdx].label} – ${cols[cIdx].label}`);
-            }
+      return rawArr.map(item => {
+        const qId = item.questionId;
+        const ans = item.answer;
+        const q = this.questions.find(q => Number(q.id) === Number(qId));
+
+        if (Array.isArray(ans) && ans.length > 0 && Array.isArray(ans[0]) && q?.type === 'checkboxGrid') {
+          const rows = q.rows || [];
+          const cols = q.options || [];
+          const picked: string[] = [];
+          ans.forEach((rowArr: boolean[], rIdx: number) => {
+            rowArr.forEach((isOn: boolean, cIdx: number) => {
+              if (isOn && rows[rIdx] && cols[cIdx]) {
+                picked.push(`${this.formatPair(rows[rIdx], mode)} – ${this.formatPair(cols[cIdx], mode)}`);
+              }
+            });
           });
-        });
-        return {
-          questionId: qId,
-          answer: checked.length ? checked.join('; ') : '–'
-        };
-      }
-      if (
-        Array.isArray(ans) &&
-        ans.length > 0 &&
-        typeof ans[0] === 'boolean' &&
-        q?.type === 'checkbox'
-      ) {
-        const options = q.options || [];
-        const checkedLabels = ans
-          .map((val: boolean, idx: number) => (val && options[idx] ? options[idx].label : null))
-          .filter(label => !!label);
-        return {
-          questionId: qId,
-          answer: checkedLabels.length ? checkedLabels.join(', ') : '–'
-        };
-      }
-      if (typeof ans === 'string' || typeof ans === 'number') {
-        return { questionId: qId, answer: `${ans}` };
-      }
-      if (Array.isArray(ans) && ans.length > 0 && typeof ans[0] === 'string') {
-        return { questionId: qId, answer: (ans as string[]).join(', ') };
-      }
-      try {
-        return { questionId: qId, answer: JSON.stringify(ans) };
-      } catch {
-        return { questionId: qId, answer: String(ans) };
-      }
-    });
+          return { questionId: qId, answer: picked.length ? picked.join('; ') : '–' };
+        }
+        if (Array.isArray(ans) && ans.length > 0 && typeof ans[0] === 'boolean' && q?.type === 'checkbox') {
+          const opts = q.options || [];
+          const picked = ans
+            .map((on: boolean, idx: number) => (on && opts[idx] ? this.formatPair(opts[idx], mode) : null))
+            .filter((x: string|null) => !!x) as string[];
+          return { questionId: qId, answer: picked.length ? picked.join(', ') : '–' };
+        }
+        if ((typeof ans === 'string' || typeof ans === 'number') && q?.options?.length) {
+          const s = String(ans);
+          const opt = q.options.find(o => String(o.value) === s || String(o.label) === s);
+          return { questionId: qId, answer: opt ? this.formatPair(opt, mode) : s };
+        }
+        if (typeof ans === 'string' || typeof ans === 'number') return { questionId: qId, answer: String(ans) };
+        if (Array.isArray(ans) && ans.length > 0 && typeof ans[0] === 'string') {
+          return { questionId: qId, answer: (ans as string[]).join(', ') };
+        }
+        try { return { questionId: qId, answer: JSON.stringify(ans) }; }
+        catch { return { questionId: qId, answer: String(ans) }; }
+      });
+    }
+
+  private formatPair(opt: any, mode: 'label'|'value'|'both'): string {
+    const l = opt?.label ?? '';
+    const v = opt?.value ?? l;
+    if (mode === 'label') return l;
+    if (mode === 'both')  return (!l || l === v) ? v : `${l} (${v})`;
+    return v; // 'value'
   }
 
-  getAnswer(resp: any, qId: number): any {
-    const ans = this.parseAnswers(resp.answersJson).find(a => a.questionId === qId);
-    return ans ? ans.answer : '';
+  getAnswer(resp: any, qId: number, mode: 'label'|'value'|'both' = this.displayMode): string {
+    const a = this.parseAnswers(resp.answersJson, mode).find(x => x.questionId === qId);
+    return a ? a.answer : '';
+  }
+
+  private getRawAnswer(resp: any, qId: number): any {
+    try {
+      const arr = JSON.parse(resp?.answersJson ?? '[]');
+      const entry = arr.find((x: any) => Number(x?.questionId) === Number(qId));
+      return entry?.answer;
+    } catch {
+      return undefined;
+    }
   }
 
   isChecked(resp: any, qId: number): boolean {
-    const ans = this.getAnswer(resp, qId);
-    return ans === true || ans === 'true' || ans === 1;
+    const raw = this.getRawAnswer(resp, qId);
+    const q = this.questions.find(q => Number(q.id) === Number(qId));
+
+    if (q?.type === 'checkbox') {
+      // checkbox questions come as boolean[]
+      return Array.isArray(raw) && raw.some(Boolean);
+    }
+    if (q?.type === 'radio') {
+      // radio is a single value (string/number) if something was picked
+      return raw !== undefined && raw !== null && String(raw).trim().length > 0;
+    }
+    if (typeof raw === 'boolean') return raw;
+    if (typeof raw === 'number')  return raw === 1;
+    if (typeof raw === 'string') {
+      const s = raw.trim().toLowerCase();
+      return s === 'true' || s === '1' || s === 'yes' || s === 'ja' || s === 'on' || s === 'checked';
+    }
+    return false;
   }
+
 
   showAllQuestions(): void {
     this.visibleQuestionIds = new Set(this.questions.map(q => q.id));

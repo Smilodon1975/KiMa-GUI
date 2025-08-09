@@ -155,14 +155,21 @@
                   <option value="text">Freitext</option>
                   <option value="date">Datum</option>
                 </select>
-
                 
                 <div *ngIf="newQuestion.type === 'checkboxGrid'">
               
                   <h6>Spalten definieren:</h6>
+
                   <div *ngFor="let opt of newQuestion.options; let i = index" class="d-flex mb-1 align-items-center">
-                    <input [(ngModel)]="opt.label" name="optLabel{{i}}" class="form-control form-control-sm me-1" placeholder="Spalten-Label (z.B. Montag)" />
-                    <input [(ngModel)]="opt.value" name="optValue{{i}}" class="form-control form-control-sm me-1" placeholder="Wert (intern)" />
+
+                    <input [(ngModel)]="opt.label" name="optLabel{{i}}" 
+                    class="form-control form-control-sm me-1" placeholder="User-Anzeige-Spalte (z.B. Montag)" 
+                    (ngModelChange)="onOptionLabelChange(i, $event)"/>
+
+                    <input [(ngModel)]="opt.value" name="optValue{{i}}" 
+                    class="form-control form-control-sm me-1" placeholder="Wert (interne Auswertung)" 
+                    (input)="markGridColValueManual(i)" />
+
                     <div class="form-check form-check-inline">
                       <input class="form-check-input" type="checkbox" [(ngModel)]="opt.exclude" name="optExcl{{i}}" />
                       <label class="form-check-label small">Ausschluss?</label>
@@ -170,10 +177,19 @@
                     <button type="button" class="btn btn-outline-danger btn-sm ms-2" (click)="removeOption(i)">✖</button>
                   </div>
                   <button type="button" class="btn btn-sm btn-success mb-3" (click)="addOption()">+ Spalte hinzufügen</button>
+
                   <h6>Zeilen definieren:</h6>
+
                   <div *ngFor="let r of newQuestion.rows; let j = index" class="d-flex mb-1 align-items-center">
-                    <input [(ngModel)]="r.label" name="rowLabel{{j}}" class="form-control form-control-sm me-1" placeholder="Zeilen-Label (z.B. 08–10)" />
-                    <input [(ngModel)]="r.value" name="rowValue{{j}}" class="form-control form-control-sm me-1" placeholder="Wert (intern)" />
+
+                    <input [(ngModel)]="r.label" name="rowLabel{{j}}" 
+                    class="form-control form-control-sm me-1" placeholder="User-Anzeige Zeile (z.B. 08–10)" 
+                    (ngModelChange)="onRowLabelChange(j, $event)" />
+
+                    <input [(ngModel)]="r.value" name="rowValue{{j}}" 
+                    class="form-control form-control-sm me-1" placeholder="Wert (interne Auswertung)"
+                    (input)="markRowValueManual(j)" />
+
                     <div class="form-check form-check-inline">
                       <input class="form-check-input" type="checkbox" [(ngModel)]="r.exclude" name="rowExcl{{j}}" />
                       <label class="form-check-label small">Ausschluss?</label>
@@ -186,8 +202,16 @@
 
                 <div *ngIf="newQuestion.type === 'radio' || newQuestion.type === 'checkbox'">
                   <div *ngFor="let opt of newQuestion.options; let i = index" class="d-flex mb-1 align-items-center">
-                    <input [(ngModel)]="opt.label" name="optLabel{{i}}" class="form-control form-control-sm me-1" placeholder="Option-Label" />
-                    <input [(ngModel)]="opt.value" name="optValue{{i}}" class="form-control form-control-sm me-1" placeholder="Option-Value" />
+
+                    <input [(ngModel)]="opt.label" name="optLabel{{i}}"
+                      class="form-control form-control-sm me-1" placeholder="User-Anzeige"
+                      (ngModelChange)="onOptionLabelChange(i, $event)" />
+
+                    <input [(ngModel)]="opt.value" name="optValue{{i}}"
+                      class="form-control form-control-sm me-1"
+                      placeholder="Wert (interne Auswertung)" 
+                      (input)="markOptionValueManual(i)" />
+
                     <div class="form-check form-check-inline">
                         <input class="form-check-input" type="checkbox" [(ngModel)]="opt.exclude" name="optExcl{{i}}" />
                         <label class="form-check-label small">Ausschluss?</label>
@@ -280,7 +304,7 @@
                 <p><strong>ID:</strong> {{ selectedProject.id }}</p>
                 <p><strong>Name:</strong> {{ selectedProject.name }}</p>
                 <p><strong>Beschreibung:</strong></p>
-                <div class="quill-content" [innerHTML]="selectedProject.description"></div>
+                <div class="quill-content alert alert-info py-2 px-3 mb-0 mt-2 small" [innerHTML]="selectedProject.description"></div>
                 <hr />
                 <h6>Fragen:</h6>
                 <ul *ngIf="questions.length > 0">
@@ -344,10 +368,17 @@
             <p class="mt-2">Lade Antworten…</p>
           </div>
 
-
-
-          
          <!-- Vergleichstabelle für Responses -->
+
+        <div class="d-flex align-items-center gap-2 mb-2">
+          <label class="mb-0 small text-muted">Anzeige:</label>
+          <select [(ngModel)]="displayMode" class="form-select form-select-sm w-auto">
+            <option value="label">User-Antwort</option>
+            <option value="value">Interne Auswertung</option>
+            <option value="both">Beides</option>
+          </select>
+        </div>
+
 
         <div class="mb-3"> <strong>Fragen ein-/ausblenden:</strong>
           <div class="d-flex flex-wrap gap-2 mt-2">

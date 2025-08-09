@@ -227,7 +227,7 @@
           <h5 class="modal-title" id="projectResponseModalLabel">Antworten zum Projekt: {{ selectedProject?.name }}</h5>
           <button type="button" class="btn-close" (click)="closeProjectResponseModal()" aria-label="Schließen"></button>
         </div>
-          <div class="alert alert-info py-2 px-3 mb-0 mt-2 small" *ngIf="selectedProject?.description">{{ selectedProject?.description }}</div>
+          <div class="quill-content alert alert-info py-2 px-3 mb-0 mt-2 small" [innerHTML]="selectedProject?.description"></div>
           <div class="modal-body">
             <div *ngIf="loadingResponses" class="text-center my-4">
               <div class="spinner-border text-primary" role="status">

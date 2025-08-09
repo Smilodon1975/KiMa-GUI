@@ -4,7 +4,7 @@
     <!-- 1) Header -->
     <div class="response-header rounded-lg mb-5" *ngIf="project">
       <h2 class="mb-1">{{ project.name }}</h2>
-      <div class="quill-content" [innerHTML]="project.description"></div>
+      <div class="quill-content alert alert-info py-2 px-3 mb-0 mt-2 small" [innerHTML]="project.description"></div>
     </div>
 
     <!-- 2) Spinner beim Laden -->
