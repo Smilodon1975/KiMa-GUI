@@ -242,10 +242,16 @@ export class AdminProjectsComponent implements OnInit, AfterViewInit {
     private normalizeOne(q: any): any {
       const clone = JSON.parse(JSON.stringify(q));
       if (Array.isArray(clone.options)) {
-        clone.options.forEach((o: any) => { if (!o.value) o.value = o.label ?? ''; delete o._autoValue; });
+        clone.options.forEach((o: any) => { // <-- Typ ergänzt
+          if (!o.value) o.value = o.label ?? '';
+          delete o._autoValue;
+        });
       }
       if (Array.isArray(clone.rows)) {
-        clone.rows.forEach((r: any) => { if (!r.value) r.value = r.label ?? ''; delete r._autoValue; });
+        clone.rows.forEach((r: any) => { // <-- Typ ergänzt
+          if (!r.value) r.value = r.label ?? '';
+          delete r._autoValue;
+        });
       }
       return clone;
     }
@@ -715,37 +721,27 @@ export class AdminProjectsComponent implements OnInit, AfterViewInit {
     return a ? a.answer : '';
   }
 
-  private getRawAnswer(resp: any, qId: number): any {
-    try {
-      const arr = JSON.parse(resp?.answersJson ?? '[]');
-      const entry = arr.find((x: any) => Number(x?.questionId) === Number(qId));
-      return entry?.answer;
-    } catch {
-      return undefined;
-    }
+  getAnswerLabel(resp: any, q: any): string {
+    const value = this.getAnswer(resp, q.id);
+    const option = q.options?.find((o: any) => o.value === value);
+    return option ? option.label : value;
   }
 
-  isChecked(resp: any, qId: number): boolean {
-    const raw = this.getRawAnswer(resp, qId);
-    const q = this.questions.find(q => Number(q.id) === Number(qId));
-
-    if (q?.type === 'checkbox') {
-      // checkbox questions come as boolean[]
-      return Array.isArray(raw) && raw.some(Boolean);
-    }
-    if (q?.type === 'radio') {
-      // radio is a single value (string/number) if something was picked
-      return raw !== undefined && raw !== null && String(raw).trim().length > 0;
-    }
-    if (typeof raw === 'boolean') return raw;
-    if (typeof raw === 'number')  return raw === 1;
-    if (typeof raw === 'string') {
-      const s = raw.trim().toLowerCase();
-      return s === 'true' || s === '1' || s === 'yes' || s === 'ja' || s === 'on' || s === 'checked';
-    }
-    return false;
+  isExcludedOption(q: any, value: any): boolean {
+    const option = q.options?.find((o: any) => o.value === value);
+    return !!option?.exclude;
   }
 
+  getCheckedOptions(resp: any, q: any): any[] {
+    const values = this.getAnswer(resp, q.id);
+    if (!Array.isArray(values)) return [];
+    return q.options?.filter((opt: any, idx: number) => values[idx]) || [];
+  }
+
+  isLastCheckedOption(opt: any, resp: any, q: any): boolean {
+    const checked = this.getCheckedOptions(resp, q);
+    return checked[checked.length - 1] === opt;
+  }
 
   showAllQuestions(): void {
     this.visibleQuestionIds = new Set(this.questions.map(q => q.id));

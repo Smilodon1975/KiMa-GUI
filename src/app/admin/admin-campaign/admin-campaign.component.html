@@ -77,9 +77,11 @@
 
     <!-- Nachricht (Text, HTML erlaubt) -->
     <div class="mb-3">
-      <label for="emailBody" class="form-label">Nachricht (Text, HTML erlaubt)</label>
-      <textarea id="emailBody" class="form-control" rows="6" [(ngModel)]="emailBody" name="emailBody" required placeholder="Projekt-Details oder Nachricht hierher">
-      </textarea>
+      <label for="emailBody" class="form-label d-block">Nachricht</label>
+      <quill-editor [(ngModel)]="emailBody" name="emailBody"
+        [ngStyle]="{ height: '250px' }" [modules]="quillModules" [theme]="'snow'" format="html"         
+        placeholder="Projekt-Details oder Nachricht hierher">
+      </quill-editor>
     </div>
 
     <!-- Link (optional) -->

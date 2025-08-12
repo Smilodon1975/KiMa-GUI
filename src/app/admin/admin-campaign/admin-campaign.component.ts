@@ -8,13 +8,14 @@ import { QuestionDef } from '../../models/question-def.model';
 import { CommonModule } from '@angular/common';
 import { FormsModule, NgForm } from '@angular/forms';
 import { RouterModule } from '@angular/router';
+import { QuillModule } from 'ngx-quill';
 
 @Component({
   selector: 'app-admin-campaign',
   templateUrl: './admin-campaign.component.html',
   styleUrls: ['./admin-campaign.component.css'],
   standalone: true,
-  imports: [CommonModule, FormsModule, RouterModule]
+  imports: [CommonModule, FormsModule, RouterModule, QuillModule]
 })
 export class AdminCampaignComponent implements OnInit {
   users: CampaignUser[] = []; 
@@ -50,7 +51,23 @@ export class AdminCampaignComponent implements OnInit {
   showProjects = false;
   projectSearch = '';
   filteredProjects: Project[] = [];
-
+  quillModules = {
+  toolbar: [
+    ['bold', 'italic', 'underline', 'strike'],
+    ['blockquote', 'code-block'],
+    [{ header: 1 }, { header: 2 }],
+    [{ list: 'ordered' }, { list: 'bullet' }],
+    [{ script: 'sub' }, { script: 'super' }],
+    [{ indent: '-1' }, { indent: '+1' }],
+    [{ direction: 'rtl' }],
+    [{ size: ['small', false, 'large', 'huge'] }],
+    [{ header: [1, 2, 3, 4, 5, 6, false] }],
+    [{ color: [] }, { background: [] }],
+    [{ font: [] }],
+    [{ align: [] }],
+    ['link', 'image', 'video'],
+    ['clean']]};
+    
   constructor(private campaignSvc: CampaignService,private projectService: ProjectService) {}
 
   ngOnInit(): void {

@@ -138,7 +138,8 @@
                   <label for="description" class="form-label">Beschreibung</label>
                   <quill-editor [(ngModel)]="selectedProject.description"
                     name="description" format="html" [modules]="quillModules"
-                    [theme]="'snow'" (ngModelChange)="markDirty()" [style]="{ height: '250px' }">
+                    [theme]="'snow'" (ngModelChange)="markDirty()" [ngStyle]="{ height: '250px' }"
+                    placeholder="Projektbeschreibung, Anforderungen etc. hierhin">
                   </quill-editor>
                 </div>
                   <!-- Fragen erstellen: -->    
@@ -411,11 +412,17 @@
                   <ng-container [ngSwitch]="q.type">
                     <!-- Single-Choice: einfach den String ausgeben -->
                     <span *ngSwitchCase="'radio'">
-                      {{ getAnswer(resp, q.id) }}
+                      {{ getAnswerLabel(resp, q) }}
+                      <span *ngIf="isExcludedOption(q, getAnswer(resp, q.id))" class="text-danger small">(Exkl.)</span>
                     </span>
+
                     <!-- Multi-Choice: Array joinen -->
                     <span *ngSwitchCase="'checkbox'">
-                      {{ getAnswer(resp, q.id) }}
+                      <ng-container *ngFor="let opt of getCheckedOptions(resp, q)">
+                        {{ opt.label }}
+                        <span *ngIf="opt.exclude" class="text-danger small">(Exkl.)</span>
+                        <span *ngIf="!isLastCheckedOption(opt, resp, q)">, </span>
+                      </ng-container>
                     </span>
                     <!-- Datum -->
                     <span *ngSwitchCase="'date'">
