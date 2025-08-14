@@ -1,0 +1,39 @@
+<div class="container my-5">
+  <ng-container *ngIf="loading">
+    <div class="alert alert-info">Projekt wird geladen…</div>
+  </ng-container>
+
+  <ng-container *ngIf="!loading && error">
+    <div class="alert alert-danger">{{ error }}</div>
+  </ng-container>
+
+  <section class="hero bg-cover bg-center text-white mb-5"
+           style="background:url('/assets/Images/consumer-bg.png') center/cover no-repeat;">
+    <div class="hero__overlay"></div>
+    <div class="hero__content relative z-10 max-w-lg mx-auto mt-20 p-4 p-md-5 bg-black/25 rounded-lg backdrop-blur-sm">
+      <h2 class="display-5 mb-3 text-shadow">Consumer Probanden gesucht!</h2>
+      <p class="lead mb-0 text-shadow">
+        Melde dich jetzt an und unterstütze uns bei spannenden Entwicklungen rund um Consumer.
+      </p>
+    </div>
+  </section>
+
+  <ng-container *ngIf="!loading && project">
+    <div class="card shadow-lg rounded-4">
+      <div class="card-header bg-secondary text-white d-flex align-items-center">
+        <i class="bi bi-people fs-2 me-3"></i>
+        <h1 class="h3 mb-0"> {{ project!.name }}</h1>
+      </div>
+      <div class="card-body">
+        <div class="quill-content" [innerHTML]="project.description"></div>
+      </div>
+      <div class="card-footer text-center bg-secondary border-0">
+        <a [href]="'https://kimafo.info/projects/' + project!.id"
+          target="_blank"
+          class="btn btn-secondary btn-lg automotive-btn">
+          Zum Fragebogen&nbsp;<i class="bi bi-box-arrow-up-right"></i>
+        </a>
+      </div>
+    </div>
+  </ng-container>
+</div>

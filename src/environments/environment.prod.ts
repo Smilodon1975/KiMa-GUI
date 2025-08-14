@@ -1,5 +1,7 @@
 export const environment = {
   production: true,
   apiUrl: 'https://kima-api-cfbfe5fudddze5c3.westeurope-01.azurewebsites.net/api',
-  automotiveProjectId:5
+  automotiveProjectId:5,
+  b2bProjectId: 7,
+  consumerProjectId: 8
 };

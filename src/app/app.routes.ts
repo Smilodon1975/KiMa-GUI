@@ -18,6 +18,8 @@ import { AdminFaqComponent } from './admin/admin-faq/admin-faq.component';
 import { AdminNewsComponent } from './admin/admin-news/admin-news.component';
 import { NewsPageComponent } from './pages/news-page/news-page.component';
 import { AutomotiveProjectComponent } from './pages/automotive-project/automotive-project.component';
+import { B2BProjectComponent } from './pages/b2b-project/b2b-project.component';
+import { ConsumerProjectComponent } from './pages/consumer-project/consumer-project.component';
 import { MaintenanceComponent } from './pages/maintenance/maintenance.component';
 import { FeedbackComponent } from './pages/feedback/feedback.component';
 import { AdminFeedbackComponent } from './admin/admin-feedback/admin-feedback.component'; 
@@ -82,6 +84,8 @@ export const routes: Routes = [
   { path: 'projects', component: ProjectViewComponent, canActivate: [] },
   { path: 'projects/:id', component: ProjectResponseComponent },
   { path: 'automotive', component: AutomotiveProjectComponent},
+  { path: 'b2b', component: B2BProjectComponent},
+  { path: 'consumer', component: ConsumerProjectComponent},
   { path: 'maintenance', component: MaintenanceComponent },
   { path: '**', redirectTo: '' }
 ];

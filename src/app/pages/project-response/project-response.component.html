@@ -127,15 +127,15 @@
                       <input *ngSwitchCase="'text'" type="text"
                         class="form-control"
                         [formControlName]="i.toString()"
-                        maxlength="100" />
+                        maxlength="150" />
 
                       <!-- Textarea -->
                       <textarea *ngSwitchCase="'textarea'" rows="4"
                         class="form-control"
                         [formControlName]="i.toString()"
-                        maxlength="100"></textarea>
+                        maxlength="150"></textarea>
                       <div class="text-end small text-muted mt-1">
-                        {{ responseForm.get(['answers', i])?.value?.length || 0 }}/100 Zeichen
+                        {{ responseForm.get(['answers', i])?.value?.length || 0 }}/150 Zeichen
                       </div>
 
                       <!-- Datum -->
