@@ -665,48 +665,67 @@ export class AdminProjectsComponent implements OnInit, AfterViewInit {
 
   parseAnswers(json: string, mode: 'label' | 'value' | 'both' = this.displayMode)
     : Array<{ questionId: number; answer: string }> {
-      if (!json) return [];
-      let rawArr: any[];
-      try { rawArr = JSON.parse(json); } catch { return []; }
+    if (!json) return [];
+    let rawArr: any[];
+    try { rawArr = JSON.parse(json); } catch { return []; }
 
-      return rawArr.map(item => {
-        const qId = item.questionId;
-        const ans = item.answer;
-        const q = this.questions.find(q => Number(q.id) === Number(qId));
+    const fmt = (opt: any): string => {
+      const l = opt?.label ?? '';
+      const v = opt?.value ?? l;
+      const ex = opt?.exclude ? ' (Exkl.)' : '';
+      if (mode === 'label') return l + ex;
+      if (mode === 'value') return v + ex;
+      return (!l || l === v) ? (v + ex) : `${l} (${v})${ex}`;
+    };
 
-        if (Array.isArray(ans) && ans.length > 0 && Array.isArray(ans[0]) && q?.type === 'checkboxGrid') {
-          const rows = q.rows || [];
-          const cols = q.options || [];
-          const picked: string[] = [];
-          ans.forEach((rowArr: boolean[], rIdx: number) => {
-            rowArr.forEach((isOn: boolean, cIdx: number) => {
-              if (isOn && rows[rIdx] && cols[cIdx]) {
-                picked.push(`${this.formatPair(rows[rIdx], mode)} – ${this.formatPair(cols[cIdx], mode)}`);
-              }
-            });
+    return rawArr.map(item => {
+      const qId = item.questionId;
+      const ans = item.answer;
+      const q   = this.questions.find(q => Number(q.id) === Number(qId));
+
+      // 🔹 Checkbox-Grid (bool[][]) -> "Zeile – Spalte" mit Exclude an Zeile ODER Spalte
+      if (Array.isArray(ans) && ans.length > 0 && Array.isArray(ans[0]) && q?.type === 'checkboxGrid') {
+        const rows = q.rows || [];
+        const cols = q.options || [];
+        const picked: string[] = [];
+        ans.forEach((rowArr: boolean[], rIdx: number) => {
+          rowArr.forEach((isOn: boolean, cIdx: number) => {
+            if (isOn && rows[rIdx] && cols[cIdx]) {
+              const rowTxt = fmt(rows[rIdx]);
+              const colTxt = fmt(cols[cIdx]);
+              picked.push(`${rowTxt} – ${colTxt}`);
+            }
           });
-          return { questionId: qId, answer: picked.length ? picked.join('; ') : '–' };
-        }
-        if (Array.isArray(ans) && ans.length > 0 && typeof ans[0] === 'boolean' && q?.type === 'checkbox') {
-          const opts = q.options || [];
-          const picked = ans
-            .map((on: boolean, idx: number) => (on && opts[idx] ? this.formatPair(opts[idx], mode) : null))
-            .filter((x: string|null) => !!x) as string[];
-          return { questionId: qId, answer: picked.length ? picked.join(', ') : '–' };
-        }
-        if ((typeof ans === 'string' || typeof ans === 'number') && q?.options?.length) {
-          const s = String(ans);
-          const opt = q.options.find(o => String(o.value) === s || String(o.label) === s);
-          return { questionId: qId, answer: opt ? this.formatPair(opt, mode) : s };
-        }
-        if (typeof ans === 'string' || typeof ans === 'number') return { questionId: qId, answer: String(ans) };
-        if (Array.isArray(ans) && ans.length > 0 && typeof ans[0] === 'string') {
-          return { questionId: qId, answer: (ans as string[]).join(', ') };
-        }
-        try { return { questionId: qId, answer: JSON.stringify(ans) }; }
-        catch { return { questionId: qId, answer: String(ans) }; }
-      });
-    }
+        });
+        return { questionId: qId, answer: picked.length ? picked.join('; ') : '–' };
+      }
+
+      // 🔹 Checkbox (bool[]) -> Liste markierter Optionen inkl. (Exkl.)
+      if (Array.isArray(ans) && ans.length > 0 && typeof ans[0] === 'boolean' && q?.type === 'checkbox') {
+        const opts = q.options || [];
+        const picked = ans
+          .map((on: boolean, idx: number) => (on && opts[idx] ? fmt(opts[idx]) : null))
+          .filter((x: string|null) => !!x) as string[];
+        return { questionId: qId, answer: picked.length ? picked.join(', ') : '–' };
+      }
+
+      // 🔹 Radio/Select -> gewählte Option inkl. (Exkl.)
+      if ((typeof ans === 'string' || typeof ans === 'number') && q?.options?.length) {
+        const s = String(ans);
+        const opt = q.options.find(o => String(o.value) === s || String(o.label) === s);
+        return { questionId: qId, answer: opt ? fmt(opt) : s };
+      }
+
+      // 🔹 Text / Datum / Sonstiges
+      if (typeof ans === 'string' || typeof ans === 'number') return { questionId: qId, answer: String(ans) };
+      if (Array.isArray(ans) && ans.length > 0 && typeof ans[0] === 'string') {
+        return { questionId: qId, answer: (ans as string[]).join(', ') };
+      }
+      try { return { questionId: qId, answer: JSON.stringify(ans) }; }
+      catch { return { questionId: qId, answer: String(ans) }; }
+    });
+  }
+
 
   private formatPair(opt: any, mode: 'label'|'value'|'both'): string {
     const l = opt?.label ?? '';
@@ -717,18 +736,32 @@ export class AdminProjectsComponent implements OnInit, AfterViewInit {
   }
 
   getAnswer(resp: any, qId: number, mode: 'label'|'value'|'both' = this.displayMode): any {
-  const q = this.questions.find(q => q.id === qId);
-  const a = this.parseAnswers(resp.answersJson, mode).find(x => x.questionId === qId);
-  // Für Checkbox-Fragen: Versuche das Original-Array zurückzugeben
-  if (q?.type === 'checkbox' && a && resp.answersJson) {
-    try {
-      const rawArr = JSON.parse(resp.answersJson);
-      const raw = rawArr.find((x: any) => x.questionId === qId);
-      if (raw && Array.isArray(raw.answer)) return raw.answer;
-    } catch {}
+    const q = this.questions.find(q => q.id === qId);
+    const a = this.parseAnswers(resp.answersJson, mode).find(x => x.questionId === qId);
+
+    // 🔹 Für Checkbox: Original-Array (bool[]) zurückgeben
+    if (q?.type === 'checkbox' && a && resp.answersJson) {
+      try {
+        const rawArr = JSON.parse(resp.answersJson);
+        const raw = rawArr.find((x: any) => x.questionId === qId);
+        if (raw && Array.isArray(raw.answer)) return raw.answer;
+      } catch {}
+    }
+
+    // 🔹 Für Checkbox-Grid: Original-Matrix (bool[][]) zurückgeben
+    if (q?.type === 'checkboxGrid' && a && resp.answersJson) {
+      try {
+        const rawArr = JSON.parse(resp.answersJson);
+        const raw = rawArr.find((x: any) => x.questionId === qId);
+        if (raw && Array.isArray(raw.answer) && Array.isArray(raw.answer[0])) {
+          return raw.answer; // <-- wichtig für displayAnswer
+        }
+      } catch {}
+    }
+
+    return a ? a.answer : '';
   }
-  return a ? a.answer : '';
-}
+
 
   getAnswerLabel(resp: any, q: any): string {
     const value = this.getAnswer(resp, q.id);
@@ -802,33 +835,45 @@ export class AdminProjectsComponent implements OnInit, AfterViewInit {
   displayAnswer(resp: any, q: any): string {
     const value = this.getAnswer(resp, q.id);
 
-    // Einzelauswahl (Radio/Select)
-    if ((q.type === 'radio' || q.type === 'select') && q.options) {
-      const opt = q.options.find((o: any) => String(o.value) === String(value));
-      if (!opt) return value ?? '';
-      let label = opt.label;
-      let intern = opt.value;
-      let ex = opt.exclude ? ' (Exkl.)' : '';
-      if (this.displayMode === 'label') return label + ex;
-      if (this.displayMode === 'value') return intern + ex;
-      return `${label} (${intern})${ex}`;
+    // Checkbox-Grid (Termintabelle)
+    if (q.type === 'checkboxGrid' && q.options && q.rows && Array.isArray(value)) {
+      const rows = q.rows;
+      const cols = q.options;
+      const arr: string[] = [];
+      value.forEach((rowArr: any[], rIdx: number) => {
+        if (!Array.isArray(rowArr)) return;
+        rowArr.forEach((checked: boolean, cIdx: number) => {
+          if (checked && rows[rIdx] && cols[cIdx]) {
+            const rowLabel = this.displayMode === 'label'
+              ? rows[rIdx].label
+              : this.displayMode === 'value'
+                ? rows[rIdx].value
+                : `${rows[rIdx].label} (${rows[rIdx].value})`;
+            const colLabel = this.displayMode === 'label'
+              ? cols[cIdx].label
+              : this.displayMode === 'value'
+                ? cols[cIdx].value
+                : `${cols[cIdx].label} (${cols[cIdx].value})`;
+            const ex = (rows[rIdx].exclude || cols[cIdx].exclude) ? ' (Exkl.)' : '';
+            arr.push(`${rowLabel} – ${colLabel}${ex}`);
+          }
+        });
+      });
+      return arr.length ? arr.join('; ') : '–';
     }
 
     // Mehrfachauswahl (Checkbox)
     if (q.type === 'checkbox' && q.options) {
-      // value kann ein Array von booleans oder Werten sein
       let arr: string[] = [];
       if (Array.isArray(value)) {
         arr = q.options
           .map((opt: any, idx: number) => {
-            // Boolean-Array (klassisch Angular)
             if (typeof value[idx] === 'boolean' && value[idx]) {
               const ex = opt.exclude ? ' (Exkl.)' : '';
               if (this.displayMode === 'label') return opt.label + ex;
               if (this.displayMode === 'value') return opt.value + ex;
               return `${opt.label} (${opt.value})${ex}`;
             }
-            // Value-Array (z.B. ['A1','B2'])
             if (typeof value[idx] !== 'undefined' && value.includes && value.includes(opt.value)) {
               const ex = opt.exclude ? ' (Exkl.)' : '';
               if (this.displayMode === 'label') return opt.label + ex;
@@ -840,6 +885,18 @@ export class AdminProjectsComponent implements OnInit, AfterViewInit {
           .filter((x: string | null): x is string => !!x);
       }
       return arr.length ? arr.join(', ') : '–';
+    }
+
+    // Einzelauswahl (Radio/Select)
+    if ((q.type === 'radio' || q.type === 'select') && q.options) {
+      const opt = q.options.find((o: any) => String(o.value) === String(value));
+      if (!opt) return value ?? '';
+      let label = opt.label;
+      let intern = opt.value;
+      let ex = opt.exclude ? ' (Exkl.)' : '';
+      if (this.displayMode === 'label') return label + ex;
+      if (this.displayMode === 'value') return intern + ex;
+      return `${label} (${intern})${ex}`;
     }
 
     // Datum
