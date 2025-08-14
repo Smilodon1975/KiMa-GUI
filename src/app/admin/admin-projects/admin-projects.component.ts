@@ -716,10 +716,19 @@ export class AdminProjectsComponent implements OnInit, AfterViewInit {
     return v; // 'value'
   }
 
-  getAnswer(resp: any, qId: number, mode: 'label'|'value'|'both' = this.displayMode): string {
-    const a = this.parseAnswers(resp.answersJson, mode).find(x => x.questionId === qId);
-    return a ? a.answer : '';
+  getAnswer(resp: any, qId: number, mode: 'label'|'value'|'both' = this.displayMode): any {
+  const q = this.questions.find(q => q.id === qId);
+  const a = this.parseAnswers(resp.answersJson, mode).find(x => x.questionId === qId);
+  // Für Checkbox-Fragen: Versuche das Original-Array zurückzugeben
+  if (q?.type === 'checkbox' && a && resp.answersJson) {
+    try {
+      const rawArr = JSON.parse(resp.answersJson);
+      const raw = rawArr.find((x: any) => x.questionId === qId);
+      if (raw && Array.isArray(raw.answer)) return raw.answer;
+    } catch {}
   }
+  return a ? a.answer : '';
+}
 
   getAnswerLabel(resp: any, q: any): string {
     const value = this.getAnswer(resp, q.id);
@@ -806,24 +815,30 @@ export class AdminProjectsComponent implements OnInit, AfterViewInit {
     }
 
     // Mehrfachauswahl (Checkbox)
-    if (q.type === 'checkbox' && Array.isArray(value) && q.options) {
-      interface Option {
-        label: string;
-        value: string;
-        exclude?: boolean;
+    if (q.type === 'checkbox' && q.options) {
+      // value kann ein Array von booleans oder Werten sein
+      let arr: string[] = [];
+      if (Array.isArray(value)) {
+        arr = q.options
+          .map((opt: any, idx: number) => {
+            // Boolean-Array (klassisch Angular)
+            if (typeof value[idx] === 'boolean' && value[idx]) {
+              const ex = opt.exclude ? ' (Exkl.)' : '';
+              if (this.displayMode === 'label') return opt.label + ex;
+              if (this.displayMode === 'value') return opt.value + ex;
+              return `${opt.label} (${opt.value})${ex}`;
+            }
+            // Value-Array (z.B. ['A1','B2'])
+            if (typeof value[idx] !== 'undefined' && value.includes && value.includes(opt.value)) {
+              const ex = opt.exclude ? ' (Exkl.)' : '';
+              if (this.displayMode === 'label') return opt.label + ex;
+              if (this.displayMode === 'value') return opt.value + ex;
+              return `${opt.label} (${opt.value})${ex}`;
+            }
+            return null;
+          })
+          .filter((x: string | null): x is string => !!x);
       }
-
-      const arr: string[] = q.options
-        .map((opt: Option, idx: number): string | null =>
-          value[idx]
-            ? (this.displayMode === 'label'
-                ? opt.label
-                : this.displayMode === 'value'
-                  ? opt.value
-                  : `${opt.label} (${opt.value})`) + (opt.exclude ? ' (Exkl.)' : '')
-            : null
-        )
-        .filter((x: string | null): x is string => !!x);
       return arr.length ? arr.join(', ') : '–';
     }
 
