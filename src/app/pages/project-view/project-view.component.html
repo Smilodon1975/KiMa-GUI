@@ -35,11 +35,9 @@
 
         <div [id]="'collapseProject' + i" class="collapse" [class.show]="openedIndex === i">
       <div class="mt-2">
-        <div class="quill-content alert alert-info py-2 px-3 mb-0 mt-2 small" [innerHTML]="project.description"></div>
+        <div class="quill-content alert alert-info py-2 px-3 mb-0 mt-2 small mb-3" [innerHTML]="project.description"></div>
         <button
-          class="btn btn-accent"
-          (click)="openProject(project); $event.stopPropagation()"
-        >
+          class="btn btn-accent" (click)="openProject(project); $event.stopPropagation()">
           Fragen beantworten
         </button>
       </div>
