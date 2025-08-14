@@ -409,37 +409,7 @@
                   {{ resp.respondentEmail || '–' }}
                 </td>
                 <td *ngFor="let q of questions" [hidden]="!visibleQuestionIds.has(q.id)">
-                  <ng-container [ngSwitch]="q.type">
-                    <!-- Single-Choice: einfach den String ausgeben -->
-                    <span *ngSwitchCase="'radio'">
-                      {{ getAnswerLabel(resp, q) }}
-                      <span *ngIf="isExcludedOption(q, getAnswer(resp, q.id))" class="text-danger small">(Exkl.)</span>
-                    </span>
-
-                    <!-- Multi-Choice: Array joinen -->
-                    <span *ngSwitchCase="'checkbox'">
-                      <ng-container *ngFor="let opt of getCheckedOptions(resp, q)">
-                        {{ opt.label }}
-                        <span *ngIf="opt.exclude" class="text-danger small">(Exkl.)</span>
-                        <span *ngIf="!isLastCheckedOption(opt, resp, q)">, </span>
-                      </ng-container>
-                    </span>
-                    <!-- Datum -->
-                    <span *ngSwitchCase="'date'">
-                      {{ getAnswer(resp, q.id) | date:'dd.MM.yyyy' }}
-                    </span>
-                    <!-- Freitext -->
-                    <span *ngSwitchCase="'text'">
-                      {{ getAnswer(resp, q.id) }}
-                    </span>
-                    <!-- Grid (falls Du noch eine Grid-Frage hast) -->
-                    <span *ngSwitchCase="'checkboxGrid'">
-                      {{ getAnswer(resp, q.id) }}            </span>
-                    <!-- Fallback -->
-                    <span *ngSwitchDefault>
-                      {{ getAnswer(resp, q.id) }}
-                    </span>
-                  </ng-container>
+                  {{ displayAnswer(resp, q) }}
                 </td>
               </tr>
             </tbody>

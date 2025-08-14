@@ -789,5 +789,51 @@ export class AdminProjectsComponent implements OnInit, AfterViewInit {
     const q = this.questions.find(q => q.id === qId);
     return q?.type === 'date';
   }
+
+  displayAnswer(resp: any, q: any): string {
+    const value = this.getAnswer(resp, q.id);
+
+    // Einzelauswahl (Radio/Select)
+    if ((q.type === 'radio' || q.type === 'select') && q.options) {
+      const opt = q.options.find((o: any) => String(o.value) === String(value));
+      if (!opt) return value ?? '';
+      let label = opt.label;
+      let intern = opt.value;
+      let ex = opt.exclude ? ' (Exkl.)' : '';
+      if (this.displayMode === 'label') return label + ex;
+      if (this.displayMode === 'value') return intern + ex;
+      return `${label} (${intern})${ex}`;
+    }
+
+    // Mehrfachauswahl (Checkbox)
+    if (q.type === 'checkbox' && Array.isArray(value) && q.options) {
+      interface Option {
+        label: string;
+        value: string;
+        exclude?: boolean;
+      }
+
+      const arr: string[] = q.options
+        .map((opt: Option, idx: number): string | null =>
+          value[idx]
+            ? (this.displayMode === 'label'
+                ? opt.label
+                : this.displayMode === 'value'
+                  ? opt.value
+                  : `${opt.label} (${opt.value})`) + (opt.exclude ? ' (Exkl.)' : '')
+            : null
+        )
+        .filter((x: string | null): x is string => !!x);
+      return arr.length ? arr.join(', ') : '–';
+    }
+
+    // Datum
+    if (q.type === 'date' && value) {
+      return new Date(value).toLocaleDateString('de-DE');
+    }
+
+    // Freitext oder Fallback
+    return value ?? '–';
+  }
 }
 
