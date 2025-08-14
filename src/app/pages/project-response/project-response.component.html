@@ -222,6 +222,12 @@
                         <span *ngSwitchCase="'date'">
                           {{ previewAnswer(i) | date:'dd.MM.yyyy' }}
                         </span>
+                        <span *ngSwitchCase="'radio'">
+                          {{ getAnswerLabel(i) }}
+                        </span>
+                        <span *ngSwitchCase="'select'">
+                          {{ getAnswerLabel(i) }}
+                        </span>
                         <span *ngSwitchDefault>
                           {{ previewAnswer(i) }}
                         </span>

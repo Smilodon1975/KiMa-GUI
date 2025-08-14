@@ -261,5 +261,13 @@ export class ProjectResponseComponent implements OnInit {
     this.checkingEmail = false;    
   }
 
-
+  getAnswerLabel(i: number): string {
+    const q = this.questions[i];
+    const value = this.responseForm.get(['answers', i])?.value;
+    if ((q.type === 'radio' || q.type === 'select') && q.options) {
+      const opt = q.options.find((o: any) => o.value === value);
+      return opt ? opt.label : value;
+    }
+    return value;
+  }
 }
