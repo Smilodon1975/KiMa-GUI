@@ -125,12 +125,18 @@
 
                       <!-- Text -->
                       <input *ngSwitchCase="'text'" type="text"
-                        class="form-control" [formControlName]="i.toString()"/>
+                        class="form-control"
+                        [formControlName]="i.toString()"
+                        maxlength="100" />
 
                       <!-- Textarea -->
-                      <textarea  *ngSwitchCase="'textarea'" rows="4"
-                        class="form-control" [formControlName]="i.toString()">
-                      </textarea>
+                      <textarea *ngSwitchCase="'textarea'" rows="4"
+                        class="form-control"
+                        [formControlName]="i.toString()"
+                        maxlength="100"></textarea>
+                      <div class="text-end small text-muted mt-1">
+                        {{ responseForm.get(['answers', i])?.value?.length || 0 }}/100 Zeichen
+                      </div>
 
                       <!-- Datum -->
                       <input *ngSwitchCase="'date'" type="date"
