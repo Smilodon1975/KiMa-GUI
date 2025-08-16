@@ -34,10 +34,68 @@
           </div>
       </div>
     </div>
-  </footer>
+  </footer> 
 
 
-  <!-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------->
+    <!-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------->
+
+    <!-- Modal About -->
+
+  <div class="modal fade" id="aboutModal" tabindex="-1" aria-labelledby="aboutModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-scrollable" 
+    [appModalMoveResize]="{ handle: '.modal-header', resizable: true, minW: 280, minH: 160, allowOversize: true, allowOffscreen: true, edgeHandles: true }">
+      <div class="modal-content bg-dark text-white">
+        <div class="modal-header">
+            <h5 class="modal-title text-bg-secondary p-3" id="aboutModalLabel">Über die Technologie hinter KiMa</h5>
+            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Schließen"></button>
+        </div>
+        <div class="modal-body">
+            <p>Diese Webanwendung wurde entwickelt von <strong>Andreas Kirschbaum</strong>, Fachinformatiker Anwendungsentwicklung.</p>
+
+            <h6 class="text-bg-secondary p-3">🛠 Verwendete Technologien</h6>
+            <ul>
+            <li>Frontend: Angular 16, TypeScript, NodeJS, Bootstrap 5, Visual Studio Code</li>
+            <li>Backend: C#, ASP.NET Core 9 Web API, Entity Framework Core, MySQL / SQLite, Visual Studio</li>
+            <li>Authentifizierung: ASP.NET Identity mit JWT-Bearer Tokens</li>
+            <li>E-Mail Versand: Azure Communication Services (Email)</li>
+            <li>Hosting & Infrastruktur: Azure App Service (Westeuropa)</li>
+            </ul>                
+
+            <h6 class="text-bg-secondary p-3">✉️ Kontakt</h6>
+            <p>Bei Fragen, Feedback oder einer Zusammenarbeit erreichst du mich unter:  
+            <a href="mailto:andreaskirschbaum@gmx.de" class="text-info">
+                andreaskirschbaum&#64;gmx.de
+            </a>
+            </p>
+
+            <hr class="border-secondary"/>
+
+            <!-- hier der deutlich sichtbare Dankes-Satz -->
+            <p class="small text-white">
+            ⭐ Vielen Dank für dein Interesse an KiMa!  
+            Wir freuen uns auf dein Feedback und deine Teilnahme.
+            </p>           
+
+        </div>
+        <div class="modal-footer d-flex justify-content-between align-items-center">
+            <div class="text-white-50">
+                KiMa GUI v. {{ version.number }}
+            </div>
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                Schließen
+            </button>
+        </div>
+    </div>
+  </div>
+</div>
+
+
+
+
+
+
+
+<!-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------->
   
   <!-- Modal for Impressum -->
   
@@ -155,57 +213,6 @@
       </div>
     </div>
   </div>
-</div>
-
-
-    <!-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------->
-
-    <!-- Modal About -->
-
-    <div class="modal fade" id="aboutModal" tabindex="-1" aria-labelledby="aboutModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-lg modal-dialog-scrollable">
-            <div class="modal-content bg-dark text-white">
-            <div class="modal-header">
-                <h5 class="modal-title text-bg-secondary p-3" id="aboutModalLabel">Über die Technologie hinter KiMa</h5>
-                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Schließen"></button>
-            </div>
-            <div class="modal-body">
-                <p>Diese Webanwendung wurde entwickelt von <strong>Andreas Kirschbaum</strong>, Fachinformatiker Anwendungsentwicklung.</p>
-
-                <h6 class="text-bg-secondary p-3">🛠 Verwendete Technologien</h6>
-                <ul>
-                <li>Frontend: Angular 16, TypeScript, NodeJS, Bootstrap 5, Visual Studio Code</li>
-                <li>Backend: C#, ASP.NET Core 9 Web API, Entity Framework Core, MySQL / SQLite, Visual Studio</li>
-                <li>Authentifizierung: ASP.NET Identity mit JWT-Bearer Tokens</li>
-                <li>E-Mail Versand: Azure Communication Services (Email)</li>
-                <li>Hosting & Infrastruktur: Azure App Service (Westeuropa)</li>
-                </ul>                
-
-                <h6 class="text-bg-secondary p-3">✉️ Kontakt</h6>
-                <p>Bei Fragen, Feedback oder einer Zusammenarbeit erreichst du mich unter:  
-                <a href="mailto:andreaskirschbaum@gmx.de" class="text-info">
-                    andreaskirschbaum&#64;gmx.de
-                </a>
-                </p>
-
-                <hr class="border-secondary"/>
-
-                <!-- hier der deutlich sichtbare Dankes-Satz -->
-                <p class="small text-white">
-                ⭐ Vielen Dank für dein Interesse an KiMa!  
-                Wir freuen uns auf dein Feedback und deine Teilnahme.
-                </p>           
-
-            </div>
-            <div class="modal-footer d-flex justify-content-between align-items-center">
-                <div class="text-white-50">
-                    KiMa GUI v. {{ version.number }}
-                </div>
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
-                    Schließen
-                </button>
-            </div>
-        </div>
 </div>
 
     

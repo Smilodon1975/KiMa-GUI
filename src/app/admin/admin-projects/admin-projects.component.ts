@@ -11,11 +11,12 @@ import { DragDropModule } from '@angular/cdk/drag-drop';
 import { QuillModule } from 'ngx-quill';
 import { DatePipe } from '@angular/common';
 import { CommonModule } from '@angular/common';
+import { ModalMoveResizeDirective } from '../../shared/modal-move-resize.directive';
 
 @Component({
   selector: 'app-admin-projects',
   standalone: true,
-  imports: [FormsModule, RouterModule, DragDropModule, QuillModule, DatePipe, CommonModule],
+  imports: [FormsModule, RouterModule, DragDropModule, QuillModule, DatePipe, CommonModule, ModalMoveResizeDirective],
   templateUrl: './admin-projects.component.html',
   styleUrls: ['./admin-projects.component.css']
 })

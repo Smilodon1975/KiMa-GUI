@@ -1,0 +1,10 @@
+.modal-header.dragging { cursor: grabbing !important; user-select: none; }
+
+.modal.show .modal-dialog { transform: none !important; }
+
+.modal-resize-handle:hover { opacity: 1; }
+
+.modal-content > div[style*="cursor: e-resize"],
+.modal-content > div[style*="cursor: s-resize"] {
+  background: transparent;
+}

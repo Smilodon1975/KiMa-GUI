@@ -11,13 +11,14 @@ import { CountryService } from '../../services/country.service';
 import { Router } from '@angular/router';
 import { switchMap, catchError, tap, finalize } from 'rxjs/operators'; // RxJS Operatoren importieren
 import { of, throwError} from 'rxjs'; // of und throwError importieren
+import { ModalMoveResizeDirective } from '../../shared/modal-move-resize.directive';
 
 @Component({
   selector: 'app-user',
   templateUrl: './user.component.html',
   styleUrls: ['./user.component.css'],
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, ModalMoveResizeDirective],
 })
 export class UserComponent implements OnInit {
   loginMessage: string | null = '';

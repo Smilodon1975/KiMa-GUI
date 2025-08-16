@@ -8,6 +8,7 @@ import { UserUpdateModel } from '../../models/user-update.model';
 import { CountryService } from '../../services/country.service';
 import { Router } from '@angular/router';
 import { RouterModule } from '@angular/router';
+import { ModalMoveResizeDirective } from '../../shared/modal-move-resize.directive';
 
 
 @Component({
@@ -15,7 +16,7 @@ import { RouterModule } from '@angular/router';
   templateUrl: './admin-dashboard.component.html',
   styleUrls: ['./admin-dashboard.component.css'],
   standalone: true,
-  imports: [CommonModule, FormsModule, RouterModule],
+  imports: [CommonModule, FormsModule, RouterModule, ModalMoveResizeDirective],
 })
 export class AdminComponent implements OnInit {
   users: UserUpdateModel[] = [];

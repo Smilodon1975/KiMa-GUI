@@ -9,13 +9,14 @@ import { CommonModule } from '@angular/common';
 import { FormsModule, NgForm } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { QuillModule } from 'ngx-quill';
+import { ModalMoveResizeDirective } from '../../shared/modal-move-resize.directive';
 
 @Component({
   selector: 'app-admin-campaign',
   templateUrl: './admin-campaign.component.html',
   styleUrls: ['./admin-campaign.component.css'],
   standalone: true,
-  imports: [CommonModule, FormsModule, RouterModule, QuillModule]
+  imports: [CommonModule, FormsModule, RouterModule, QuillModule, ModalMoveResizeDirective]
 })
 export class AdminCampaignComponent implements OnInit {
   users: CampaignUser[] = []; 

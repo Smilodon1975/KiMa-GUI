@@ -7,13 +7,14 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { RouterModule } from '@angular/router';
+import { ModalMoveResizeDirective } from '../../shared/modal-move-resize.directive';
 
 @Component({
   selector: 'app-admin-faq',
   templateUrl: './admin-faq.component.html',
   styleUrls: ['./admin-faq.component.css'],
   standalone: true,
-  imports: [CommonModule,FormsModule, RouterModule],
+  imports: [CommonModule,FormsModule, RouterModule, ModalMoveResizeDirective],
 })
 export class AdminFaqComponent implements OnInit {
   faqs: FAQ[] = [];

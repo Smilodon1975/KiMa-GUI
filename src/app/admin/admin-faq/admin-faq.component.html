@@ -37,7 +37,7 @@
   
   <!-- Modal für FAQ Bearbeitung/Hinzufügen -->
   <div class="modal fade" id="faqModal" tabindex="-1" aria-labelledby="faqModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
+    <div class="modal-dialog"[appModalMoveResize]="{ handle: '.modal-header', resizable: true, minW: 280, minH: 160, allowOversize: true, allowOffscreen: true, edgeHandles: true }">
       <div class="modal-content">
         <div class="modal-header">
           <h5 class="modal-title" id="faqModalLabel">{{ selectedFAQ ? 'FAQ bearbeiten' : 'Neues FAQ hinzufügen' }}</h5>

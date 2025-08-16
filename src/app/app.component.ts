@@ -54,12 +54,9 @@ export class AppComponent implements OnInit {
 
   scrollToTop(): void {
     window.scrollTo({ top: 0, behavior: 'smooth' }); 
-  }  
+  }     
 
-
-  
-
-  }
+}
 
 
 

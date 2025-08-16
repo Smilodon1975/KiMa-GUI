@@ -223,7 +223,7 @@
 
 
   <div class="modal fade" id="projectResponseModal" tabindex="-1" aria-labelledby="projectResponseModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-xl">
+    <div class="modal-dialog modal-xl" [appModalMoveResize]="{ handle: '.modal-header', resizable: true, minW: 280, minH: 160, allowOversize: true, allowOffscreen: true, edgeHandles: true }">
       <div class="modal-content">
         <div class="modal-header">
           <h5 class="modal-title" id="projectResponseModalLabel">Antworten zum Projekt: {{ selectedProject?.name }}</h5>
@@ -268,8 +268,8 @@
                     </button>
                     <ul *ngIf="openResponses.has(idx)" class="ps-3 mb-2">
                       <li *ngFor="let ans of parseAnswers(resp.answersJson)">
-                        <span class="fw-semibold">{{ getQuestionText(ans.questionId) }}:</span>
-                        <span>{{ ans.answer }}</span>
+                        <span class="fw-semibold">{{ getQuestionText(ans.questionId) }}:</span>&nbsp;
+                        <span>{{  ans.answer }}</span>
                       </li>
                     </ul>
                     </td>

@@ -6,13 +6,14 @@ import { NewsService } from '../../services/news.service';
 import { INews } from '../../services/news.service';
 import { Router } from '@angular/router';
 import { RouterModule } from '@angular/router';
+import { ModalMoveResizeDirective } from '../../shared/modal-move-resize.directive';
 
 @Component({
   selector: 'app-admin-news',
   templateUrl: './admin-news.component.html',
   styleUrls: ['./admin-news.component.css'],
   standalone: true,
-  imports: [CommonModule, FormsModule, RouterModule],
+  imports: [CommonModule, FormsModule, RouterModule, ModalMoveResizeDirective],
 })
 export class AdminNewsComponent implements OnInit {
   newsList: INews[] = [];

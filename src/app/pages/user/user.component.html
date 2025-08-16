@@ -198,14 +198,14 @@
                       </div>
                     </div>
 
-                  <!-- Anzeige Benutzerdaten Ende----------------------------------------------------------------------------->
+        <!-- Anzeige Benutzerdaten Ende----------------------------------------------------------------------------->
 
           
 
-                  <!-- ✅ Modal für Bearbeitung der Daten ---------------------------------------------------------------------------->
+        <!-- ✅ Modal für Bearbeitung der Daten ---------------------------------------------------------------------------->
 
         <div class="modal fade" id="userModal" tabindex="-1" aria-labelledby="userModalLabel" aria-hidden="true">
-          <div class="modal-dialog modal-lg">
+          <div class="modal-dialog modal-lg" [appModalMoveResize]="{ handle: '.modal-header', resizable: true, minW: 280, minH: 160, allowOversize: true, allowOffscreen: true, edgeHandles: true }">
             <div class="modal-content">
               <div class="modal-header">
                 <h5 class="modal-title" id="userModalLabel">Meine Daten bearbeiten</h5>
@@ -666,7 +666,7 @@
           <!-- Modal für Account-Löschung ------------------------------------------------------------------------------------------>
 
           <div class="modal fade" id="deleteAccountModal" tabindex="-1" aria-labelledby="deleteAccountModalLabel" aria-hidden="true">
-            <div class="modal-dialog">
+            <div class="modal-dialog" [appModalMoveResize]="{ handle: '.modal-header', resizable: true, minW: 280, minH: 160, allowOversize: true, allowOffscreen: true, edgeHandles: true }">
               <div class="modal-content">
                 <div class="modal-header">
                   <h5 class="modal-title" id="deleteAccountModalLabel">Account löschen</h5>
